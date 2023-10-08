@@ -1,0 +1,10 @@
+<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Heart" clip-path="url(#clip0_1685_564)">
+<path id="Vector" d="M15 25C11.7375 23.9 3.75 19.0625 3.75 11.25C3.75 7.8 6.55 5 10 5C12.05 5 13.8625 5.9875 15 7.5C16.1375 5.975 17.9625 5 20 5C23.45 5 26.25 7.7875 26.25 11.25C26.25 19.075 18.2625 23.9 15 25Z" stroke="#1B2E3C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_1685_564">
+<rect width="30" height="30" fill="white"/>
+</clipPath>
+</defs>
+</svg>
