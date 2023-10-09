@@ -1,127 +1,208 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import { Nokora } from "next/font/google";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/Layout/Navbar";
 
-import banner from "../../public/Images/banner.png"
+import banner from "../../public/Images/banner.png";
+import Energy from "../../public/Images/Energy.svg";
+import Dollar from "../../public/Images/Dollar.svg";
+import Star from "../../public/Images/Star.svg";
+import staricon from "../../public/Images/staricon.svg";
+import Heart from "../../public/Images/Heart.svg";
+
+import shirt from "../../public/Images/shirt.png";
+import short1 from "../../public/Images/short1.png";
+import short2 from "../../public/Images/short2.png";
+import cargo from "../../public/Images/cargo.png";
+import tshirt from "../../public/Images/tshirt.png";
+import girl from "../../public/Images/girl.png";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (
-    <div style={{ fontFamily: "'Nokora', sans-serif" }} className={inter.className}>
-      <Navbar />
-      
+    <div
+      style={{ fontFamily: "'Nokora', sans-serif" }}
+      className={`${inter.className} text-[#1B2E3C] bg-white`}
+    >
       <Image src={banner} alt="banner" />
-      <main
-        // className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-      >
-        <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-          <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-            Get started by editing&nbsp;
-            <code className="font-mono font-bold">src/pages/index.tsx</code>
-          </p>
-          <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-            <a
-              className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{" "}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className="dark:invert"
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
+      <div className="py-16">
+        <h2 className="text-center text-2xl tracking-[3.6px]">
+          What makes us different
+        </h2>
+        <div className="w-[1200px] mx-auto">
+          <div className="grid grid-cols-4 gap-[40px] mt-[50px]">
+            <div className="">
+              <Image src={Energy} alt="energy" className="mb-[16px]" />
+              <div>
+                <h2 className="text-xl mb-[8px]">Super Fast Delivery</h2>
+                <p>
+                  Order before 3pm and get your order the next hour as standard
+                </p>
+              </div>
+            </div>
+            <div className="">
+              <Image src={Dollar} alt="dollar" className="mb-[16px]" />
+              <div>
+                <h2 className="text-xl mb-[8px]">Affordable Prices</h2>
+                <p>
+                  For our material and quality you won’t find better prices
+                  anywhere else
+                </p>
+              </div>
+            </div>
+            <div className="">
+              <Image src={Star} alt="Star" className="mb-[16px]" />
+              <div>
+                <h2 className="text-xl mb-[8px]">Trend Masters</h2>
+                <p>
+                  Trend is not an issue, we set standards that can’t be met by
+                  others
+                </p>
+              </div>
+            </div>
+            <div className="">
+              <Image src={Star} alt="Star" className="mb-[16px]" />
+              <div>
+                <h2 className="text-xl mb-[8px]">Trend Masters</h2>
+                <p>
+                  Trend is not an issue, we set standards that can’t be met by
+                  others
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-          <Image
-            className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
+      </div>
+      <div className="px-8 py-[60px] bg-[#1B2E3C]">
+        <div className="grid grid-cols-3 gap-8">
+          <div>
+            <Image src={shirt} alt="shirt" />
+          </div>
+          <div className="grid grid-row-2 gap-8">
+            <Image src={short1} alt="short1" />
+            <Image src={short2} alt="short2" />
+          </div>
+          <div>
+            <Image src={cargo} alt="cargo" />
+          </div>
         </div>
-
-        <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Docs{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Learn{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Templates{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              Deploy{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              Instantly deploy your Next.js site to a shareable URL with Vercel.
-            </p>
-          </a>
+      </div>
+      <div className="text-center py-[60px]">
+        <h2 className="text-2xl tracking-[3.6px] font-light">Latest Release</h2>
+        <h2 className="my-2">+</h2>
+        <h2 className="text-5xl font-normal">TRENDING</h2>
+      </div>
+      <div className="w-[1200px] mx-auto my-[70px]">
+        <div className="grid grid-cols-4 gap-8">
+          <div>
+            <Image src={tshirt} alt="tshirt" />
+            <div className="my-5">
+              <h2 className="">Product XYZ</h2>
+              <div className="flex my-2">
+                <Image src={staricon} alt="starticon" />
+                <Image src={staricon} alt="starticon" />
+                <Image src={staricon} alt="starticon" />
+                <Image src={staricon} alt="starticon" />
+              </div>
+              <h2>N4,000.00</h2>
+            </div>
+            <div className="flex gap-6">
+              <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
+                Add to cart
+              </button>
+              <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
+                <Image src={Heart} alt="heart" />
+              </button>
+            </div>
+          </div>
+          <div>
+            <Image src={tshirt} alt="tshirt" />
+            <div className="my-5">
+              <h2 className="">Product XYZ</h2>
+              <div className="flex my-2">
+                <Image src={staricon} alt="starticon" />
+                <Image src={staricon} alt="starticon" />
+                <Image src={staricon} alt="starticon" />
+                <Image src={staricon} alt="starticon" />
+              </div>
+              <h2>N4,000.00</h2>
+            </div>
+            <div className="flex gap-6">
+              <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
+                Add to cart
+              </button>
+              <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
+                <Image src={Heart} alt="heart" />
+              </button>
+            </div>
+          </div>
+          <div>
+            <Image src={tshirt} alt="tshirt" />
+            <div className="my-5">
+              <h2 className="">Product XYZ</h2>
+              <div className="flex my-2">
+                <Image src={staricon} alt="starticon" />
+                <Image src={staricon} alt="starticon" />
+                <Image src={staricon} alt="starticon" />
+                <Image src={staricon} alt="starticon" />
+              </div>
+              <h2>N4,000.00</h2>
+            </div>
+            <div className="flex gap-6">
+              <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
+                Add to cart
+              </button>
+              <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
+                <Image src={Heart} alt="heart" />
+              </button>
+            </div>
+          </div>
+          <div>
+            <Image src={tshirt} alt="tshirt" />
+            <div className="my-5">
+              <h2 className="">Product XYZ</h2>
+              <div className="flex my-2">
+                <Image src={staricon} alt="starticon" />
+                <Image src={staricon} alt="starticon" />
+                <Image src={staricon} alt="starticon" />
+                <Image src={staricon} alt="starticon" />
+              </div>
+              <h2>N4,000.00</h2>
+            </div>
+            <div className="flex gap-6">
+              <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
+                Add to cart
+              </button>
+              <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
+                <Image src={Heart} alt="heart" />
+              </button>
+            </div>
+          </div>
         </div>
-      </main>
+      </div>
+      <div className="w-[1200px] mx-auto my-10">
+        <div className="grid grid-cols-2">
+          <div className="flex items-center justify-center bg-[#1B2E3C] text-[#F3E3E2] p-12">
+            <div className="">
+              <h2 className="text-center text-5xl">ABOUT</h2>
+              <p className="my-8 text-lg">
+                Lorem ipsum dolor sit amet consectetur. Neque interdum ante
+                pretium suscipit nec vitae. Ultrices libero fames morbi risus
+                consequat. Lacinia tortor facilisis pellentesque mattis. Eu
+                pharetra a neque sed condimentum arcu neque. <br /> <br />
+                Lorem ipsum dolor sit amet consectetur. Neque interdum ante
+                pretium suscipit nec vitae. Ultrices libero fames morbi risus
+                consequat. Lacinia tortor facilisis pellentesque mattis. Eu
+                pharetra a neque sed condimentum arcu neque.
+              </p>
+            </div>
+          </div>
+          <div>
+            <Image src={girl} alt="girl" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

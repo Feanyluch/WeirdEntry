@@ -1,0 +1,10 @@
+<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Star" clip-path="url(#clip0_1621_13335)">
+<path id="Vector" d="M18.6996 11.3124L25.0121 13.8374C26.6746 14.4999 26.6746 15.5749 25.0121 16.2374L18.6996 18.7624L16.1746 25.0749C15.5121 26.6499 14.4371 26.6499 13.7746 25.0749L11.2496 18.7624L4.93711 16.2374C3.36211 15.5749 3.36211 14.4999 4.93711 13.8374L11.2496 11.3124L13.7746 4.9999C14.4371 3.3249 15.5121 3.3249 16.1746 4.9999L18.6996 11.3124Z" stroke="#1B2E3C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_1621_13335">
+<rect width="30" height="30" fill="white"/>
+</clipPath>
+</defs>
+</svg>
