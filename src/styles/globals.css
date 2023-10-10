@@ -26,3 +26,40 @@ body {
     rgb(var(--background-start-rgb));
 } */
 
+body {
+  scroll-behavior: smooth;
+}
+/* Add this CSS to your stylesheet */
+
+/* Custom CSS to hide the scrollbars */
+.product-container::-webkit-scrollbar {
+  width: 0.4rem; /* Set a width for the scrollbar (adjust as needed) */
+}
+
+.product-container::-webkit-scrollbar-track {
+  background-color: transparent; /* Make the track (background) transparent */
+}
+
+.product-container::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Make the thumb (scrollbar handle) transparent */
+  border: none;
+}
+
+/* Add a hover effect for the scrollbar thumb (optional) */
+.product-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.2); /* Add a slight hover effect */
+}
+
+/* Custom CSS to style the slider handles */
+.slider-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #1B2E3C;
+  cursor: grab;
+}
+
+/* Custom styling when the handle is active (being dragged) */
+.slider-thumb:active {
+  cursor: grabbing;
+}

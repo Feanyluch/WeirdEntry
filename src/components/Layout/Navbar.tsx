@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-[#FFFFFF] text-[#1B2E3C] sticky top-0 bg-opacity-80 backdrop-blur-xl">
+    <nav className="bg-[#FFFFFF] text-[#1B2E3C] sticky top-0 bg-opacity-70 backdrop-blur-xl z-[999]">
       <div className="w-[1300px] mx-auto py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
@@ -38,7 +38,7 @@ const Navbar: React.FC = () => {
                 Shop
               </Link>
               <Link href="/about-us" className={"px-2"}>
-                About US
+                AboutUS
               </Link>
             </ul>
           </div>
@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
                 <div className="relative">
                   <input
                     type="search"
-                    className="bg-[#F3E3E2] py-2 px-4 rounded-lg border-2 border-transparent focus:outline-none focus:border-white w-full"
+                    className="bg-[#fff] py-2 px-4 rounded-lg border-2 border-[#1B2E3C] focus:outline-none w-full"
                     placeholder="Search"
                   />
                   <div
