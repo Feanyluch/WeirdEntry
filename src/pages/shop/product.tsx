@@ -102,7 +102,6 @@ const ProductDescription = () => {
       </div>
       <div className="">
         <h2 className="py-4 text-center uppercase text-lg my-4">Related Products</h2>
-        
       </div>
     </div>
   );
