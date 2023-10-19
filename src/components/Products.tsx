@@ -1,271 +1,32 @@
-import React from "react";
+// pages/index.tsx
+import { GetStaticProps } from 'next';
+import ProductCard from '../components/ProductCard';
+import { ProductData } from './product';
+import { useState } from 'react';
 
+interface ProductsProps {
+  products: ProductData[];
+}
 
-import Image from "next/image";
-import Link from "next/link";
+const Products: React.FC<ProductsProps> = ({ products }) => {
 
-import staricon from "../../public/Images/staricon.svg";
-import Heart from "../../public/Images/Heart.svg";
+  const [cartCount, setCartCount] = useState(0);
+  const [heartCount, setHeartCount] = useState(0);
 
-import tshirt from "../../public/Images/tshirt.png";
+  const handleAddToCart = () => {
+    setCartCount(cartCount + 1);
+  };
 
-const Products = () => {
+  console.log("CarCount", cartCount)
+
+  const handleAddToFavorite = () => {
+    setHeartCount(heartCount + 1);
+  };
   return (
-    <div className="overflow-auto">
-      <div className="grid grid-cols-3 gap-8">
-        <div>
-          <Image src={tshirt} alt="tshirt" />
-          <div className="my-5">
-            <h2 className="">Product XYZ</h2>
-            <div className="flex my-2">
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-            </div>
-            <h2>N4,000.00</h2>
-          </div>
-          <div className="flex gap-6">
-            <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
-              Add to cart
-            </button>
-            <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
-              <Image src={Heart} alt="heart" />
-            </button>
-          </div>
-        </div>
-        <div>
-          <Image src={tshirt} alt="tshirt" />
-          <div className="my-5">
-            <h2 className="">Product XYZ</h2>
-            <div className="flex my-2">
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-            </div>
-            <h2>N4,000.00</h2>
-          </div>
-          <div className="flex gap-6">
-            <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
-              Add to cart
-            </button>
-            <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
-              <Image src={Heart} alt="heart" />
-            </button>
-          </div>
-        </div>
-        <div>
-          <Image src={tshirt} alt="tshirt" />
-          <div className="my-5">
-            <h2 className="">Product XYZ</h2>
-            <div className="flex my-2">
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-            </div>
-            <h2>N4,000.00</h2>
-          </div>
-          <div className="flex gap-6">
-            <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
-              Add to cart
-            </button>
-            <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
-              <Image src={Heart} alt="heart" />
-            </button>
-          </div>
-        </div>
-        <div>
-          <Image src={tshirt} alt="tshirt" />
-          <div className="my-5">
-            <h2 className="">Product XYZ</h2>
-            <div className="flex my-2">
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-            </div>
-            <h2>N4,000.00</h2>
-          </div>
-          <div className="flex gap-6">
-            <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
-              Add to cart
-            </button>
-            <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
-              <Image src={Heart} alt="heart" />
-            </button>
-          </div>
-        </div>
-        <div>
-          <Image src={tshirt} alt="tshirt" />
-          <div className="my-5">
-            <h2 className="">Product XYZ</h2>
-            <div className="flex my-2">
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-            </div>
-            <h2>N4,000.00</h2>
-          </div>
-          <div className="flex gap-6">
-            <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
-              Add to cart
-            </button>
-            <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
-              <Image src={Heart} alt="heart" />
-            </button>
-          </div>
-        </div>
-        <div>
-          <Image src={tshirt} alt="tshirt" />
-          <div className="my-5">
-            <h2 className="">Product XYZ</h2>
-            <div className="flex my-2">
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-            </div>
-            <h2>N4,000.00</h2>
-          </div>
-          <div className="flex gap-6">
-            <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
-              Add to cart
-            </button>
-            <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
-              <Image src={Heart} alt="heart" />
-            </button>
-          </div>
-        </div>
-        <div>
-          <Image src={tshirt} alt="tshirt" />
-          <div className="my-5">
-            <h2 className="">Product XYZ</h2>
-            <div className="flex my-2">
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-            </div>
-            <h2>N4,000.00</h2>
-          </div>
-          <div className="flex gap-6">
-            <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
-              Add to cart
-            </button>
-            <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
-              <Image src={Heart} alt="heart" />
-            </button>
-          </div>
-        </div>
-        <div>
-          <Image src={tshirt} alt="tshirt" />
-          <div className="my-5">
-            <h2 className="">Product XYZ</h2>
-            <div className="flex my-2">
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-            </div>
-            <h2>N4,000.00</h2>
-          </div>
-          <div className="flex gap-6">
-            <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
-              Add to cart
-            </button>
-            <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
-              <Image src={Heart} alt="heart" />
-            </button>
-          </div>
-        </div>
-        <div>
-          <Image src={tshirt} alt="tshirt" />
-          <div className="my-5">
-            <h2 className="">Product XYZ</h2>
-            <div className="flex my-2">
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-            </div>
-            <h2>N4,000.00</h2>
-          </div>
-          <div className="flex gap-6">
-            <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
-              Add to cart
-            </button>
-            <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
-              <Image src={Heart} alt="heart" />
-            </button>
-          </div>
-        </div>
-        <div>
-          <Image src={tshirt} alt="tshirt" />
-          <div className="my-5">
-            <h2 className="">Product XYZ</h2>
-            <div className="flex my-2">
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-            </div>
-            <h2>N4,000.00</h2>
-          </div>
-          <div className="flex gap-6">
-            <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
-              Add to cart
-            </button>
-            <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
-              <Image src={Heart} alt="heart" />
-            </button>
-          </div>
-        </div>
-        <div>
-          <Image src={tshirt} alt="tshirt" />
-          <div className="my-5">
-            <h2 className="">Product XYZ</h2>
-            <div className="flex my-2">
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-            </div>
-            <h2>N4,000.00</h2>
-          </div>
-          <div className="flex gap-6">
-            <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
-              Add to cart
-            </button>
-            <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
-              <Image src={Heart} alt="heart" />
-            </button>
-          </div>
-        </div>
-        <div>
-          <Image src={tshirt} alt="tshirt" />
-          <div className="my-5">
-            <h2 className="">Product XYZ</h2>
-            <div className="flex my-2">
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-              <Image src={staricon} alt="starticon" />
-            </div>
-            <h2>N4,000.00</h2>
-          </div>
-          <div className="flex gap-6">
-            <button className="py-4 w-[220px] uppercase border border-[#0C0C1E]">
-              Add to cart
-            </button>
-            <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center">
-              <Image src={Heart} alt="heart" />
-            </button>
-          </div>
-        </div>
-      </div>
+    <div className="grid grid-cols-3 gap-8">
+      {products.map((product, index) => (
+        <ProductCard key={index} product={product} onAddToCart={handleAddToCart} onAddToFavorite={handleAddToFavorite} />
+      ))}
     </div>
   );
 };

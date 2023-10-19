@@ -12,20 +12,19 @@ import star from "../../../public/Images/staricon.svg";
 import nostar from "../../../public/Images/nostarticon.svg";
 
 import toright from "../../../public/Images/toRight.svg";
+import RelatedProducts from "@/components/RelatedProducts";
+import { GetStaticProps } from "next";
+import { ProductData } from "@/components/product";
+import Breadcrumb from "@/components/BreadCrumb";
 
-const ProductDescription = () => {
+interface HomeProps {
+  products: ProductData[]; // Make sure the interface matches the expected prop
+}
+
+const ProductDescription: React.FC<HomeProps> = ({ products }) => {
   return (
     <div>
-      <div className="bg-[#1B2E3C] h-[299px] flex items-center justify-center text-white">
-        <div className="flex justify-between items-center flex-col">
-          <h2 className="uppercase text-5xl">Shop</h2>
-          <div className="flex mt-20 text-lg uppercase">
-            <Link href="/">Home</Link>
-            <Image src={toright} alt="toright" /> Shop
-            <Image src={toright} alt="toright" /> Product XYZ
-          </div>
-        </div>
-      </div>
+      <Breadcrumb />
       <div className="w-[1100px] mx-auto text-[#1B2E3C] py-8">
         <div className="grid grid-cols-2 gap-8">
           <div className="grid grid-cols-3 gap-4">
@@ -53,7 +52,7 @@ const ProductDescription = () => {
                 <Image src={nostar} alt="star" />
               </div>
               <h2 className="text-3xl font-bold">N4,000</h2>
-              <p className="py-10 break-words w-[70%]">
+              <p className="py-6 break-words w-[80%]">
                 Lorem ipsum dolor sit amet consectetur. Neque interdum ante
                 pretium suscipit nec vitae. Ultrices libero fames morbi risus
                 consequat. Lacinia tortor facilisis pellentesque mattis. Eu
@@ -100,11 +99,23 @@ const ProductDescription = () => {
           </div>
         </div>
       </div>
-      <div className="">
-        <h2 className="py-4 text-center uppercase text-lg my-4">Related Products</h2>
+      <div className="w-[1400px] mx-auto my-10">
+        <h2 className="py-4 text-center uppercase text-xl my-4">Related Products</h2>
+        <RelatedProducts products={products} />
       </div>
     </div>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  // Fetch your JSON data here, for example, using `import`
+  const productData = await import('../../../assets/productData.json');
+
+  return {
+    props: {
+      products: productData.products as ProductData[], // Cast the products data to ProductData[]
+    },
+  };
 };
 
 export default ProductDescription;

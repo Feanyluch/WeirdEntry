@@ -15,6 +15,10 @@ import weirdlogo from "../../../public/Images/weirdlogo.png"
 
 const Navbar: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+  const [favoriteCount, setFavoriteCount] = useState(0);
+
+  console.log("CartCount from navbar", cartCount)
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -38,7 +42,7 @@ const Navbar: React.FC = () => {
                 Shop
               </Link>
               <Link href="/about-us" className={"px-2"}>
-                AboutUS
+                About US
               </Link>
             </ul>
           </div>
@@ -73,9 +77,11 @@ const Navbar: React.FC = () => {
             </div>
             <div className="p-2">
               <Image src={Cart} alt="Logo" />
+              {cartCount > 0 && <span className="count-badge">{cartCount}</span>}
             </div>
             <div className="p-2">
               <Image src={Heart} alt="Heart" />
+              {favoriteCount > 0 && <span className="count-badge">{favoriteCount}</span>}
             </div>
             <div className="p-2">
               <Image src={User} alt="User" />

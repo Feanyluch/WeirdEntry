@@ -2,8 +2,9 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import { Nokora } from "next/font/google";
 import Navbar from "@/components/Layout/Navbar";
+import Banner from "@/components/Banner";
 
-import banner from "../../public/Images/banner.png";
+import banner1 from "../../public/Images/banner1.png";
 import Energy from "../../public/Images/Energy.svg";
 import Dollar from "../../public/Images/Dollar.svg";
 import Star from "../../public/Images/Star.svg";
@@ -25,7 +26,9 @@ export default function Home() {
       style={{ fontFamily: "'Nokora', sans-serif" }}
       className={`${inter.className} text-[#1B2E3C] bg-white`}
     >
-      <Image src={banner} alt="banner" />
+      <Banner />
+      <Image src={banner1} alt="banner" />
+      
       <div className="py-16">
         <h2 className="text-center text-2xl tracking-[3.6px]">
           What makes us different

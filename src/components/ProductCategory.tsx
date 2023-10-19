@@ -9,7 +9,7 @@ const ProductCategory: React.FC = () => {
   };
 
   return (
-    <div className="border border-[#1B2E3C] p-4 w-[345px] text-[#1B2E3C]">
+    <div className="border border-[#1B2E3C] p-4 w-[300px] text-[#1B2E3C] rounded-lg">
       <div className="border-[#1B2E3C80] border-b pb-8">
         <div className="">
           <h2 className="uppercase text-xl font-normal">
@@ -41,7 +41,7 @@ const ProductCategory: React.FC = () => {
           <p className="mx-2">N{priceRange[1]}</p>
         </div>
         <div className="flex items-center justify-center my-4">
-          <button className="uppercase py-4 px-8 w-[220px] border border-[#1B2E3C]">
+          <button className="uppercase py-4 px-8 w-[220px] border border-[#1B2E3C] rounded-lg">
             Filter
           </button>
         </div>

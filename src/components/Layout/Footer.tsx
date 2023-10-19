@@ -6,12 +6,19 @@ import mstar from "../../../public/Images/mstart.svg";
 
 import call from "../../../public/Images/Call.svg"
 import locationw from "../../../public/Images/locationw.svg"
-import Email from "../../../public/Images/Email.svg"
+import Email from "../../../public/Images/Email.svg";
+
+
 
 const Footer = () => {
   return (
     <div className="bg-[#F3E3E2]">
       <div className="w-[1300px] mx-auto py-16 px-8">
+        {/* <div className="grid grid-cols-4">
+          <div className="">
+            
+            </div>
+        </div> */}
         <div className="flex items-center justify-center">
           <Link href="/shop" className="px-4">
             Shop

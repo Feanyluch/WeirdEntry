@@ -1,20 +1,22 @@
-import React from 'react'
-import Image from "next/image"
-import Link from 'next/link'
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 
-import toright from "../../../public/Images/toright.svg"
+import toright from "../../../public/Images/toright.svg";
+import Breadcrumb from "@/components/BreadCrumb";
 
 const index = () => {
   return (
     <div>
-      <div className='bg-[#1B2E3C] h-[299px] flex items-center justify-center text-white'>
-        <div className='flex justify-between items-center flex-col'>
-            <h2 className='uppercase text-5xl '>about us</h2>
-            <div className="flex text-lg uppercase mt-24"><Link href="/">Home</Link><Image src={toright} alt="toright" /> about us</div>
+      <Breadcrumb />
+      <div className="grid grid-cols-2 h-[700px] my-14 mx-auto max-w-[1300px] ">
+        <div className="bg-[#F3E3E2]">
+          <h2 className="uppercase my-4 text-center text-5xl text-[#0C0C1E]">Our story</h2>
         </div>
+        <div className="bg-[#1B2E3C]"></div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default index
+export default index;

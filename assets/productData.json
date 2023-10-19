@@ -1,0 +1,152 @@
+{
+    "products": [
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 4,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 1,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 3,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 5,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 0,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 3,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 2,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 5,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 1,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 2,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 4,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 3,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 1,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 3,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 4,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 5,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 3,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 4,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 1,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 3,
+        "price": "N4,000.00"
+      },
+      {
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "altText": "tshirt",
+        "productName": "Product XYZ",
+        "rating": 2,
+        "price": "N4,000.00"
+      }
+    ]
+  }
+  
