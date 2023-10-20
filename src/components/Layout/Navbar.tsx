@@ -15,10 +15,6 @@ import weirdlogo from "../../../public/Images/weirdlogo.png"
 
 const Navbar: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
-  const [favoriteCount, setFavoriteCount] = useState(0);
-
-  console.log("CartCount from navbar", cartCount)
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -34,14 +30,14 @@ const Navbar: React.FC = () => {
             </div>
           </div>
           <div className={`${isSearchOpen ? "hidden" : "block"} uppercase`}>
-            <ul className="flex space-x-4 ml-8">
-              <Link href="/" className={"px-2"}>
+            <ul className="flex space-x-4 text-xl ml-8">
+              <Link href="/" className={"px-2 nav-link mx-2"}>
                 Home
               </Link>
-              <Link href="/shop" className={"px-2"}>
+              <Link href="/shop" className={"px-2 nav-link mx-2"}>
                 Shop
               </Link>
-              <Link href="/about-us" className={"px-2"}>
+              <Link href="/about-us" className={"px-2 nav-link mx-2"}>
                 About US
               </Link>
             </ul>
@@ -77,11 +73,9 @@ const Navbar: React.FC = () => {
             </div>
             <div className="p-2">
               <Image src={Cart} alt="Logo" />
-              {cartCount > 0 && <span className="count-badge">{cartCount}</span>}
             </div>
             <div className="p-2">
               <Image src={Heart} alt="Heart" />
-              {favoriteCount > 0 && <span className="count-badge">{favoriteCount}</span>}
             </div>
             <div className="p-2">
               <Image src={User} alt="User" />

@@ -27,7 +27,7 @@ export default function Home() {
       className={`${inter.className} text-[#1B2E3C] bg-white`}
     >
       <Banner />
-      <Image src={banner1} alt="banner" />
+      {/* <Image src={banner1} alt="banner" /> */}
       
       <div className="py-16">
         <h2 className="text-center text-2xl tracking-[3.6px]">
