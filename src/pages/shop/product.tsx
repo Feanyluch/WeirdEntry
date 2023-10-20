@@ -99,7 +99,7 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
           </div>
         </div>
       </div>
-      <div className="w-[1400px] mx-auto my-10">
+      <div className="w-[1300px] mx-auto my-10">
         <h2 className="py-4 text-center uppercase text-xl my-4">Related Products</h2>
         <RelatedProducts products={products} />
       </div>
