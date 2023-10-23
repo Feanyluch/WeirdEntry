@@ -18,11 +18,11 @@ const ProductCategory: React.FC = () => {
             Categories
           </h2>
         </div>
-        <div className="list-none text-lg font-light">
-          <li className="py-2">Shirts</li>
-          <li className="py-2">Cargo pants</li>
-          <li className="py-2">Category 3</li>
-          <li className="py-2">Category 4</li>
+        <div className="list-none text-lg font-light mt-4">
+          <li className="py-2 pl-2 cursor-pointer rounded-lg hover:bg-[#f1f1f2] hover:font-bold transition-all">Shirts</li>
+          <li className="py-2 pl-2 cursor-pointer rounded-lg hover:bg-[#f1f1f2] hover:font-bold transition-all">Cargo pants</li>
+          <li className="py-2 pl-2 cursor-pointer rounded-lg hover:bg-[#f1f1f2] hover:font-bold transition-all">Category 3</li>
+          <li className="py-2 pl-2 cursor-pointer rounded-lg hover:bg-[#f1f1f2] hover:font-bold transition-all">Category 4</li>
         </div>
       </div>
       <div>
