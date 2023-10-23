@@ -56,7 +56,7 @@ const Banner = () => {
             objectFit="cover"
           />
           <div className="bg-black opacity-40 absolute h-full w-full"></div>
-          <div className="absolute inset-0 flex flex-col justify-center items-start max-w-[1300px] mx-auto h-[300px] overflow-hidden my-auto z-[9]">
+          <div className="absolute inset-0 flex flex-col justify-center items-start max-w-[1100px] mx-auto h-[300px] overflow-hidden my-auto z-[9]">
             <div
               className={` flex flex-col justify-center  text-white transform ${
                 index === currentBanner

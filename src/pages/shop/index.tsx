@@ -16,13 +16,13 @@ const Index: React.FC<HomeProps> = ({ products }) => {
   return (
     <div>
       <Breadcrumb />
-      <div className="w-[1300px] mx-auto flex gap-8 my-12">
+      <div className="w-[1100px] mx-auto flex gap-8 my-12">
         <div className="w-1/4 flex-shrink-0">
           <div className="sticky top-40">
             <ProductCategory />
           </div>
         </div>
-        <div className="flex-grow overflow-y-auto px-4 product-container">
+        <div className="overflow-y-auto px-4 product-container">
           <Products products={products} />
         </div>
       </div>

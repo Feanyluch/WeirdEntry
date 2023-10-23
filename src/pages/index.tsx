@@ -33,7 +33,7 @@ export default function Home() {
         <h2 className="text-center text-2xl tracking-[3.6px]">
           What makes us different
         </h2>
-        <div className="w-[1300px] mx-auto">
+        <div className="w-[1100px] mx-auto">
           <div className="grid grid-cols-4 gap-[40px] mt-[50px]">
             <div className="">
               <Image src={Energy} alt="energy" className="mb-[16px]" />
@@ -77,8 +77,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="px-8 py-[60px] bg-[#1B2E3C]">
-        <div className="grid grid-cols-3 gap-8">
+      <div className="px-8 py-[60px] bg-[#1B2E3C] ">
+        <div className="max-w-[1100px] mx-auto grid grid-cols-3 gap-8">
           <div>
             <Image src={shirt} alt="shirt" />
           </div>
@@ -96,7 +96,7 @@ export default function Home() {
         <h2 className="my-2">+</h2>
         <h2 className="text-5xl font-normal">TRENDING</h2>
       </div>
-      <div className="w-[1300px] mx-auto my-[70px]">
+      <div className="w-[1100px] mx-auto my-[70px]">
         <div className="grid grid-cols-4 gap-8">
           <div>
             <Image src={tshirt} alt="tshirt" />
@@ -184,12 +184,12 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="w-[1200px] mx-auto my-10">
+      <div className="w-[1100px] mx-auto my-10">
         <div className="grid grid-cols-2">
           <div className="flex items-center justify-center bg-[#1B2E3C] text-[#F3E3E2] p-12">
             <div className="">
               <h2 className="text-center text-5xl">ABOUT</h2>
-              <p className="my-8 text-lg">
+              <p className="my-2 text-lg">
                 Lorem ipsum dolor sit amet consectetur. Neque interdum ante
                 pretium suscipit nec vitae. Ultrices libero fames morbi risus
                 consequat. Lacinia tortor facilisis pellentesque mattis. Eu

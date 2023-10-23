@@ -14,7 +14,7 @@ const Breadcrumb = () => {
   };
 
   return (
-    <div className="bg-[#1B2E3C] h-[299px] flex items-center justify-center text-white">
+    <div className="bg-[#1B2E3C] h-[299px] flex items-center justify-center text-[#F3E3E2]">
       <div className="flex justify-between items-center flex-col">
         <h2 className="uppercase text-5xl">
           {formatPageName(pathnames[pathnames.length - 1])}
