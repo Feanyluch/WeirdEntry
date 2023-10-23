@@ -12,7 +12,7 @@ import Logo from "../../../public/Images/weirdlogo.png";
 const Footer = () => {
   return (
     <div className="bg-[#F3E3E2]">
-      <div className="w-[1100px] mx-auto py-16 px-8">
+      <div className="w-[1300px] mx-auto py-16 px-8">
         <div className="grid grid-cols-4 gap-20">
           <div className="">
             <Image src={Logo} alt="logo" />

@@ -4,16 +4,20 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
 import Link from "next/link";
 import Image from "next/image";
 
-import Cart from "../../../public/Images/Cart.svg"
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+
+import cart from "../../../public/Images/cart1.png";
 // import Cart from "../../public/Images/Cart.svg";
 import Heart from "../../../public/Images/Heart.svg";
 import Search from "../../../public/Images/Search.svg";
 import User from "../../../public/Images/User.svg";
 import Close from "../../../public/Images/Close.svg";
 
-import weirdlogo from "../../../public/Images/weirdlogo.png"
+import weirdlogo from "../../../public/Images/weirdlogo.png";
 
 const Navbar: React.FC = () => {
+  const cartCount = useSelector((state: RootState) => state.cart.cartCount);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const toggleSearch = () => {
@@ -71,17 +75,18 @@ const Navbar: React.FC = () => {
                 </div>
               )}
             </div>
-            <div className="p-2">
-              <Image src={Cart} alt="Logo" />
+            <div className="p-2 relative">
+              <Image src={cart} alt="Logo" />
+              <h2 className='absolute top-0 right-0 bg-[#1B2E3C] text-white rounded-[50%] p-1 flex items-center justify-center h-4 text-sm'>{cartCount}</h2>
             </div>
-            <div className="p-2">
+            <div className="p-2 relative">
               <Image src={Heart} alt="Heart" />
+              <h2 className='absolute top-0 right-0 bg-[#1B2E3C] text-white rounded-[50%] p-1 flex items-center justify-center h-4 text-sm'>0</h2>
             </div>
             <div className="p-2">
               <Image src={User} alt="User" />
             </div>
           </div>
-
         </div>
       </div>
     </nav>

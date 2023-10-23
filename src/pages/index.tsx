@@ -33,7 +33,7 @@ export default function Home() {
         <h2 className="text-center text-2xl tracking-[3.6px]">
           What makes us different
         </h2>
-        <div className="w-[1200px] mx-auto">
+        <div className="w-[1300px] mx-auto">
           <div className="grid grid-cols-4 gap-[40px] mt-[50px]">
             <div className="">
               <Image src={Energy} alt="energy" className="mb-[16px]" />
@@ -96,7 +96,7 @@ export default function Home() {
         <h2 className="my-2">+</h2>
         <h2 className="text-5xl font-normal">TRENDING</h2>
       </div>
-      <div className="w-[1200px] mx-auto my-[70px]">
+      <div className="w-[1300px] mx-auto my-[70px]">
         <div className="grid grid-cols-4 gap-8">
           <div>
             <Image src={tshirt} alt="tshirt" />

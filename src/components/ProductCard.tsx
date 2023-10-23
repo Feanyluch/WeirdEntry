@@ -1,7 +1,15 @@
-import Image from 'next/image';
-import { ProductData } from './product';
-import { useState } from 'react';
+import Image from "next/image";
+import { ProductData } from "./product";
+import { useState } from "react";
 
+import { useDispatch } from "react-redux";
+import {
+  addToCart,
+  incrementCartCount,
+  removeFromCart,
+  incrementItem,
+  decrementItem,
+} from "@/redux/slices/cartSlice";
 interface ProductCardProps {
   product: ProductData;
 }
@@ -13,9 +21,24 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const grayStars = totalStars - product.rating;
   const displayStars = showAllStars ? totalStars : product.rating;
 
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    const cartItem = { id: product.id, quantity: 1 }; // Create a CartItem with a quantity of 1
+    console.log("produtcts added", cartItem)
+    dispatch(addToCart(cartItem)); // Dispatch the addToCart action with the CartItem
+    dispatch(incrementCartCount())
+  };
+
   return (
     <div>
-      <Image src={product.imageSrc} width={300} height={300} alt={product.altText} className="rounded-lg" />
+      <Image
+        src={product.imageSrc}
+        width={300}
+        height={300}
+        alt={product.altText}
+        className="rounded-lg"
+      />
       <div className="my-5">
         <h2 className="">{product.productName}</h2>
         <div className="flex my-2">
@@ -40,8 +63,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
         <h2>{product.price}</h2>
       </div>
-      <div className="flex gap-6">
-        <button className="py-4 w-[220px] uppercase border border-[#0C0C1E] rounded-lg">
+      <div onClick={handleAddToCart} className="flex gap-6">
+        <button className="py-4 w-[220px] uppercase border border-[#0C0C1E] rounded-lg hover:bg-[#1B2E3C] hover:text-white">
           Add to cart
         </button>
         <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center rounded-lg">
