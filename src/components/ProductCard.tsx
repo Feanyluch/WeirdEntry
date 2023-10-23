@@ -64,10 +64,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <h2>{product.price}</h2>
       </div>
       <div className="flex gap-6">
-        <button onClick={handleAddToCart} className="py-4 w-[220px] uppercase border border-[#0C0C1E] rounded-lg hover:bg-[#1B2E3C] hover:text-white">
+        <button onClick={handleAddToCart} className="py-4 w-3/4 uppercase border border-[#0C0C1E] rounded-lg hover:bg-[#1B2E3C] hover:text-white">
           Add to cart
         </button>
-        <button className="w-[56px] border border-[#0C0C1E] flex items-center justify-center rounded-lg">
+        <button className="w-1/4 border border-[#0C0C1E] flex items-center justify-center rounded-lg">
           <Image
             src="https://res.cloudinary.com/duxy2eomx/image/upload/v1697712759/Heart_kvhvmp.svg"
             height={26}
