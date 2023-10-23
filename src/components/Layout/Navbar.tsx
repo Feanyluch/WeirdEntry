@@ -21,8 +21,7 @@ import CartItems from "@/components/CartItems";
 const Navbar: React.FC = () => {
   const cartCount = useSelector((state: RootState) => state.cart.cartCount);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-
+  const [isCartOpen, setIsCartOpen] = useState(false)
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
   };
@@ -33,7 +32,7 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="bg-[#FFFFFF] text-[#1B2E3C] sticky top-0 bg-opacity-70 backdrop-blur-xl z-[999]">
-      <div className="w-[1300px] mx-auto py-4">
+      <div className="w-[1100px] mx-auto py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <div className="w-[180px]">
