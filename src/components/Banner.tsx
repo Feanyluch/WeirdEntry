@@ -58,18 +58,18 @@ const Banner = () => {
           <div className="bg-black opacity-40 absolute h-full w-full"></div>
           <div className="absolute inset-0 flex flex-col justify-center items-start max-w-[1100px] mx-auto h-[300px] overflow-hidden my-auto z-[9]">
             <div
-              className={` flex flex-col justify-center  text-white transform ${
+              className={` flex flex-col justify-center text-[#F3E3E2] transform ${
                 index === currentBanner
                   ? "translate-y-0"
                   : "translate-y-[350px]"
               } transition-transform duration-1000`}
               style={{ whiteSpace: "pre-line" }}
             >
-              <h1 className="text-5xl leading-[67px] mb-4">{data.text}</h1>
+              <h1 className="text-5xl leading-[67px] mb-4 ">{data.text}</h1>
               <p className="my-4 text-2xl">{data.paragraph}</p>
               <Link
                 href={data.link}
-                className="bg-[#1B2E3C] text-lg text-white text-center my-4 py-[17px] border transition-all rounded-lg w-[300px] z-[-9999] hover:bg-white hover:text-[#1B2E3C] "
+                className="bg-[#1B2E3C] text-lg text-white text-center my-4 py-[17px] transition-all rounded-lg w-[300px] z-[-9999] hover:bg-[#F3E3E2] hover:text-[#1B2E3C] "
               >
                 {data.buttonLabel}
               </Link>
