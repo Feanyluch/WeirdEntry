@@ -35,7 +35,7 @@ const Banner = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentBanner((prevBanner) => (prevBanner + 1) % bannerData.length);
-    }, 5000); // Change the background every 5 seconds (5000ms).
+    }, 10000); // Change the background every 5 seconds (5000ms).
 
     return () => clearInterval(interval);
   }, []);
@@ -61,7 +61,7 @@ const Banner = () => {
               className={` flex flex-col justify-center  text-white transform ${
                 index === currentBanner
                   ? "translate-y-0"
-                  : "translate-y-[190px]"
+                  : "translate-y-[350px]"
               } transition-transform duration-1000`}
               style={{ whiteSpace: "pre-line" }}
             >
@@ -69,7 +69,7 @@ const Banner = () => {
               <p className="my-4 text-2xl">{data.paragraph}</p>
               <Link
                 href={data.link}
-                className="bg-[#1B2E3C] text-lg text-white text-center my-4 py-[17px] rounded-lg w-[300px] z-[-9999]"
+                className="bg-[#1B2E3C] text-lg text-white text-center my-4 py-[17px] border transition-all rounded-lg w-[300px] z-[-9999] hover:bg-white hover:text-[#1B2E3C] "
               >
                 {data.buttonLabel}
               </Link>
