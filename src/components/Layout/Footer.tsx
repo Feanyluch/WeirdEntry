@@ -12,53 +12,57 @@ import Logo from "../../../public/Images/weirdlogo.png";
 const Footer = () => {
   return (
     <div className="bg-[#F3E3E2]">
-      <div className="w-[1100px] mx-auto py-16">
+      <div className="w-[1200px] mx-auto py-16">
         <div className="grid grid-cols-4 gap-20">
           <div className="">
             <Image src={Logo} alt="logo" />
-            <h2 className="text-[16px] my-2">
+            <h2 className="text-[14px] my-2">
               Elevate Your Style, Illuminate Your Presence.
             </h2>
           </div>
           <div className="flex flex-col">
-            <h2 className="text-xl font-bold mb-2">Quick Links</h2>
-            <Link href="/" className="text-[16px] my-2">
+            <h2 className="text-lg font-bold mb-2">Quick Links</h2>
+            <Link href="/" className="text-[14px] my-2">
               Home
             </Link>
-            <Link href="/" className="text-[16px] my-2">
+            <Link href="/" className="text-[14px] my-2">
               Shop
             </Link>
-            <Link href="/" className="text-[16px] my-2">
+            <Link href="/" className="text-[14px] my-2">
               My Account
             </Link>
           </div>
           <div className="flex flex-col">
-            <h2 className="text-xl font-bold mb-2">More Info</h2>
-            <Link href="/" className="text-[16px] my-2">
+            <h2 className="text-lg font-bold mb-2">More Info</h2>
+            <Link href="/" className="text-[14px] my-2">
               About Us
             </Link>
-            <Link href="/" className="text-[16px] my-2">
+            <Link href="/" className="text-[14px] my-2">
               Shipping and Delivery
             </Link>
-            <Link href="/" className="text-[16px] my-2">
+            <Link href="/" className="text-[14px] my-2">
               Terms of Service
             </Link>
-            <Link href="/" className="text-[16px] my-2">
+            <Link href="/" className="text-[14px] my-2">
               Privacy Policy
             </Link>
           </div>
           <div className="flex flex-col">
-            <h2 className="text-xl font-bold mb-2">Quick Links</h2>
-            <Link href="/" className="text-[16px] my-2">
+            <h2 className="text-lg font-bold mb-2">Quick Links</h2>
+            <Link href="/" className="text-[14px] my-2">
               email: weirdentry@gmail.com
             </Link>
-            <p className="text-[16px] my-2">
-              Address: 44 Way, Weird Entry Street,<br /> Lagos, Nigeria.
+            <p className="text-[14px] my-2">
+              Address: 44 Way, Weird Entry Street,
+              <br /> Lagos, Nigeria.
             </p>
           </div>
         </div>
         <div className="mt-24 flex items-center justify-between">
-          <h2 className="text-bold text-[16px]">&copy 2021 WEIRD ENTRY. | All rights reserved. | Designed and Developed by 44’’ Squad.</h2>
+          <h2 className="text-bold text-[12px]">
+            &copy 2021 WEIRD ENTRY. | All rights reserved. | Designed and
+            Developed by 44’’ Squad.
+          </h2>
           <div className="flex items-center justify-center">
             <Link href="twitter.com">T</Link>
             <Link href="twitter.com">T</Link>

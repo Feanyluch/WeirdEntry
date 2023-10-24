@@ -16,7 +16,7 @@ const Index: React.FC<HomeProps> = ({ products }) => {
   return (
     <div>
       <Breadcrumb />
-      <div className="w-[1100px] mx-auto flex gap-8 my-12">
+      <div className="w-[1200px] mx-auto flex gap-8 my-12">
         <div className="w-1/4 flex-shrink-0">
           <div className="sticky top-40">
             <ProductCategory />

@@ -19,19 +19,19 @@ const Breadcrumb = () => {
         <h2 className="uppercase text-5xl">
           {formatPageName(pathnames[pathnames.length - 1])}
         </h2>
-        <div className="flex mt-32 text-lg uppercase">
+        <div className="flex mt-32 text-sm uppercase">
           <Link href="/">Home</Link>
           {pathnames.map((name, index) => {
             const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
             const isLast = index === pathnames.length - 1;
             return isLast ? (
               <>
-                <Image src={toright} alt="toright" />
+                <Image src={toright} alt="toright" height={20} width={20} />
                 <span key={name}>{formatPageName(name)}</span>
               </>
             ) : (
               <>
-                <Image src={toright} alt="toright" />{' '}
+                <Image src={toright} alt="toright" height={20} width={20} />{' '}
                 <Link href={routeTo}>{formatPageName(name)}</Link>
               </>
             );

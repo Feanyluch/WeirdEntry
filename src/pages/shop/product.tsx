@@ -52,7 +52,7 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
                 <Image src={nostar} alt="star" />
               </div>
               <h2 className="text-3xl font-bold">N4,000</h2>
-              <p className="py-6 break-words w-[80%]">
+              <p className="py-6 break-words w-[80%] text-sm">
                 Lorem ipsum dolor sit amet consectetur. Neque interdum ante
                 pretium suscipit nec vitae. Ultrices libero fames morbi risus
                 consequat. Lacinia tortor facilisis pellentesque mattis. Eu
@@ -60,34 +60,34 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
               </p>
               <div className="">
                 <h4>Polo Sizes</h4>
-                <div className="flex">
-                  <button className="mr-4 border border-[#0C0C1E80] px-2">
+                <div className="flex my-2">
+                  <button className=" text-sm mr-4 border border-[#0C0C1E80] px-2">
                     Medium
                   </button>
-                  <button className="mr-4 border border-[#0C0C1E80] px-2">
+                  <button className=" text-sm mr-4 border border-[#0C0C1E80] px-2">
                     Large
                   </button>
-                  <button className="mr-4 border border-[#0C0C1E80] px-2">
+                  <button className=" text-sm mr-4 border border-[#0C0C1E80] px-2">
                     Extra Large
                   </button>
-                  <button className="mr-4 border border-[#0C0C1E80] px-2">
+                  <button className=" text-sm mr-4 border border-[#0C0C1E80] px-2">
                     XXL
                   </button>
                 </div>
               </div>
               <div className="my-8">
                 <h4>Colors</h4>
-                <div className="flex">
-                  <button className="mr-4 border border-[#0C0C1E80] px-2">
+                <div className="flex my-2">
+                  <button className=" text-sm mr-4 border border-[#0C0C1E80] px-2">
                     Medium
                   </button>
-                  <button className="mr-4 border border-[#0C0C1E80] px-2">
+                  <button className=" text-sm mr-4 border border-[#0C0C1E80] px-2">
                     Large
                   </button>
-                  <button className="mr-4 border border-[#0C0C1E80] px-2">
+                  <button className=" text-sm mr-4 border border-[#0C0C1E80] px-2">
                     Extra Large
                   </button>
-                  <button className="mr-4 border border-[#0C0C1E80] px-2">
+                  <button className=" text-sm mr-4 border border-[#0C0C1E80] px-2">
                     XXL
                   </button>
                 </div>

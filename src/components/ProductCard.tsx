@@ -61,17 +61,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             />
           ))}
         </div>
-        <h2>{product.price}</h2>
+        <h2 className="text-sm my-4">{product.price}</h2>
       </div>
-      <div className="flex gap-6">
-        <button onClick={handleAddToCart} className="py-4 w-3/4 uppercase border border-[#0C0C1E] rounded-lg hover:bg-[#1B2E3C] hover:text-white">
+      <div className="flex gap-4">
+        <button onClick={handleAddToCart} className="text-sm py-3 w-3/4 uppercase border border-[#0C0C1E] rounded-lg hover:bg-[#1B2E3C] hover:text-white">
           Add to cart
         </button>
         <button className="w-1/4 border border-[#0C0C1E] flex items-center justify-center rounded-lg">
           <Image
             src="https://res.cloudinary.com/duxy2eomx/image/upload/v1697712759/Heart_kvhvmp.svg"
-            height={26}
-            width={26}
+            height={25}
+            width={25}
             alt="heart"
           />
         </button>
