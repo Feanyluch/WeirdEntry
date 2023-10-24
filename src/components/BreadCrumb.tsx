@@ -1,10 +1,15 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
-
 import toright from '../../public/Images/toright.svg';
+import { ProductData } from "@/components/product"; // Import the ProductData type
+import { GetStaticPaths, GetStaticProps } from 'next';
 
-const Breadcrumb = () => {
+interface HomeProps {
+  products: ProductData[]; // Make sure the interface matches the expected prop
+}
+
+const Breadcrumb: React.FC<HomeProps> = ({ products }) => {
   const router = useRouter();
   const pathnames = router.asPath.split('/').filter((x) => x);
 
@@ -13,11 +18,13 @@ const Breadcrumb = () => {
     return name.replace(/-/g, ' ').toUpperCase();
   };
 
+  const selectedProduct = products.find((product) => product.id === parseInt(pathnames[pathnames.length - 1], 10));
+
   return (
     <div className="bg-[#1B2E3C] h-[299px] flex items-center justify-center text-[#F3E3E2]">
       <div className="flex justify-between items-center flex-col">
         <h2 className="uppercase text-5xl">
-          {formatPageName(pathnames[pathnames.length - 1])}
+          {selectedProduct ? formatPageName(selectedProduct.productName) : formatPageName(pathnames[pathnames.length - 1])}
         </h2>
         <div className="flex mt-32 text-sm uppercase">
           <Link href="/">Home</Link>
@@ -27,7 +34,7 @@ const Breadcrumb = () => {
             return isLast ? (
               <>
                 <Image src={toright} alt="toright" height={20} width={20} />
-                <span key={name}>{formatPageName(name)}</span>
+                <span key={name}>{formatPageName(selectedProduct ? selectedProduct.productName : name)}</span>
               </>
             ) : (
               <>
@@ -40,6 +47,33 @@ const Breadcrumb = () => {
       </div>
     </div>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  // Fetch your JSON data here, for example, using `import`
+  const productData = await import('../../assets/productData.json');
+
+  return {
+    props: {
+      products: productData.products as ProductData[], // Cast the products data to ProductData[]
+    },
+  };
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  // Fetch your JSON data or use another data source to get the list of product IDs
+  const productData = await import('../../assets/productData.json');
+  const products = productData.products as ProductData[];
+
+  // Create an array of product IDs for the dynamic paths
+  const paths = products.map((product) => ({
+    params: { id: product.id.toString() },
+  }));
+
+  return {
+    paths,
+    fallback: false, // Set to 'true' or 'blocking' if you want to enable fallback behavior
+  };
 };
 
 export default Breadcrumb;

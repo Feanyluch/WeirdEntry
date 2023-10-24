@@ -69,7 +69,7 @@ const Banner = () => {
               <p className="my-4 text-sm">{data.paragraph}</p>
               <Link
                 href={data.link}
-                className="bg-[#1B2E3C] text-sm text-white text-center my-4 py-[17px] transition-all rounded-lg w-[300px] z-[-9999] hover:bg-[#F3E3E2] hover:text-[#1B2E3C] "
+                className="bg-[#1B2E3C] text-sm text-white text-center my-4 py-[17px] transition-all rounded-lg w-[300px] z-[-9999] hover:bg-[#F3E3E2] hover:text-[#1B2E3C] transition ease-in-out duration-300 delay-100 hover:-translate-y-1"
               >
                 {data.buttonLabel}
               </Link>

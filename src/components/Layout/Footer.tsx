@@ -21,7 +21,7 @@ const Footer = () => {
             </h2>
           </div>
           <div className="flex flex-col">
-            <h2 className="text-lg font-bold mb-2">Quick Links</h2>
+            <h2 className="text-sm font-bold mb-2">Quick Links</h2>
             <Link href="/" className="text-[14px] my-2">
               Home
             </Link>
@@ -33,7 +33,7 @@ const Footer = () => {
             </Link>
           </div>
           <div className="flex flex-col">
-            <h2 className="text-lg font-bold mb-2">More Info</h2>
+            <h2 className="text-sm font-bold mb-2">More Info</h2>
             <Link href="/" className="text-[14px] my-2">
               About Us
             </Link>
@@ -48,7 +48,7 @@ const Footer = () => {
             </Link>
           </div>
           <div className="flex flex-col">
-            <h2 className="text-lg font-bold mb-2">Quick Links</h2>
+            <h2 className="text-sm font-bold mb-2">Quick Links</h2>
             <Link href="/" className="text-[14px] my-2">
               email: weirdentry@gmail.com
             </Link>
