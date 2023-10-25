@@ -6,6 +6,7 @@ import toright from "../../../public/Images/toright.svg";
 import Breadcrumb from "@/components/BreadCrumb";
 
 import { ProductData } from "@/components/product";
+import { GetStaticProps } from "next";
 
 interface HomeProps {
   products: ProductData[]; // Make sure the interface matches the expected prop
@@ -23,6 +24,17 @@ const index: React.FC<HomeProps> = ({ products }) => {
       </div>
     </div>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  // Fetch your JSON data here, for example, using `import`
+  const productData = await import('../../../assets/productData.json');
+
+  return {
+    props: {
+      products: productData.products as ProductData[], // Cast the products data to ProductData[]
+    },
+  };
 };
 
 export default index;

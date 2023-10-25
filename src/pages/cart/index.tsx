@@ -6,6 +6,7 @@ import { ProductData } from "@/components/product";
 
 import cartempty from "../../../public/Images/cartempty.png"
 import Link from 'next/link';
+import { GetStaticProps } from 'next';
 
 interface HomeProps {
     products: ProductData[]; // Make sure the interface matches the expected prop
@@ -24,5 +25,16 @@ const NotFound: React.FC<HomeProps> = ({ products }) =>{
         </div>
     )
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+    // Fetch your JSON data here, for example, using `import`
+    const productData = await import('../../../assets/productData.json');
+  
+    return {
+      props: {
+        products: productData.products as ProductData[], // Cast the products data to ProductData[]
+      },
+    };
+  };
 
 export default NotFound;
