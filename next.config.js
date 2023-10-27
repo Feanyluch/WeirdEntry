@@ -35,6 +35,12 @@ module.exports = {
         port: '',
         pathname: '/duxy2eomx/image/upload/v1697809364/unsplash_6uW0PTXaOd8_dvpaqn.png',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png'
+      }
     ],
   },
 }

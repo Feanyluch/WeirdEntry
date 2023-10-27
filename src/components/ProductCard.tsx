@@ -3,14 +3,16 @@ import Link from "next/link";
 import { ProductData } from "./product";
 import { useState } from "react";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
   incrementCartCount,
   removeFromCart,
   incrementItem,
   decrementItem,
+  addSelectedProduct,
 } from "@/redux/slices/cartSlice";
+import { RootState } from "@/redux/store";
 interface ProductCardProps {
   product: ProductData;
 }
@@ -23,22 +25,34 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const displayStars = showAllStars ? totalStars : product.rating;
 
   const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
 
   const handleAddToCart = () => {
-    const cartItem = { id: product.id, quantity: 1 }; // Create a CartItem with a quantity of 1
-    console.log("produtcts added", cartItem);
-    dispatch(addToCart(cartItem)); // Dispatch the addToCart action with the CartItem
+    const existingProduct = cartItems.find((item) => item.id === product.id);
+
+
+    if (existingProduct) {
+      // If the product is already in the cart, increment its quantity
+      dispatch(incrementItem(existingProduct.id));
+      console.log("Increment Items", incrementItem(existingProduct.id))
+    } else {
+      // If the product is not in the cart, add it with a quantity of 1
+      const cartItem = { id: product.id, quantity: 1 };
+      dispatch(addToCart(cartItem));
+    }
+
     dispatch(incrementCartCount());
+    dispatch(addSelectedProduct(product));
   };
 
   return (
     <div>
       <Link href={`/shop/${product.id}`} passHref>
-        <div className="rounded-lg h-[250px] w-[250px] relative overflow-hidden">
+        <div className="rounded-lg h-[200px] w-[250px] relative overflow-hidden bg-[#0C0C1E]">
           <Image
             src={product.imageSrc}
             width={250}
-            height={250}
+            height={500}
             alt={product.altText}
             className=" object-cover transform hover:scale-110 transition-transform duration-300"
           />

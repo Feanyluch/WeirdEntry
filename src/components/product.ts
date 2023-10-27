@@ -6,4 +6,5 @@ export interface ProductData {
   productName: string;
   rating: number;
   price: string;
+  quantity: number;
 }

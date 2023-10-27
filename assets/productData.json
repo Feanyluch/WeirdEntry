@@ -3,7 +3,7 @@
     "products": [
       {
         "id": 1,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Fendi shirt",
         "rating": 4,
@@ -11,7 +11,7 @@
       },
       {
         "id": 2,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Shirt X",
         "rating": 1,
@@ -19,7 +19,7 @@
       },
       {
         "id": 3,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Gucci shirt",
         "rating": 3,
@@ -27,7 +27,7 @@
       },
       {
         "id": 4,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Versace",
         "rating": 5,
@@ -35,7 +35,7 @@
       },
       {
         "id": 5,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Gucce XYZ",
         "rating": 0,
@@ -43,7 +43,7 @@
       },
       {
         "id": 6,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Palm Angels",
         "rating": 3,
@@ -51,7 +51,7 @@
       },
       {
         "id": 7,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Uruguay XYZ",
         "rating": 2,
@@ -59,7 +59,7 @@
       },
       {
         "id": 8,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Las vegas",
         "rating": 5,
@@ -67,7 +67,7 @@
       },
       {
         "id": 9,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Fila shirt",
         "rating": 1,
@@ -75,7 +75,7 @@
       },
       {
         "id": 10,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Sligh XYZ",
         "rating": 2,
@@ -83,7 +83,7 @@
       },
       {
         "id": 11,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Product XYZ",
         "rating": 4,
@@ -91,7 +91,7 @@
       },
       {
         "id": 12,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Product XYZ",
         "rating": 3,
@@ -99,7 +99,7 @@
       },
       {
         "id": 13,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Product XYZ",
         "rating": 1,
@@ -107,7 +107,7 @@
       },
       {
         "id": 14,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Product XYZ",
         "rating": 3,
@@ -115,7 +115,7 @@
       },
       {
         "id": 15,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Product XYZ",
         "rating": 4,
@@ -123,7 +123,7 @@
       },
       {
         "id": 16,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Product XYZ",
         "rating": 5,
@@ -131,7 +131,7 @@
       },
       {
         "id": 17,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "D&G XYZ",
         "rating": 3,
@@ -139,7 +139,7 @@
       },
       {
         "id": 18,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Laslas XYZ",
         "rating": 4,
@@ -147,7 +147,7 @@
       },
       {
         "id": 19,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Ochara XYZ",
         "rating": 1,
@@ -155,7 +155,7 @@
       },
       {
         "id": 20,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Weird wire ",
         "rating": 3,
@@ -163,7 +163,7 @@
       },
       {
         "id": 21,
-        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1697711587/tshirt_wagio8.png",
+        "imageSrc": "https://res.cloudinary.com/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png",
         "altText": "tshirt",
         "productName": "Product XYZ",
         "rating": 2,

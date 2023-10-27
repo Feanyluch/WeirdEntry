@@ -42,7 +42,7 @@ const Home: React.FC<HomeProps> = ({ products }) => {
         <h2 className="text-center text-xl tracking-[3.6px]">
           What makes us different
         </h2>
-        <div className="w-[1100px] mx-auto">
+        <div className="w-[1200px] mx-auto">
           <div className="grid grid-cols-4 gap-[40px] mt-[50px]">
             <div className="">
               <Image src={Energy} alt="energy" className="mb-[16px]" />
@@ -87,7 +87,7 @@ const Home: React.FC<HomeProps> = ({ products }) => {
         </div>
       </div>
       <div className="px-8 py-[60px] bg-[#1B2E3C] ">
-        <div className="max-w-[1100px] mx-auto grid grid-cols-3 gap-8">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-3 gap-8">
           <div>
             <Image src={shirt} alt="shirt" />
           </div>
@@ -105,10 +105,10 @@ const Home: React.FC<HomeProps> = ({ products }) => {
         <h2 className="my-2">+</h2>
         <h2 className="text-4xl font-normal">TRENDING</h2>
       </div>
-      <div className="w-[1100px] mx-auto my-[50px]">
+      <div className="w-[1200px] mx-auto my-[50px]">
         <RelatedProducts products={products} />
       </div>
-      <div className="w-[1100px] mx-auto my-10">
+      <div className="w-[1200px] mx-auto my-10">
         <div className="grid grid-cols-2">
           <div className="flex items-start justify-center bg-[#1B2E3C] text-[#F3E3E2] px-12 ">
             <div className="">

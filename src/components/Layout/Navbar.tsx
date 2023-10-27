@@ -17,8 +17,14 @@ import Close from "../../../public/Images/Close.svg";
 import weirdlogo from "../../../public/Images/weirdlogo.png";
 
 import CartItems from "@/components/CartItems";
+import { ProductData } from "@/components/product";
+import { GetStaticProps } from "next";
 
-const Navbar: React.FC = () => {
+interface HomeProps {
+  products: ProductData[]; // Make sure the interface matches the expected prop
+}
+
+const Navbar: React.FC<HomeProps> = ({ products }) => {
   const cartCount = useSelector((state: RootState) => state.cart.cartCount);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -114,6 +120,17 @@ const Navbar: React.FC = () => {
       </div>
     </nav>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  // Fetch your JSON data here, for example, using `import`
+  const productData = await import('../../../assets/productData.json');
+
+  return {
+    props: {
+      products: productData.products as ProductData[], // Cast the products data to ProductData[]
+    },
+  };
 };
 
 export default Navbar;
