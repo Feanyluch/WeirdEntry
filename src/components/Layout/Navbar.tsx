@@ -20,11 +20,9 @@ import CartItems from "@/components/CartItems";
 import { ProductData } from "@/components/product";
 import { GetStaticProps } from "next";
 
-interface HomeProps {
-  products: ProductData[]; // Make sure the interface matches the expected prop
-}
 
-const Navbar: React.FC<HomeProps> = ({ products }) => {
+
+const Navbar: React.FC = () => {
   const cartCount = useSelector((state: RootState) => state.cart.cartCount);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
