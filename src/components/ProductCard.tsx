@@ -48,10 +48,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <div>
       <Link href={`/shop/${product.id}`} passHref>
-        <div className="rounded-lg h-[200px] w-[250px] relative overflow-hidden bg-[#0C0C1E]">
+        <div className="rounded-lg h-[200px] relative overflow-hidden">
           <Image
             src={product.imageSrc}
-            width={250}
+            width={350}
             height={500}
             alt={product.altText}
             className=" object-cover transform hover:scale-110 transition-transform duration-300"
@@ -83,7 +83,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <h2 className="text-sm my-4">{product.price}</h2>
         </div>
       </Link>
-      <div className="flex gap-4">
+      <div className="flex gap-4 w-full">
         <button
           onClick={handleAddToCart}
           className="text-sm py-3 w-3/4 uppercase border border-[#0C0C1E] rounded-lg hover:bg-[#1B2E3C] hover:text-white transition ease-in-out duration-300"
