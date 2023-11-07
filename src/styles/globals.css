@@ -84,3 +84,33 @@ body {
 .nav-link:hover::before {
   width: 100%; 
 }
+
+/* Style the form label to appear on the border */
+.custom-input-group {
+  position: relative;
+}
+
+.custom-input-group label:focus-within {
+  color: #424242;
+}
+
+/* .custom-input-group label.text-[#424242] {
+  color: #424242;
+} */
+
+.custom-input-group label {
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  background-color: white;
+  padding: 0 4px;
+  z-index: 99;
+}
+
+/* Style the input to have some padding and border */
+.custom-input-group input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  width: 100%;
+}
