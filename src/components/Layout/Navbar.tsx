@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
 import Link from "next/link";
@@ -26,6 +26,7 @@ const Navbar: React.FC = () => {
   const cartCount = useSelector((state: RootState) => state.cart.cartCount);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const cartContainerRef = useRef<HTMLDivElement | null>(null);
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
   };
@@ -33,6 +34,22 @@ const Navbar: React.FC = () => {
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
   };
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (cartContainerRef.current && !cartContainerRef.current.contains(e.target as Node)) {
+        setIsCartOpen(false);
+      }
+    };
+
+    if (isCartOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isCartOpen]);
 
   return (
     <nav className="bg-[#FFFFFF] text-[#1B2E3C] sticky top-0 bg-opacity-70 backdrop-blur-xl z-[999]">
