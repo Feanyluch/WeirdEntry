@@ -48,9 +48,9 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
   };
 
   return (
-    <div className="p-4 flex items-center justify-start">
-      <div className="">
-        <Image src={shirt2} alt="item1" width={100} height={100} />
+    <div className="p-4 flex items-center justify-start h-[200px] my-4">
+      <div className=" rounded-lg">
+        <Image src={shirt2} alt="item1" width={200} height={200} className="rounded-lg" />
       </div>
       <div className="mx-4">
         <h2 className="text-xl">{product.productName}</h2>

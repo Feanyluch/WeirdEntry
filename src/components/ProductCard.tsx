@@ -39,6 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       // If the product is not in the cart, add it with a quantity of 1
       const cartItem = { id: product.id, quantity: 1 };
       dispatch(addToCart(cartItem));
+      console.log("Item added", cartItem)
     }
 
     dispatch(incrementCartCount());
@@ -49,6 +50,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <div>
       <Link href={`/shop/${product.id}`} passHref>
         <div className="rounded-lg h-[200px] relative overflow-hidden">
+          <h2 className="absolute z-[9] bg-gray-200 px-4 py-2">-50%</h2>
           <Image
             src={product.imageSrc}
             width={350}
@@ -56,6 +58,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             alt={product.altText}
             className=" object-cover transform hover:scale-110 transition-transform duration-300"
           />
+
         </div>
 
         <div className="my-5">

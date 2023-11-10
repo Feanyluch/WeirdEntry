@@ -14,10 +14,10 @@ const CartItems: React.FC = () => {
 
   if (selectedProducts.length === 0) {
     return (
-      <div className="bg-[#F3E3E2] w-[300px] flex items-center justify-center flex-col">
+      <div className="bg-[#F3E3E2] rounded-lg w-[300px] p-4 flex items-center justify-center flex-col">
         <h2>Cart is empty</h2>
 
-        <Link href="/cart">Go to Cart</Link>
+        <Link href="/cart" className="text-xl border-2 border-[#1B2E3C] bg-white m-4 flex items-center justify-center py-4 px-8 h-12 rounded-lg hover:bg-[#1B2E3C] hover:text-white transition-all ">Go to Cart</Link>
       </div>
     );
   }
@@ -27,7 +27,7 @@ const CartItems: React.FC = () => {
   if (uniqueSelectedProducts.length > 3) {
     // Display only the first 3 selected products
     return (
-      <div className="bg-[#F3E3E2] w-[300px]">
+      <div className="bg-[#F3E3E2] rounded-lg w-[300px] p-4">
         {uniqueSelectedProducts.slice(0, 3).map((product) => (
           <MiniProduct
           key={product.id}
@@ -35,13 +35,13 @@ const CartItems: React.FC = () => {
           cartItems={cartItems}
         />
         ))}
-        <Link href="/cart">Go to Cart</Link>
+        <Link href="/cart" className="text-xl border-2 border-[#1B2E3C] bg-white m-4 flex items-center justify-center py-4 px-8 h-12 rounded-lg hover:bg-[#1B2E3C] hover:text-white transition-all ">Go to Cart</Link>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#F3E3E2] w-[300px]">
+    <div className="bg-[#F3E3E2] rounded-lg w-[300px] p-4">
       {uniqueSelectedProducts.map((product) => (
         <MiniProduct
         key={product.id}
@@ -50,7 +50,7 @@ const CartItems: React.FC = () => {
       />
       ))}
 
-      <Link href="/cart">Go to Cart</Link>
+      <Link href="/cart" className="text-xl border-2 border-[#1B2E3C] bg-white m-4 flex items-center justify-center py-4 px-8 h-12 rounded-lg hover:bg-[#1B2E3C] hover:text-white transition-all ">Go to Cart</Link>
     </div>
   );
 };

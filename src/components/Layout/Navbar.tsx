@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="bg-[#FFFFFF] text-[#1B2E3C] sticky top-0 bg-opacity-70 backdrop-blur-xl z-[999]">
       <div className="w-[1200px] mx-auto py-4">
-        <div className="flex justify-between items-center">
+        <div className="relative flex justify-between items-center">
           <div className="flex items-center">
             <div className="w-[200px]">
               <Link href="/">
@@ -78,6 +78,7 @@ const Navbar: React.FC = () => {
               </Link>
             </ul>
           </div>
+
           <div className="flex items-center space-x-4">
             <div
               className={`relative ${
@@ -108,6 +109,7 @@ const Navbar: React.FC = () => {
               )}
             </div>
             <div className="relative">
+              
               <div className="p-2 relative cursor-pointer" onClick={toggleCart}>
                 <Image src={cart} alt="Logo" height={22} width={22} />
                 <h2 className="absolute top-0 right-0 bg-[#1B2E3C] text-white rounded-[50%] p-1 flex items-center justify-center h-5 w-5 text-sm">
@@ -115,11 +117,13 @@ const Navbar: React.FC = () => {
                 </h2>
               </div>
               {isCartOpen && (
-                <div className="absolute top-[50px] right-0">
+                <div className="absolute top-[50px] right-0" ref={cartContainerRef}>
                   <CartItems />
                 </div>
               )}
+              
             </div>
+            
 
             <div className="p-2 relative cursor-pointer">
               <Image src={Heart} alt="Heart" height={22} width={22} />
