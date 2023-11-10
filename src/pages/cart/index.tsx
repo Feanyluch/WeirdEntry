@@ -44,13 +44,44 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
 
   const uniqueSelectedProducts = Array.from(new Set(selectedProducts));
 
+  const calculateSubtotal = () => {
+    let subtotal = 0;
+    for (const item of cartItems) {
+      const product = products.find((p) => p.id === item.id);
+  
+      if (product) {
+        const priceAsNumber = parseFloat(product.price.replace(/[^0-9.-]+/g, ''));
+        console.log("Product Price:", product.price);
+        console.log("Price as Number:", priceAsNumber);
+        console.log("Item Quantity:", item.quantity);
+  
+        if (!isNaN(priceAsNumber)) {
+          subtotal += priceAsNumber * item.quantity;
+        }
+      }
+    }
+    return subtotal;
+  };
+  
+  
+  
+
+  const calculateTotal = () => {
+    const subtotal = calculateSubtotal();
+    const shippingChargePercentage = 10; // Adjust based on your requirement
+    const shippingCharge = (subtotal * shippingChargePercentage) / 100;
+    return subtotal + shippingCharge;
+  };
+
+  const subtotal = calculateSubtotal();
+  const total = calculateTotal();
+
   return (
     <div className="">
       <Breadcrumb products={products} />
-
-      <div className=" bg-[#fdf9f9] p-8 w-[1200px] mx-auto my-[3rem]">
-        <div className="flex">
-          <div className="bg-[#F3E3E2] rounded-lg w-[50%]">
+      <div className="bg-[#fdf9f9] p-8 w-[1200px] mx-auto my-[3rem]">
+        <div className="grid grid-cols-2 gap-12">
+          <div className="bg-[#F3E3E2] rounded-lg">
             {uniqueSelectedProducts.map((product) => (
               <CartProducts
                 key={product.id}
@@ -59,7 +90,11 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
               />
             ))}
           </div>
-          <div className=""></div>
+          <div className="">
+          <h2>SubTotal: {subtotal.toLocaleString()}</h2>
+          <p>Shipping charges (10%): {(subtotal * 0.1).toLocaleString()}</p>
+          <h2>Total: {total.toLocaleString()}</h2>
+          </div>
         </div>
       </div>
     </div>

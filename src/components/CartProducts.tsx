@@ -52,9 +52,9 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
       <div className=" rounded-lg">
         <Image src={shirt2} alt="item1" width={200} height={200} className="rounded-lg" />
       </div>
-      <div className="mx-4">
+      <div className="mx-8">
         <h2 className="text-xl">{product.productName}</h2>
-        <h1 className="font-bold my-1">{product.price}</h1>
+        <h1 className="font-bold py-2">{product.price}</h1>
         <div className="flex items-center justify-between text-xl">
           <button
             className="text-xl bg-gray-100 px-2 rounded-lg"
