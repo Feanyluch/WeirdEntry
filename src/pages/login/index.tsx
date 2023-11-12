@@ -58,26 +58,14 @@ const Index: React.FC<HomeProps> = ({ products }) => {
           <h2 className="text-5xl text-center py-12 uppercase">Login</h2>
           <div className="my-2">
             <div className="py-2">
-              <div
-                className={`custom-input-group ${
-                  isEmailFocused ? "focused" : ""
-                }`}
-              >
-                <label
-                  htmlFor="email"
-                  className={`text-[12.8px] ${
-                    isEmailFocused ? "text-[#1B2E3C] font-bold" : "text-[#BEBEBE]"
-                  }`}
-                >
-                  Email
-                </label>
+              
                 <input
                   type="email"
                   id="email"
                   name="email"
                   value={email}
-                  placeholder="Johnsondoe@nomail.com"
-                  className={`h-[60px] bg-[#f3f4f5] focus:outline-none focus:border-[#1B2E3C] focus:border-2 ${isEmailFocused ? "bg-white" : "bg-[#f3f4f5]"}`}
+                  placeholder="Email Address"
+                  className={`h-[60px] w-full px-4 bg-[#f3f4f5] focus:outline-none focus:border-[#1B2E3C] focus:border-2 rounded-lg ${isEmailFocused ? "bg-white" : "bg-[#f3f4f5]"}`}
                   onFocus={() => setIsEmailFocused(true)}
                   onChange={handleEmailChange}
                   onBlur={handleEmailBlur}
@@ -89,30 +77,17 @@ const Index: React.FC<HomeProps> = ({ products }) => {
                   {emailError}
                 </span>
               )}
-            </div>
 
             <div className="py-2">
-              <div
-                className={`custom-input-group ${
-                  isPasswordFocused ? "focused" : ""
-                }`}
-              >
-                <label
-                  htmlFor="password"
-                  className={`text-[12.8px] font-normal ${
-                    isPasswordFocused ? "text-[#1B2E3C]" : "text-[#BEBEBE]"
-                  }`}
-                >
-                  Password
-                </label>
+              
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
                     id="password"
                     name="password"
                     value={password}
-                    placeholder="**********"
-                    className={`h-[60px] bg-[#f3f4f5] focus:outline-none focus:border-[#1B2E3C] focus:border-2 ${isEmailFocused ? "bg-white" : "bg-[#f3f4f5]"}`}
+                    placeholder="Password"
+                    className={`h-[60px] w-full bg-[#f3f4f5] px-4 rounded-lg focus:outline-none focus:border-[#1B2E3C] focus:border-2 ${isEmailFocused ? "bg-white" : "bg-[#f3f4f5]"}`}
                     onChange={handlePasswordChange}
                     onFocus={() => setIsPasswordFocused(true)}
                     onBlur={handlePasswordBlur}
@@ -136,7 +111,6 @@ const Index: React.FC<HomeProps> = ({ products }) => {
                   {passwordError}
                 </span>
               )}
-            </div>
           </div>
           <RoundCheckbox
             label="Remember me"
