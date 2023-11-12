@@ -7,9 +7,13 @@ import RoundCheckbox from "@/components/Checkbox";
 import Link from "next/link";
 import Image from "next/image";
 
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/redux/slices/authSlice';
+
 import { useLogin } from "@/hook/useLogin";
 
 import toright from "../../../public/Images/To-Right.svg";
+import { login } from "@/service/authService";
 
 interface HomeProps {
   products: ProductData[];
@@ -17,9 +21,9 @@ interface HomeProps {
 
 const Index: React.FC<HomeProps> = ({ products }) => {
   const {
-    name,
-    setName,
-    nameError,
+    lastName,
+    setLastName,
+    lastNameError,
     email,
     setEmail,
     emailError,
@@ -49,6 +53,20 @@ const Index: React.FC<HomeProps> = ({ products }) => {
     console.log(newCheckedState);
     setIsChecked(newCheckedState);
   };
+
+  const dispatch = useDispatch();
+
+  const handleLogin = async () => {
+    try {
+      const user = await login({ email, password });
+      console.log("user details", user);
+      dispatch(setUser(user));
+      // Redirect or perform further actions
+    } catch (error) {
+      // Handle login error
+    }
+  };
+  
 
   return (
     <div className="">
@@ -118,14 +136,14 @@ const Index: React.FC<HomeProps> = ({ products }) => {
             onChange={handleCheckboxChange}
           />
           <div className="my-2">
-            <button className="py-3 px-8 my-4 w-full border-2 transition-all border-[#1B2E3C] hover:bg-[#1B2E3C] hover:text-white rounded-lg uppercase text-xl">
+            <button onClick={handleLogin} className="py-3 px-8 my-4 w-full border-2 transition-all border-[#1B2E3C] hover:bg-[#1B2E3C] hover:text-white rounded-lg uppercase text-xl">
               Login
             </button>
           </div>
           <div className="flex items-center justify-between text-gray-400 py-8">
             <Link href="/">Forgot password ?</Link>
             <div className="flex">
-              <Link href="/">Register</Link>
+              <Link href="/signup">Register</Link>
               <Image src={toright} width={20} height={20} alt="to right" />
             </div>
           </div>

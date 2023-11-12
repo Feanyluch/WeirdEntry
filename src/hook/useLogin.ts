@@ -3,8 +3,11 @@ import { useState, useEffect } from "react";
 // import { adminLogin } from "./useLitmus";
 
 export const useLogin = () => {
-  const [name, setName] = useState("");
-  const [nameError, setNameError] = useState("")
+  const [firstName, setFirstName] = useState("");
+  const [firstNameError, setFirstNameError] = useState("")
+  //
+  const [lastName, setLastName] = useState("");
+  const [lastNameError, setLastNameError] = useState("")
   //
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -13,13 +16,14 @@ export const useLogin = () => {
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   //
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password_confirmation, setConfirmPassword] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   //
   const [rememberMe, setRememberMe] = useState(false);
 
-  const [isNameFocused, setIsNameFocused] = useState(false);
+  const [isFirstNameFocused, setIsFirstNameFocused] = useState(false);
+  const [isLastNameFocused, setIsLastNameFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false)
   const [isEmailFocused, setIsEmailFocused] = useState(false);
@@ -29,20 +33,37 @@ export const useLogin = () => {
   //   redirectIfAuthenticated: "/user/dashboard",
   // });
 
-  const handleNameBlur = () => {
-    if (!name) {
-      setNameError("Name is required")
+  const handleFirstNameBlur = () => {
+    if (!firstName) {
+      setFirstNameError("Name is required")
     } else{
-      setNameError('')
+      setFirstNameError('')
     }
   }
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value)
-    if (!name) {
-      setNameError("Name is required")
+  const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFirstName(e.target.value)
+    if (!firstName) {
+      setFirstNameError("Name is required")
     } else{
-      setNameError('')
+      setFirstNameError('')
+    }
+  }
+
+  const handleLastNameBlur = () => {
+    if (!lastName) {
+      setLastNameError("Name is required")
+    } else{
+      setLastNameError('')
+    }
+  }
+
+  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLastName(e.target.value)
+    if (!lastName) {
+      setLastNameError("Name is required")
+    } else{
+      setLastNameError('')
     }
   }
 
@@ -113,13 +134,13 @@ export const useLogin = () => {
   };
 
   const handleConfirmPasswordBlur = () => {
-    if (!confirmPassword) {
+    if (!password_confirmation) {
       setConfirmPasswordError("Password required")
     }
-    else if (confirmPassword !== password) {
+    else if (password_confirmation !== password) {
       setConfirmPasswordError("Passwords do not match");
     }
-    else if (confirmPassword.length < 8) {
+    else if (password_confirmation.length < 8) {
       setConfirmPasswordError("Password must be at least 8 characters");
     } else {
       setConfirmPasswordError("");
@@ -129,7 +150,7 @@ export const useLogin = () => {
   };
 
   const handleConfirmPassword = () => {
-    if (confirmPassword !== password) {
+    if (password_confirmation !== password) {
       setConfirmPasswordError("Passwords do not match");
     } else {
       setConfirmPasswordError("");
@@ -138,7 +159,7 @@ export const useLogin = () => {
 
   useEffect(() => {
     handleConfirmPassword()
-  }, [confirmPassword])
+  }, [password_confirmation])
 
   const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmPassword(e.target.value)
@@ -170,16 +191,20 @@ export const useLogin = () => {
   }, []);
 
   return {
-    name,
-    setName,
-    nameError,
-    setNameError,
+    lastName,
+    setLastName,
+    firstName,
+    setFirstName,
+    lastNameError,
+    firstNameError,
+    setLastNameError,
+    setFirstNameError,
     email,
     setEmail,
     emailError,
     password,
     setPassword,
-    confirmPassword,
+    password_confirmation,
     setConfirmPassword,
     passwordError,
     setPasswordError,
@@ -191,8 +216,10 @@ export const useLogin = () => {
     setShowConfirmPassword,
     rememberMe,
     setRememberMe,
-    isNameFocused,
-    setIsNameFocused,
+    isFirstNameFocused,
+    setIsFirstNameFocused,
+    isLastNameFocused,
+    setIsLastNameFocused,
     isPasswordFocused,
     setIsPasswordFocused,
     isConfirmPasswordFocused,
@@ -200,11 +227,13 @@ export const useLogin = () => {
     isEmailFocused,
     setIsEmailFocused,
     //
-    handleNameBlur,
+    handleLastNameBlur,
+    handleFirstNameBlur,
     handleEmailBlur,
     handlePasswordBlur,
     handleSubmit,
-    handleNameChange,
+    handleLastNameChange,
+    handleFirstNameChange,
     handleEmailChange,
     handlePasswordChange,
     handleShowPasswordClick,
