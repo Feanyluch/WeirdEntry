@@ -66,7 +66,6 @@ const Index: React.FC<HomeProps> = ({ products }) => {
       // Handle login error
     }
   };
-  
 
   return (
     <div className="">

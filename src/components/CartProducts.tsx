@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import shirt2 from "../../public/Images/shirt2.png";
+import DeleteSvg from "../../public/Images/delete.svg"
+import Favorite from "../../public/Images/Heart.svg"
 import { ProductData } from "@/components/product";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -48,27 +50,45 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
   };
 
   return (
-    <div className="p-4 flex items-center justify-start h-[200px] my-4">
-      <div className=" rounded-lg">
-        <Image src={shirt2} alt="item1" width={200} height={200} className="rounded-lg" />
+    <div className="grid grid-cols-2 my-8 gap-8">
+      <div className=" rounded-lg bg-black">
+        <Image src={product.imageSrc} alt="item1" width={300} height={100} className="rounded-lg" />
       </div>
-      <div className="mx-8">
-        <h2 className="text-xl">{product.productName}</h2>
-        <h1 className="font-bold py-2">{product.price}</h1>
-        <div className="flex items-center justify-between text-xl">
+      <div className="flex flex-col py-4 gap-[5px]">
+        <h2 className="text-base font-normal uppercase">{product.productName}</h2>
+        <h1 className="font-bold text-base my-1">{product.price}</h1>
+        
+        <div className="flex items-center justify-between gap-6">
+          <div className="flex gap-1">
+            <h2>Size: </h2>
+            <p> M</p>
+          </div>
+        <div className="flex items-center justify-start gap-[12px] text-base my-1">
+          <h2>Qty:</h2>
           <button
-            className="text-xl bg-gray-100 px-2 rounded-lg"
+            className="text-lg px-2 rounded-lg"
             onClick={decrementQuantity}
           >
             -
           </button>
           <h2>{quantity}</h2>
           <button
-            className="text-xl bg-gray-100 px-2 rounded-lg"
+            className="text-lg px-2 rounded-lg"
             onClick={incrementQuantity}
           >
             +
           </button>
+        </div>
+        </div>
+        <div className="py-2 flex justify-between items-center">
+          <div className="flex items-center gap-2 cursor-pointer">
+          <Image src={Favorite} width={20} height={20} alt="delete icon" />
+            <h2 className="text-xs uppercase">Add to wishlist</h2>
+          </div>
+          <div className="flex items-center gap-2 cursor-pointer">
+            <Image src={DeleteSvg} width={20} height={20} alt="delete icon" />
+            <h2 className="text-xs uppercase">Delete</h2>
+          </div>
         </div>
       </div>
     </div>

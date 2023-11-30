@@ -21,12 +21,12 @@ const Breadcrumb: React.FC<HomeProps> = ({ products }) => {
   const selectedProduct = products.find((product) => product.id === parseInt(pathnames[pathnames.length - 1], 10));
 
   return (
-    <div className="bg-[#1B2E3C] h-[299px] flex items-center justify-center text-[#F3E3E2]">
-      <div className="flex justify-between items-center flex-col">
+    <div className="bg-[#1B2E3C] h-[240px] flex items-end justify-center text-[#F3E3E2] py-[20px]">
+      <div className="flex gap-[72px] justify-center items-center flex-col">
         <h2 className="uppercase text-5xl">
           {selectedProduct ? formatPageName(selectedProduct.productName) : formatPageName(pathnames[pathnames.length - 1])}
         </h2>
-        <div className="flex mt-32 text-sm uppercase">
+        <div className="flex text-sm uppercase">
           <Link href="/">Home</Link>
           {pathnames.map((name, index) => {
             const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;

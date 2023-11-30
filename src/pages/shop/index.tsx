@@ -16,7 +16,7 @@ const Index: React.FC<HomeProps> = ({ products }) => {
   return (
     <div>
       <Breadcrumb products={products} />
-      <div className="w-[1200px] mx-auto flex gap-8 my-12">
+      <div className="w-[1200px] mx-auto flex gap-8 my-[70px]">
         <div className="w-1/4 flex-shrink-0">
           <div className="sticky top-40">
             <ProductCategory />
@@ -33,6 +33,7 @@ const Index: React.FC<HomeProps> = ({ products }) => {
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch your JSON data here, for example, using `import`
   const productData = await import('../../../assets/productData.json');
+  console.log("Product Data", productData)
 
   return {
     props: {
