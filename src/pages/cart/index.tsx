@@ -33,7 +33,7 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
           </h2>
           <Link
             href="/shop"
-            className="w-[300px] border border-[#0C0C1E] text-center rounded-lg my-8 py-4 text-base"
+            className="w-[300px] border border-[#0C0C1E] text-center rounded-lg my-8 py-4 text-sm"
           >
             Return to shop
           </Link>
@@ -79,8 +79,8 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
     <div className="">
       <Breadcrumb products={products} />
       <div className="bg-[#fdf9f9] max-w-[1200px] px-[70px] pt-[60px] pb-[30px] mx-auto my-[60px]">
-        <div className="flex w-full gap-[30px]">
-          <div className="w-[60%] bg-[#F3E3E2] rounded-lg px-[40px] h-[550px] overflow-auto">
+        <div className="flex w-full gap-[30px] h-[480px]">
+          <div className="w-[60%] bg-[#F3E3E2] rounded-lg px-[40px] overflow-auto">
             {uniqueSelectedProducts.map((product) => (
               <CartProducts
                 key={product.id}
@@ -90,42 +90,42 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
             ))}
           </div>
           <div className="w-[40%] pt-[10px] px-[20px]">
-            <p className="text-base font-light tracking-[2px]">Coupon Code</p>
+            <p className="text-sm font-light tracking-[2px]">Coupon Code</p>
             <div className="w-full h-[1px] bg-[#0C0C1E80] my-[30px]"></div>
             <div className="flex justify-between items-center">
-              <h2 className="text-base font-light tracking-[2px] uppercase">
+              <h2 className="text-sm font-light tracking-[1px] uppercase">
                 SubTotal
               </h2>{" "}
-              <span className="text-lg font-bold ">
+              <span className="text-sm font-bold ">
                 N{subtotal.toLocaleString()}
               </span>
             </div>
             <div className="w-full h-[1px] bg-[#0C0C1E80] my-[30px]"></div>
-            <p className="text-lg font-normal tracking-[3px] uppercase">
+            <p className="text-sm font-normal tracking-[1px] uppercase">
               Shipping
             </p>
             <div className="flex justify-between items-center my-[30px]">
-              <h2 className="text-base font-light tracking-[2px] uppercase">
+              <h2 className="text-sm font-light tracking-[1px] uppercase">
                 Weird Entry (10%)
               </h2>{" "}
-              <span className="text-lg font-bold ">
+              <span className="text-sm font-bold ">
                 N{(subtotal * 0.1).toLocaleString()}
               </span>
             </div>
-            <p className="font-light text-sm w-[90%]">
+            <p className="font-light text-xs w-[90%]">
               Shipping options and details will be updated during the checkout,
               click on the checkout button below to proceed.
             </p>
             <div className="w-full h-[1px] bg-[#0C0C1E80] my-[30px]"></div>
             <div className="flex justify-between items-center">
-              <h2 className="text-base font-light tracking-[2px] uppercase">
+              <h2 className="text-sm font-light tracking-[2px] uppercase">
                 Total
               </h2>{" "}
-              <span className="text-lg font-bold ">
+              <span className="text-sm font-bold ">
                 N{total.toLocaleString()}
               </span>
             </div>
-            <div className="flex items-center justify-center my-8"><button className="bg-[#1B2E3C] text-[#F3E3E2] py-[17px] px-[80px] text-sm uppercase rounded-lg">Check out</button></div>
+            <div className="flex items-center justify-center my-8"><a href="cart/checkout" className="bg-[#1B2E3C] text-[#F3E3E2] py-[17px] px-[80px] text-sm uppercase rounded-lg">Check out</a></div>
           </div>
         </div>
       </div>

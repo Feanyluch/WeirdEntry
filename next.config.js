@@ -39,7 +39,7 @@ module.exports = {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
         port: '',
-        pathname: '/duxy2eomx/image/upload/v1698223732/shirt1_p2niki.png'
+        pathname: '/duxy2eomx/image/upload/v1701445909/newshirt_m84thz.png'
       }
     ],
   },

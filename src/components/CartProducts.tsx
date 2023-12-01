@@ -23,7 +23,7 @@ interface MiniProductProps {
   cartItems: { id: number; quantity: number }[];
 }
 
-const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {  
+const CartProducts: React.FC<MiniProductProps> = ({ product }) => {  
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const cartItem = cartItems.find((item) => item.id === product.id);
@@ -51,20 +51,20 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
 
   return (
     <div className="grid grid-cols-2 my-8 gap-8">
-      <div className=" rounded-lg bg-black">
-        <Image src={product.imageSrc} alt="item1" width={300} height={100} className="rounded-lg" />
+      <div className=" rounded-lg w-[200px] h-[50px]">
+        <Image src={product.imageSrc} alt="item1" width={200} height={50} className="rounded-lg" />
       </div>
       <div className="flex flex-col py-4 gap-[5px]">
-        <h2 className="text-base font-normal uppercase">{product.productName}</h2>
-        <h1 className="font-bold text-base my-1">{product.price}</h1>
+        <h2 className="text-sm font-normal uppercase">{product.productName}</h2>
+        <h1 className="font-bold text-sm my-1">{product.price}</h1>
         
         <div className="flex items-center justify-between gap-6">
           <div className="flex gap-1">
-            <h2>Size: </h2>
-            <p> M</p>
+            <h2 className="text-sm">Size: </h2>
+            <p className="text-sm"> M</p>
           </div>
-        <div className="flex items-center justify-start gap-[12px] text-base my-1">
-          <h2>Qty:</h2>
+        <div className="flex items-center justify-start gap-[12px] text-sm my-1">
+          <h2 className="text-sm">Qty:</h2>
           <button
             className="text-lg px-2 rounded-lg"
             onClick={decrementQuantity}
@@ -95,4 +95,4 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
   );
 };
 
-export default MiniProducts;
+export default CartProducts;

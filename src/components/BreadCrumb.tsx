@@ -23,10 +23,10 @@ const Breadcrumb: React.FC<HomeProps> = ({ products }) => {
   return (
     <div className="bg-[#1B2E3C] h-[240px] flex items-end justify-center text-[#F3E3E2] py-[20px]">
       <div className="flex gap-[72px] justify-center items-center flex-col">
-        <h2 className="uppercase text-5xl">
+        <h2 className="uppercase text-4xl">
           {selectedProduct ? formatPageName(selectedProduct.productName) : formatPageName(pathnames[pathnames.length - 1])}
         </h2>
-        <div className="flex text-sm uppercase">
+        <div className="flex items-center justify-center text-xs uppercase">
           <Link href="/">Home</Link>
           {pathnames.map((name, index) => {
             const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
