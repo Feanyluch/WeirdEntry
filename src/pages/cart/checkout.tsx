@@ -256,6 +256,8 @@ const Checkout: React.FC<HomeProps> = ({ products }) => {
               ))}
             </div>
 
+            <div className="w-full h-[1px] bg-[#0C0C1E80] my-[20px]"></div>
+
             <div className="px-4 py-4">
               <div className="py-[10px] flex items-center justify-between">
                 <h2 className="text-sm font-normal">Subtotal</h2>
