@@ -18,10 +18,10 @@ const RoundCheckbox: React.FC<RoundCheckboxProps> = ({ label, checked, onChange 
           checked={checked}
           onChange={() => onChange(!checked)}
         />
-        <div className={`w-5 h-5 ${checked ? "bg-[#1B2E3C]" : "bg-white border-gray-400"} rounded-full shadow-inner border border-gray-400}`}></div>
+        <div className={`w-4 h-4 ${checked ? "bg-[#1B2E3C]" : "bg-white border-gray-400"} rounded-full shadow-inner border border-gray-400}`}></div>
         {/* <div className={`absolute w-[200px] h-[300px] rounded-full z-[999] bg-red-700 border-2 ${checked ? 'border-blue-600' : 'border-purple-600'} transform scale-0 transition-transform`}></div> */}
       </div>
-      <div className={`ml-3 font-normal ${checked ? 'text-[#1B2E3C]' : "text-gray-400"}`}>{label}</div>
+      <div className={`ml-3 font-normal text-xs ${checked ? 'text-[#1B2E3C]' : "text-[#1B2E3C80]"}`}>{label}</div>
     </label>
   );
 };

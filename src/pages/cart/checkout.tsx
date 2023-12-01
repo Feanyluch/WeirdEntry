@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Breadcrumb from "@/components/BreadCrumb";
 import CartProducts from "@/components/CartProducts";
 import Image from "next/image";
@@ -15,12 +17,52 @@ import { GetStaticProps } from "next";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import CheckoutProducts from "@/components/CheckoutProducts";
+import RoundCheckbox from "@/components/Checkbox";
 
 interface HomeProps {
   products: ProductData[]; // Make sure the interface matches the expected prop
 }
 
+// Define the CheckboxStates interface
+interface CheckboxStates {
+  addCard: boolean;
+  bankTransfer: boolean;
+  terms: boolean;
+  // Add more checkboxes as needed
+}
+
 const Checkout: React.FC<HomeProps> = ({ products }) => {
+  // Create an array of checkbox states
+  const [checkboxStates, setCheckboxStates] = useState<CheckboxStates>({
+    addCard: false,
+    bankTransfer: false,
+    terms: false
+    // Initialize more checkboxes as needed
+  });
+
+  
+
+  // Function to handle checkbox changes
+  const handleCheckboxChange = (checkboxName: keyof CheckboxStates) => {
+    setCheckboxStates((prevStates) => ({
+      ...prevStates,
+      [checkboxName]: !prevStates[checkboxName],
+    }));
+
+    // Uncheck the other checkbox
+    if (checkboxName === 'addCard') {
+      setCheckboxStates((prevStates) => ({
+        ...prevStates,
+        bankTransfer: false,
+      }));
+    } else if (checkboxName === 'bankTransfer') {
+      setCheckboxStates((prevStates) => ({
+        ...prevStates,
+        addCard: false,
+      }));
+    }
+  };  
+
   const selectedProducts = useSelector(
     (state: RootState) => state.cart.selectedProduct
   );
@@ -167,17 +209,41 @@ const Checkout: React.FC<HomeProps> = ({ products }) => {
 
               <div className="flex flex-col gap-[20px]">
                 <div className="bg-[#1B2E3C0D] h-[40px] rounded p-2 flex items-center justify-start gap-2 cursor-pointer">
-                  <Image src={Circle} width={20} height={20} alt="verifyIcon" />
-                  <h2 className="text-xs text-[#1B2E3C80]">Add Card</h2>
+                  <RoundCheckbox
+                    label="Add Card"
+                    checked={checkboxStates.addCard}
+                    onChange={() => handleCheckboxChange("addCard")}
+                  />
                 </div>
                 <div className="bg-[#1B2E3C0D] h-[40px] rounded p-2 flex items-center justify-start gap-2 cursor-pointer">
-                  <Image src={Circle} width={20} height={20} alt="verifyIcon" />
-                  <h2 className="text-xs text-[#1B2E3C80]">Bank Transfer</h2>
+                  <RoundCheckbox
+                    label="Bank Transfer"
+                    checked={checkboxStates.bankTransfer}
+                    onChange={() => handleCheckboxChange("bankTransfer")}
+                  />
                 </div>
               </div>
             </div>
+            <div className="flex items-center justify-start gap-4 my-2">
+              <RoundCheckbox
+                label="By clicking place order, I agree to the Terms and Conditions"
+                checked={checkboxStates.terms}
+                onChange={() => handleCheckboxChange("terms")}
+              />
+              {/* <p className="text-xs">
+                By clicking place order, I agree to the Terms and Conditions
+              </p> */}
+            </div>
+            <div className="flex items-center justify-center">
+              <Link
+                href="/place-order"
+                className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded"
+              >
+                Place Order
+              </Link>
+            </div>
           </div>
-          <div className="w-[42%] bg-white rounded-lg p-[40px]">
+          <div className="w-[42%] h-[830px] bg-white rounded-lg p-[40px]">
             <h2 className="uppercase text-sm font-normal">items</h2>
             <div className="w-full h-[1px] bg-[#0C0C1E80] my-[20px]"></div>
             <div className="h-[530px] overflow-auto">
