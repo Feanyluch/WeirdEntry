@@ -15,7 +15,12 @@ const Breadcrumb: React.FC<HomeProps> = ({ products }) => {
 
   const formatPageName = (name: string) => {
     // Replace hyphens with spaces and capitalize words
-    return name.replace(/-/g, ' ').toUpperCase();
+    const formattedName = name.replace(/-/g, ' ').toUpperCase();
+
+    // Remove query parameters from the formatted name
+    const withoutQueryParams = formattedName.split('?')[0];
+
+    return withoutQueryParams;
   };
 
   const selectedProduct = products.find((product) => product.id === parseInt(pathnames[pathnames.length - 1], 10));

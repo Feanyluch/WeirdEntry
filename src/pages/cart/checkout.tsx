@@ -128,7 +128,7 @@ const Checkout: React.FC<HomeProps> = ({ products }) => {
 
       <div className="bg-[#fdf9f9] max-w-[1200px] px-[70px] pt-[60px] pb-[30px] mx-auto my-[60px]">
         <div className="flex gap-[40px]">
-          <div className="w-[58%] flex flex-col w-full gap-[30px]">
+          <div className="w-[58%] flex flex-col gap-[30px]">
             <div className="bg-white rounded-lg p-[40px]">
               <h2 className="uppercase text-sm font-normal">
                 Delivery Details
