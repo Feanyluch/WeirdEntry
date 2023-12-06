@@ -38,25 +38,25 @@ const CartProducts: React.FC<MiniProductProps> = ({ product }) => {
 
   const incrementQuantity = () => {
     setQuantity(quantity + 1);
-    dispatch(incrementCartCount())
+    // dispatch(incrementCartCount())
     
   };
 
   const decrementQuantity = () => {
     if (quantity > 0) {
       setQuantity(quantity - 1);
-      dispatch(decrementCartCount())
+      // dispatch(decrementCartCount())
     }
   };
 
   return (
-    <div className="grid grid-cols-2 my-8 gap-8">
-      <div className=" rounded-lg w-[200px] h-[50px]">
-        <Image src={product.imageSrc} alt="item1" width={200} height={50} className="rounded-lg" />
+    <div className="grid grid-cols-2 py-4 gap-8">
+      <div className=" rounded-lg">
+        <Image src={product.product_image} alt="item1" width={200} height={50} className="rounded-lg" />
       </div>
       <div className="flex flex-col py-4 gap-[5px]">
-        <h2 className="text-sm font-normal uppercase">{product.productName}</h2>
-        <h1 className="font-bold text-sm my-1">{product.price}</h1>
+        <h2 className="text-sm font-normal uppercase">{product.title}</h2>
+        <h1 className="font-bold text-sm my-1">₦ {(product.price).toLocaleString()}</h1>
         
         <div className="flex items-center justify-between gap-6">
           <div className="flex gap-1">

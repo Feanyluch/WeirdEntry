@@ -43,7 +43,7 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
   const decrementQuantity = () => {
     if (quantity > 0) {
       setQuantity(quantity - 1);
-      dispatch(decrementCartCount());
+      // dispatch(decrementCartCount());
     }
   };
 
@@ -55,20 +55,20 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
     console.log("Item removed", cartItem);
   };
 
-  const priceAsNumber = parseFloat(
-    product.price.replace(/[^0-9.-]+/g, "")
-  );
+  // const priceAsNumber = parseFloat(
+  //   product.price.replace(/[^0-9.-]+/g, "")
+  // );
 
-  console.log("produuuuuuuuuuu price", priceAsNumber)
+  // console.log("produuuuuuuuuuu price", priceAsNumber)
   
 
   return (
     <div className="p-4 flex justify-between gap-4">
       <div className="flex items-center justify-start gap-4">
         <div className="w-[50px]">
-          <Image src={product.imageSrc} alt="item1" width={100} height={100} />
+          <Image src={product.product_image} alt="item1" width={100} height={100} />
         </div>
-        <h2 className="text-sm">{product.productName}</h2>
+        <h2 className="text-sm">{product.title}</h2>
       </div>
       <div className="flex items-center justify-center">
         <div className="flex items-center justify-between text-xl gap-2 border border-[#1B2E3C80]">
@@ -89,7 +89,7 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
       </div>
 
       <h1 className="font-bold text-xs flex items-center justify-center">
-        N{(priceAsNumber * quantity).toLocaleString()}
+      ₦{(product.price * quantity).toLocaleString()}
       </h1>
       <div
         className="flex items-center justify-center"

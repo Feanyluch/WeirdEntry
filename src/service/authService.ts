@@ -2,15 +2,16 @@
 import axios from "axios";
 
 export const signup = async (userData: {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
+  address: string;
   password: string;
   password_confirmation: string;
 }) => {
   try {
     const response = await axios.post(
-      "https://d8e8-154-118-74-220.ngrok-free.app/api/register",
+      "https://weird-entry-lara-production.up.railway.app/api/register",
       userData
     );
     return response.data;

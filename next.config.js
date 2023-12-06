@@ -42,6 +42,7 @@ module.exports = {
         pathname: '/duxy2eomx/image/upload/v1701445909/newshirt_m84thz.png'
       }
     ],
+    domains: ['api.lorem.space'],
   },
 }
 // module.exports = nextConfig

@@ -18,11 +18,12 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const [showAllStars, setShowAllStars] = useState(false);
+  // console.log("Product Card Prop", product);
+  // const [showAllStars, setShowAllStars] = useState(false);
 
-  const totalStars = 5;
-  const grayStars = totalStars - product.rating;
-  const displayStars = showAllStars ? totalStars : product.rating;
+  // const totalStars = 5;
+  // const grayStars = totalStars - product.rating;
+  // const displayStars = showAllStars ? totalStars : product.rating;
 
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -52,17 +53,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="rounded-lg h-[200px] relative overflow-hidden">
           <h2 className="absolute z-[9] bg-gray-200 px-4 py-2">-50%</h2>
           <Image
-            src={product.imageSrc}
+            src={product.product_image}
             width={350}
             height={500}
-            alt={product.altText}
+            alt={product.title}
             className=" object-cover transform hover:scale-110 transition-transform duration-300"
           />
         </div>
 
         <div className="my-5">
-          <h2 className="">{product.productName}</h2>
-          <div className="flex my-2">
+          <h2 className="">{product.title}</h2>
+          {/* <div className="flex my-2">
             {[...Array(displayStars)].map((_, index) => (
               <Image
                 key={index}
@@ -81,8 +82,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 alt="gray-staricon"
               />
             ))}
-          </div>
-          <h2 className="text-sm my-4">{product.price}</h2>
+          </div> */}
+          <h2 className="text-sm my-4">₦ {(product.price).toLocaleString()}</h2>
         </div>
       </Link>
       <div className="flex gap-4 w-full">

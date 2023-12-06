@@ -11,7 +11,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
   const relatedProducts = products.slice(0, 4);
 
   return (
-    <div className="max-w-[1200px] mx-auto grid grid-cols-4 gap-4">
+    <div className="max-w-[1100px] mx-auto grid grid-cols-4 gap-4">
       {relatedProducts.map((product, index) => (
         <ProductCard key={index} product={product} />
       ))}

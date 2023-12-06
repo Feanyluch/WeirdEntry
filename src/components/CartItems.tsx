@@ -18,7 +18,7 @@ const CartItems: React.FC = () => {
         {/* //{" "} */}
         {/* <div className="bg-[#F3E3E2] h-[100px] rounded-lg w-[300px] p-4 flex items-center justify-center flex-col"> */}
           {/* // <h2>Cart is empty</h2> */}
-          {/* <Link href="/cart/checkout" className="text-xl border-2 border-[#1B2E3C] m-4 flex items-center justify-center py-4 px-8 h-12 rounded-lg bg-[#1B2E3C] text-white transition-all ">Go to Cart</Link> */}
+          {/* <Link href="/cart" className="text-xl border-2 border-[#1B2E3C] m-4 flex items-center justify-center py-4 px-8 h-12 rounded-lg bg-[#1B2E3C] text-white transition-all ">Go to Cart</Link> */}
           {/* //{" "} */}
         {/* </div> */}
       </div>
@@ -48,7 +48,7 @@ const CartItems: React.FC = () => {
           />
         ))}
         <Link
-          href="/cart/checkout"
+          href="/cart"
           className="text-xl border-2 border-[#1B2E3C] m-4 flex items-center justify-center py-4 px-8 h-12 rounded-lg bg-[#1B2E3C] text-white transition-all uppercase"
         >
           checkout
@@ -72,7 +72,7 @@ const CartItems: React.FC = () => {
       ))}
 
       <Link
-        href="/cart/checkout"
+        href="/cart"
         className="text-xl border-2 border-[#1B2E3C] m-4 flex items-center justify-center py-4 px-8 h-12 rounded-lg bg-[#1B2E3C] text-white transition-all uppercase"
       >
         checkout

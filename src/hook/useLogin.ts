@@ -3,11 +3,14 @@ import { useState, useEffect } from "react";
 // import { adminLogin } from "./useLitmus";
 
 export const useLogin = () => {
-  const [firstName, setFirstName] = useState("");
+  const [first_name, setFirstName] = useState("");
   const [firstNameError, setFirstNameError] = useState("")
   //
-  const [lastName, setLastName] = useState("");
+  const [last_name, setLastName] = useState("");
   const [lastNameError, setLastNameError] = useState("")
+   //
+   const [address, setAddress] = useState("");
+   const [addressError, setAddressError] = useState("")
   //
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -24,6 +27,7 @@ export const useLogin = () => {
 
   const [isFirstNameFocused, setIsFirstNameFocused] = useState(false);
   const [isLastNameFocused, setIsLastNameFocused] = useState(false);
+  const [isAddressFocused, setIsAddressFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false)
   const [isEmailFocused, setIsEmailFocused] = useState(false);
@@ -34,7 +38,7 @@ export const useLogin = () => {
   // });
 
   const handleFirstNameBlur = () => {
-    if (!firstName) {
+    if (!first_name) {
       setFirstNameError("Name is required")
     } else{
       setFirstNameError('')
@@ -43,7 +47,7 @@ export const useLogin = () => {
 
   const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFirstName(e.target.value)
-    if (!firstName) {
+    if (!first_name) {
       setFirstNameError("Name is required")
     } else{
       setFirstNameError('')
@@ -51,7 +55,7 @@ export const useLogin = () => {
   }
 
   const handleLastNameBlur = () => {
-    if (!lastName) {
+    if (!last_name) {
       setLastNameError("Name is required")
     } else{
       setLastNameError('')
@@ -60,10 +64,27 @@ export const useLogin = () => {
 
   const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLastName(e.target.value)
-    if (!lastName) {
+    if (!last_name) {
       setLastNameError("Name is required")
     } else{
       setLastNameError('')
+    }
+  }
+
+  const handleAddressBlur = () => {
+    if (!address) {
+      setAddressError("Name is required")
+    } else{
+      setAddressError('')
+    }
+  }
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress(e.target.value)
+    if (!first_name) {
+      setAddressError("Name is required")
+    } else{
+      setAddressError('')
     }
   }
 
@@ -191,10 +212,14 @@ export const useLogin = () => {
   }, []);
 
   return {
-    lastName,
+    last_name,
     setLastName,
-    firstName,
+    first_name,
     setFirstName,
+    address,
+    setAddress,
+    addressError,
+    setAddressError,
     lastNameError,
     firstNameError,
     setLastNameError,
@@ -220,6 +245,8 @@ export const useLogin = () => {
     setIsFirstNameFocused,
     isLastNameFocused,
     setIsLastNameFocused,
+    isAddressFocused,
+    setIsAddressFocused,
     isPasswordFocused,
     setIsPasswordFocused,
     isConfirmPasswordFocused,
@@ -227,6 +254,8 @@ export const useLogin = () => {
     isEmailFocused,
     setIsEmailFocused,
     //
+    handleAddressBlur,
+    handleAddressChange,
     handleLastNameBlur,
     handleFirstNameBlur,
     handleEmailBlur,

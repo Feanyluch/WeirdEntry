@@ -1,5 +1,6 @@
 import Breadcrumb from "@/components/BreadCrumb";
 import React, { useState } from "react";
+import axios from "axios";
 
 import { ProductData } from "@/components/product";
 import { GetStaticProps } from "next";
@@ -21,14 +22,18 @@ interface HomeProps {
 
 const Index: React.FC<HomeProps> = ({ products }) => {
   const {
-    firstName,
+    first_name,
     setFirstName,
-    lastName,
+    last_name,
     setLastName,
     lastNameError,
     firstNameError,
     email,
     setEmail,
+    address,
+    setAddress,
+    addressError,
+    setAddressError,
     emailError,
     password,
     setPassword,
@@ -41,6 +46,8 @@ const Index: React.FC<HomeProps> = ({ products }) => {
     
     isFirstNameFocused,
     setIsFirstNameFocused,
+    isAddressFocused,
+    setIsAddressFocused,
     isLastNameFocused,
     setIsLastNameFocused,
     password_confirmation,
@@ -58,6 +65,8 @@ const Index: React.FC<HomeProps> = ({ products }) => {
     isEmailFocused,
     setIsEmailFocused,
     //
+    handleAddressBlur,
+    handleAddressChange,
     handleEmailBlur,
     handleFirstNameBlur,
     handleLastNameBlur,
@@ -86,8 +95,9 @@ const Index: React.FC<HomeProps> = ({ products }) => {
       const user = await signup({
         email,
         password,
-        firstName,
-        lastName,
+        first_name,
+        last_name,
+        address,
         password_confirmation,
       });
       console.log("user details", user);
@@ -110,9 +120,9 @@ const Index: React.FC<HomeProps> = ({ products }) => {
               <div className="py-2">
                 <input
                   type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={firstName}
+                  id="first_name"
+                  name="first_name"
+                  value={first_name}
                   placeholder="First Name"
                   className={`h-[60px] w-full px-4 bg-[#f3f4f5] focus:outline-none focus:border-[#1B2E3C] focus:border-2 rounded-lg ${
                     isFirstNameFocused ? "bg-white" : "bg-[#f3f4f5]"
@@ -133,9 +143,9 @@ const Index: React.FC<HomeProps> = ({ products }) => {
               <div className="py-2">
                 <input
                   type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={lastName}
+                  id="last_name"
+                  name="last_name"
+                  value={last_name}
                   placeholder="Last Name"
                   className={`h-[60px] w-full px-4 bg-[#f3f4f5] focus:outline-none focus:border-[#1B2E3C] focus:border-2 rounded-lg ${
                     isLastNameFocused ? "bg-white" : "bg-[#f3f4f5]"
@@ -143,6 +153,29 @@ const Index: React.FC<HomeProps> = ({ products }) => {
                   onFocus={() => setIsLastNameFocused(true)}
                   onChange={handleLastNameChange}
                   onBlur={handleLastNameBlur}
+                />
+              </div>
+
+              {lastNameError && (
+                <span className="text-[#1B2E3C] text-sm py-1">
+                  {lastNameError}
+                </span>
+              )}
+            </div>
+            <div className="">
+              <div className="py-2">
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  value={address}
+                  placeholder="Delivery Address"
+                  className={`h-[60px] w-full px-4 bg-[#f3f4f5] focus:outline-none focus:border-[#1B2E3C] focus:border-2 rounded-lg ${
+                    isAddressFocused ? "bg-white" : "bg-[#f3f4f5]"
+                  }`}
+                  onFocus={() => setIsAddressFocused(true)}
+                  onChange={handleAddressChange}
+                  onBlur={handleAddressBlur}
                 />
               </div>
 
@@ -278,13 +311,23 @@ const Index: React.FC<HomeProps> = ({ products }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const productData = await import("../../../assets/productData.json");
+  // Fetch data from the API using Axios
+  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
 
-  return {
-    props: {
-      products: productData.products as ProductData[],
-    },
-  };
+  try {
+    const response = await axios.get(apiUrl);
+    const productData = response.data;
+    console.log("Product Data", productData);
+
+    return {
+      props: {
+        products: productData as ProductData[],
+      },
+    };
+  } catch (error: any) {
+    console.error("Error fetching data from API:", error.message);
+    throw new Error(`Failed to fetch data from API: ${error.message}`);
+  }
 };
 
 export default Index;

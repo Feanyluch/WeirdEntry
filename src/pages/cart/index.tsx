@@ -10,9 +10,10 @@ import Link from "next/link";
 import { GetStaticProps } from "next";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import axios from "axios";
 
 interface HomeProps {
-  products: ProductData[]; // Make sure the interface matches the expected prop
+  products?: { data: ProductData[] } | undefined; // Make the prop optional
 }
 
 const Cart: React.FC<HomeProps> = ({ products }) => {
@@ -47,23 +48,27 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
   const calculateSubtotal = () => {
     let subtotal = 0;
     for (const item of cartItems) {
-      const product = products.find((p) => p.id === item.id);
-
-      if (product) {
-        const priceAsNumber = parseFloat(
-          product.price.replace(/[^0-9.-]+/g, "")
-        );
-        console.log("Product Price:", product.price);
-        console.log("Price as Number:", priceAsNumber);
-        console.log("Item Quantity:", item.quantity);
-
-        if (!isNaN(priceAsNumber)) {
-          subtotal += priceAsNumber * item.quantity;
+      if (products && Array.isArray(products.data)) {
+        const product = products.data.find((p) => p.id === item.id);
+  
+        if (product) {
+          const priceAsNumber = product.price;
+          console.log("Product Price:", product.price);
+          console.log("Price as Number:", priceAsNumber);
+          console.log("Item Quantity:", item.quantity);
+  
+          if (!isNaN(priceAsNumber)) {
+            subtotal += priceAsNumber * item.quantity;
+            console.log("Subtotal after this iteration:", subtotal);
+          }
         }
       }
     }
     return subtotal;
   };
+  
+  
+
 
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
@@ -73,6 +78,7 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
   };
 
   const subtotal = calculateSubtotal();
+  console.log({subtotal})
   const total = calculateTotal();
 
   return (
@@ -125,7 +131,7 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
                 N{total.toLocaleString()}
               </span>
             </div>
-            <div className="flex items-center justify-center my-8"><a href="cart/checkout" className="bg-[#1B2E3C] text-[#F3E3E2] py-[17px] px-[80px] text-sm uppercase rounded-lg">Check out</a></div>
+            <div className="flex items-center justify-center my-8"><Link href="cart/checkout" className="bg-[#1B2E3C] text-[#F3E3E2] py-[17px] px-[80px] text-sm uppercase rounded-lg">Check out</Link></div>
           </div>
         </div>
       </div>
@@ -134,14 +140,23 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  // Fetch your JSON data here, for example, using `import`
-  const productData = await import("../../../assets/productData.json");
+  // Fetch data from the API using Axios
+  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
 
-  return {
-    props: {
-      products: productData.products as ProductData[], // Cast the products data to ProductData[]
-    },
-  };
+  try {
+    const response = await axios.get(apiUrl);
+    const productData = response.data;
+    console.log("Product Data", productData);
+
+    return {
+      props: {
+        products: productData as ProductData[],
+      },
+    };
+  } catch (error: any) {
+    console.error("Error fetching data from API:", error.message);
+    throw new Error(`Failed to fetch data from API: ${error.message}`);
+  }
 };
 
 export default Cart;

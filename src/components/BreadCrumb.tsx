@@ -1,15 +1,17 @@
-import { useRouter } from 'next/router';
-import Link from 'next/link';
+import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import axios from 'axios';
 import toright from '../../public/Images/toright.svg';
-import { ProductData } from "@/components/product"; // Import the ProductData type
+import { ProductData } from '@/components/product'; // Import the ProductData type
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 
-interface HomeProps {
-  products: ProductData[]; // Make sure the interface matches the expected prop
+interface BreadcrumbProps {
+  products?: ProductData[] | { data: ProductData[] } | undefined; // Make the prop optional
 }
 
-const Breadcrumb: React.FC<HomeProps> = ({ products }) => {
+const Breadcrumb: React.FC<BreadcrumbProps> = ({ products }) => {
   const router = useRouter();
   const pathnames = router.asPath.split('/').filter((x) => x);
 
@@ -23,13 +25,15 @@ const Breadcrumb: React.FC<HomeProps> = ({ products }) => {
     return withoutQueryParams;
   };
 
-  const selectedProduct = products.find((product) => product.id === parseInt(pathnames[pathnames.length - 1], 10));
+  const selectedProduct = Array.isArray(products)
+    ? products.find((product) => product.id === parseInt(pathnames[pathnames.length - 1], 10))
+    : undefined;
 
   return (
     <div className="bg-[#1B2E3C] h-[240px] flex items-end justify-center text-[#F3E3E2] py-[20px]">
       <div className="flex gap-[72px] justify-center items-center flex-col">
         <h2 className="uppercase text-4xl">
-          {selectedProduct ? formatPageName(selectedProduct.productName) : formatPageName(pathnames[pathnames.length - 1])}
+          {selectedProduct ? formatPageName(selectedProduct.title) : formatPageName(pathnames[pathnames.length - 1])}
         </h2>
         <div className="flex items-center justify-center text-xs uppercase">
           <Link href="/">Home</Link>
@@ -39,7 +43,7 @@ const Breadcrumb: React.FC<HomeProps> = ({ products }) => {
             return isLast ? (
               <>
                 <Image src={toright} alt="toright" height={20} width={20} />
-                <span key={name}>{formatPageName(selectedProduct ? selectedProduct.productName : name)}</span>
+                <span key={name}>{formatPageName(selectedProduct ? selectedProduct.title : name)}</span>
               </>
             ) : (
               <>
@@ -54,31 +58,52 @@ const Breadcrumb: React.FC<HomeProps> = ({ products }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  // Fetch your JSON data here, for example, using `import`
-  const productData = await import('../../assets/productData.json');
 
-  return {
-    props: {
-      products: productData.products as ProductData[], // Cast the products data to ProductData[]
-    },
-  };
+
+export const getStaticProps: GetStaticProps = async () => {
+  // Fetch data from the API using Axios
+  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+
+  try {
+    const response = await axios.get(apiUrl);
+    const productData = response.data;
+    console.log("Product Data", productData);
+
+    return {
+      props: {
+        products: productData as ProductData[],
+      },
+    };
+  } catch (error: any) {
+    console.error("Error fetching data from API:", error.message);
+    throw new Error(`Failed to fetch data from API: ${error.message}`);
+  }
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  // Fetch your JSON data or use another data source to get the list of product IDs
-  const productData = await import('../../assets/productData.json');
-  const products = productData.products as ProductData[];
+  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
 
-  // Create an array of product IDs for the dynamic paths
-  const paths = products.map((product) => ({
+  try {
+    const response = await axios.get(apiUrl);
+    const productData = response.data;
+    console.log("Product Data", productData);
+
+    // Create an array of product IDs for the dynamic paths
+  const paths = productData.map((product: { id: { toString: () => any; }; }) => ({
     params: { id: product.id.toString() },
   }));
 
-  return {
-    paths,
-    fallback: false, // Set to 'true' or 'blocking' if you want to enable fallback behavior
-  };
+    return {
+      props: {
+        products: productData as ProductData[],
+      },
+      paths,
+      fallback: false,
+    };
+  } catch (error: any) {
+    console.error("Error fetching data from API:", error.message);
+    throw new Error(`Failed to fetch data from API: ${error.message}`);
+  }
 };
 
 export default Breadcrumb;
