@@ -18,58 +18,52 @@ const Index: React.FC<HomeProps> = ({ initialProducts, nextPageUrl, prevPageUrl 
 
   useEffect(() => {
     setProducts(initialProducts?.data || []);
+    console.log("Initial Prev Page URL:", prevPageUrl);
+    console.log("Initial Next Page URL:", nextPageUrl);
   }, [initialProducts]);
+
+  const handlePrevPage = async () => {
+    if (prevPageUrl) {
+      try {
+        const response = await axios.get(prevPageUrl);
+        const productData = response.data;
+
+        setCurrentPage(currentPage - 1);
+
+        // Log the values for debugging
+        console.log("Next Page URL:", productData.next_page_url);
+        console.log("Previous Page URL:", productData.prev_page_url);
+        console.log("Product Data:", productData);
+
+        // Update the component state with the new data
+        setProducts(productData.data);
+      } catch (error: any) {
+        console.error("Error fetching previous page data from API:", error.message);
+      }
+    }
+  };
 
   const handleNextPage = async () => {
     if (nextPageUrl) {
       try {
         const response = await axios.get(nextPageUrl);
         const productData = response.data;
-  
+
         setCurrentPage(currentPage + 1);
-  
+
         // Log the values for debugging
-        console.log("Next Page URL:", nextPageUrl);
-        console.log("Previous Page URL:", prevPageUrl);
+        console.log("Next Page URL:", productData.next_page_url);
+        console.log("Previous Page URL:", productData.prev_page_url);
         console.log("Product Data:", productData);
-  
+
         // Update the component state with the new data
-        // Here, I'm assuming the new products replace the old ones
         setProducts(productData.data);
       } catch (error: any) {
         console.error("Error fetching next page data from API:", error.message);
       }
-    } else {
-      // Handle the case when nextPageUrl is null or undefined
-      console.log("Next page URL is null or undefined");
     }
   };
-  
-  const handlePrevPage = async () => {
-    if (prevPageUrl) {
-      try {
-        const response = await axios.get(prevPageUrl);
-        const productData = response.data;
-  
-        setCurrentPage(currentPage - 1);
-  
-        // Log the values for debugging
-        console.log("Next Page URL:", nextPageUrl);
-        console.log("Previous Page URL:", prevPageUrl);
-        console.log("Product Data:", productData);
-  
-        // Update the component state with the new data
-        // Here, I'm assuming the new products replace the old ones
-        setProducts(productData.data);
-      } catch (error: any) {
-        console.error("Error fetching previous page data from API:", error.message);
-      }
-    } else {
-      // Handle the case when prevPageUrl is null or undefined
-      console.log("Previous page URL is null or undefined");
-    }
-  };
-  
+
   
   
   return (
@@ -84,12 +78,12 @@ const Index: React.FC<HomeProps> = ({ initialProducts, nextPageUrl, prevPageUrl 
         <div className="overflow-y-auto px-4 product-container">
           <Products products={{ data: products }} />
           <div className="flex justify-between mt-4">
-            <button onClick={handlePrevPage} disabled={!prevPageUrl}>
-              Previous
-            </button>
-            <button onClick={handleNextPage} disabled={!nextPageUrl}>
-              Next
-            </button>
+          <button onClick={handlePrevPage} disabled={!prevPageUrl}>
+            Previous
+          </button>
+          <button onClick={handleNextPage} disabled={!nextPageUrl}>
+            Next
+          </button>
           </div>
         </div>
       </div>
