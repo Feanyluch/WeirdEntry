@@ -7,20 +7,23 @@ interface ProductsProps {
 }
 
 const Products: React.FC<ProductsProps> = ({ products }) => {
-  console.log({products})
+  console.log({ products });
+
   if (!products) {
     // Handle the case where products is undefined, you can show a loading state or return null
-    return null; 
+    return null;
   }
+
+  const productsArray = Array.isArray(products) ? products : products.data;
 
   return (
     <div className="grid grid-cols-3 gap-8">
-      {Array.isArray(products?.data) &&
-        products.data.map((product, index) => (
-          <ProductCard key={index} product={product} />
-        ))}
+      {productsArray.map((product, index) => (
+        <ProductCard key={index} product={product} />
+      ))}
     </div>
   );
 };
+
 
 export default Products;

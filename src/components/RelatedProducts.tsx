@@ -4,15 +4,15 @@ import ProductCard from './ProductCard';
 import { ProductData } from './product';
 
 interface RelatedProductsProps {
-  products: ProductData[];
+  products?: { data: ProductData[] } | undefined; // Make the prop optional
 }
 
 const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
-  const relatedProducts = products.slice(0, 4);
+  const relatedProducts = products?.data?.slice(0, 4);
 
   return (
     <div className="max-w-[1100px] mx-auto grid grid-cols-4 gap-4">
-      {relatedProducts.map((product, index) => (
+      {Array.isArray(relatedProducts) && relatedProducts.map((product, index) => (
         <ProductCard key={index} product={product} />
       ))}
     </div>

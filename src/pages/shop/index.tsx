@@ -1,7 +1,4 @@
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import toright from "../../../public/Images/toright.svg";
+import React, { useState, useEffect } from "react";
 import ProductCategory from "@/components/ProductCategory";
 import Products from "@/components/Products";
 import { GetStaticProps } from "next";
@@ -10,10 +7,71 @@ import Breadcrumb from "@/components/BreadCrumb";
 import axios from "axios";
 
 interface HomeProps {
-  products?: { data: ProductData[] } | undefined; // Make the prop optional
+  initialProducts?: { data: ProductData[] } | undefined;
+  nextPageUrl?: string | null;
+  prevPageUrl?: string | null;
 }
 
-const Index: React.FC<HomeProps> = ({ products }) => {
+const Index: React.FC<HomeProps> = ({ initialProducts, nextPageUrl, prevPageUrl }) => {
+  const [products, setProducts] = useState(initialProducts?.data || []);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setProducts(initialProducts?.data || []);
+  }, [initialProducts]);
+
+  const handleNextPage = async () => {
+    if (nextPageUrl) {
+      try {
+        const response = await axios.get(nextPageUrl);
+        const productData = response.data;
+  
+        setCurrentPage(currentPage + 1);
+  
+        // Log the values for debugging
+        console.log("Next Page URL:", nextPageUrl);
+        console.log("Previous Page URL:", prevPageUrl);
+        console.log("Product Data:", productData);
+  
+        // Update the component state with the new data
+        // Here, I'm assuming the new products replace the old ones
+        setProducts(productData.data);
+      } catch (error: any) {
+        console.error("Error fetching next page data from API:", error.message);
+      }
+    } else {
+      // Handle the case when nextPageUrl is null or undefined
+      console.log("Next page URL is null or undefined");
+    }
+  };
+  
+  const handlePrevPage = async () => {
+    if (prevPageUrl) {
+      try {
+        const response = await axios.get(prevPageUrl);
+        const productData = response.data;
+  
+        setCurrentPage(currentPage - 1);
+  
+        // Log the values for debugging
+        console.log("Next Page URL:", nextPageUrl);
+        console.log("Previous Page URL:", prevPageUrl);
+        console.log("Product Data:", productData);
+  
+        // Update the component state with the new data
+        // Here, I'm assuming the new products replace the old ones
+        setProducts(productData.data);
+      } catch (error: any) {
+        console.error("Error fetching previous page data from API:", error.message);
+      }
+    } else {
+      // Handle the case when prevPageUrl is null or undefined
+      console.log("Previous page URL is null or undefined");
+    }
+  };
+  
+  
+  
   return (
     <div>
       <Breadcrumb products={products} />
@@ -24,7 +82,15 @@ const Index: React.FC<HomeProps> = ({ products }) => {
           </div>
         </div>
         <div className="overflow-y-auto px-4 product-container">
-          <Products products={products} />
+          <Products products={{ data: products }} />
+          <div className="flex justify-between mt-4">
+            <button onClick={handlePrevPage} disabled={!prevPageUrl}>
+              Previous
+            </button>
+            <button onClick={handleNextPage} disabled={!nextPageUrl}>
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -32,17 +98,17 @@ const Index: React.FC<HomeProps> = ({ products }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  // Fetch data from the API using Axios
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product";
 
   try {
     const response = await axios.get(apiUrl);
     const productData = response.data;
-    console.log("Product Data", productData);
 
     return {
       props: {
-        products: productData as ProductData[],
+        initialProducts: productData,
+        nextPageUrl: productData.next_page_url,
+        prevPageUrl: productData.prev_page_url,
       },
     };
   } catch (error: any) {
@@ -52,13 +118,3 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 export default Index;
-
-
-
-
-
-
-
-
-
-// const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vd2VpcmQtZW50cnktbGFyYS1wcm9kdWN0aW9uLnVwLnJhaWx3YXkuYXBwL2FwaS9yZWdpc3RlciIsImlhdCI6MTcwMTgwNjU0MSwiZXhwIjoxNzAxODEwMTQxLCJuYmYiOjE3MDE4MDY1NDEsImp0aSI6IkhJOFpHV053eDU2OEdObGQiLCJzdWIiOiIyIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.w7MMZJq5yKWqYnOF2xKqkpsI8Dh0dD2RwIZUuRSA4kg';

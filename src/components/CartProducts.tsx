@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import shirt2 from "../../public/Images/shirt2.png";
-import DeleteSvg from "../../public/Images/delete.svg"
-import Favorite from "../../public/Images/Heart.svg"
+import DeleteSvg from "../../public/Images/delete.svg";
+import Favorite from "../../public/Images/Heart.svg";
 import { ProductData } from "@/components/product";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-
 import {
   addToCart,
   incrementCartCount,
@@ -32,26 +30,25 @@ const CartProducts: React.FC<MiniProductProps> = ({ product }) => {
   const [quantity, setQuantity] = useState(initialQuantity);
 
   useEffect(() => {
-    // Update the Redux store when the local state changes
-    dispatch(updateItemQuantity({ productId: product.id, quantity }));
-  }, [quantity, dispatch, product.id]);
+    // Set the local state to the updated quantity when it changes in the Redux store
+    setQuantity(initialQuantity);
+  }, [initialQuantity]);
 
   const incrementQuantity = () => {
-    setQuantity(quantity + 1);
-    // dispatch(incrementCartCount())
-    
+    dispatch(incrementItem( product.id));
+    dispatch(updateItemQuantity({ productId: product.id, quantity: quantity + 1 }));
   };
 
   const decrementQuantity = () => {
     if (quantity > 0) {
-      setQuantity(quantity - 1);
-      // dispatch(decrementCartCount())
+    dispatch(incrementItem( product.id));
+      dispatch(updateItemQuantity({ productId: product.id, quantity: quantity - 1 }));
     }
   };
 
   return (
     <div className="grid grid-cols-2 py-4 gap-8">
-      <div className=" rounded-lg">
+      <div className="rounded-lg">
         <Image src={product.product_image} alt="item1" width={200} height={50} className="rounded-lg" />
       </div>
       <div className="flex flex-col py-4 gap-[5px]">

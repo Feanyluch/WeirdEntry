@@ -25,9 +25,15 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ products }) => {
     return withoutQueryParams;
   };
 
-  const selectedProduct = Array.isArray(products)
+  const selectedProduct =
+  Array.isArray(products)
     ? products.find((product) => product.id === parseInt(pathnames[pathnames.length - 1], 10))
+    : products && products.data
+    ? products.data.find((product) => product.id === parseInt(pathnames[pathnames.length - 1], 10))
     : undefined;
+   
+
+    console.log({selectedProduct})
 
   return (
     <div className="bg-[#1B2E3C] h-[240px] flex items-end justify-center text-[#F3E3E2] py-[20px]">

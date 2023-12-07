@@ -19,6 +19,7 @@ import weirdlogo from "../../../public/Images/weirdlogo.png";
 import CartItems from "@/components/CartItems";
 import { ProductData } from "@/components/product";
 import { GetStaticProps } from "next";
+import axios from "axios";
 
 
 
@@ -142,14 +143,23 @@ const Navbar: React.FC = () => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  // Fetch your JSON data here, for example, using `import`
-  const productData = await import('../../../assets/productData.json');
+  // Fetch data from the API using Axios
+  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
 
-  return {
-    props: {
-      products: productData.products as ProductData[], // Cast the products data to ProductData[]
-    },
-  };
+  try {
+    const response = await axios.get(apiUrl);
+    const productData = response.data;
+    console.log("Product Data", productData);
+
+    return {
+      props: {
+        products: productData as ProductData[],
+      },
+    };
+  } catch (error: any) {
+    console.error("Error fetching data from API:", error.message);
+    throw new Error(`Failed to fetch data from API: ${error.message}`);
+  }
 };
 
 export default Navbar;

@@ -103,7 +103,7 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
                 SubTotal
               </h2>{" "}
               <span className="text-sm font-bold ">
-                N{subtotal.toLocaleString()}
+              ₦{subtotal.toLocaleString()}
               </span>
             </div>
             <div className="w-full h-[1px] bg-[#0C0C1E80] my-[30px]"></div>
@@ -115,7 +115,7 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
                 Weird Entry (10%)
               </h2>{" "}
               <span className="text-sm font-bold ">
-                N{(subtotal * 0.1).toLocaleString()}
+              ₦{(subtotal * 0.1).toLocaleString()}
               </span>
             </div>
             <p className="font-light text-xs w-[90%]">
@@ -128,7 +128,7 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
                 Total
               </h2>{" "}
               <span className="text-sm font-bold ">
-                N{total.toLocaleString()}
+              ₦{total.toLocaleString()}
               </span>
             </div>
             <div className="flex items-center justify-center my-8"><Link href="cart/checkout" className="bg-[#1B2E3C] text-[#F3E3E2] py-[17px] px-[80px] text-sm uppercase rounded-lg">Check out</Link></div>
