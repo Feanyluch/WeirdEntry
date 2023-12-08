@@ -12,60 +12,75 @@ interface HomeProps {
   prevPageUrl?: string | null;
 }
 
-const Index: React.FC<HomeProps> = ({ initialProducts, nextPageUrl, prevPageUrl }) => {
+const Index: React.FC<HomeProps> = ({
+  initialProducts,
+  nextPageUrl,
+  prevPageUrl,
+}) => {
   const [products, setProducts] = useState(initialProducts?.data || []);
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentNextPageUrl, setCurrentNextPageUrl] = useState(nextPageUrl);
+  const [currentPrevPageUrl, setCurrentPrevPageUrl] = useState(prevPageUrl);
 
   useEffect(() => {
     setProducts(initialProducts?.data || []);
+    setCurrentPrevPageUrl(prevPageUrl);
+    setCurrentNextPageUrl(nextPageUrl);
     console.log("Initial Prev Page URL:", prevPageUrl);
     console.log("Initial Next Page URL:", nextPageUrl);
-  }, [initialProducts]);
+  }, [initialProducts, prevPageUrl, nextPageUrl]);
 
   const handlePrevPage = async () => {
-    if (prevPageUrl) {
+    if (currentPrevPageUrl) {
       try {
-        const response = await axios.get(prevPageUrl);
+        const response = await axios.get(currentPrevPageUrl);
         const productData = response.data;
 
-        setCurrentPage(currentPage - 1);
+        // Update the component state with the new data and URLs
+        setProducts(productData.data);
+        setCurrentPrevPageUrl(productData.prev_page_url);
+        setCurrentNextPageUrl(productData.next_page_url);
+
+        // Use the callback form of setCurrentPage to ensure the correct current page value
+        setCurrentPage((prevPage) => prevPage - 1);
 
         // Log the values for debugging
         console.log("Next Page URL:", productData.next_page_url);
         console.log("Previous Page URL:", productData.prev_page_url);
         console.log("Product Data:", productData);
-
-        // Update the component state with the new data
-        setProducts(productData.data);
       } catch (error: any) {
-        console.error("Error fetching previous page data from API:", error.message);
+        console.error(
+          "Error fetching previous page data from API:",
+          error.message
+        );
       }
     }
   };
 
   const handleNextPage = async () => {
-    if (nextPageUrl) {
+    if (currentNextPageUrl) {
       try {
-        const response = await axios.get(nextPageUrl);
+        const response = await axios.get(currentNextPageUrl);
         const productData = response.data;
 
-        setCurrentPage(currentPage + 1);
+        // Update the component state with the new data and URLs
+        setProducts(productData.data);
+        setCurrentPrevPageUrl(productData.prev_page_url);
+        setCurrentNextPageUrl(productData.next_page_url);
+
+        // Use the callback form of setCurrentPage to ensure the correct current page value
+        setCurrentPage((prevPage) => prevPage + 1);
 
         // Log the values for debugging
         console.log("Next Page URL:", productData.next_page_url);
         console.log("Previous Page URL:", productData.prev_page_url);
         console.log("Product Data:", productData);
-
-        // Update the component state with the new data
-        setProducts(productData.data);
       } catch (error: any) {
         console.error("Error fetching next page data from API:", error.message);
       }
     }
   };
 
-  
-  
   return (
     <div>
       <Breadcrumb products={products} />
@@ -77,13 +92,30 @@ const Index: React.FC<HomeProps> = ({ initialProducts, nextPageUrl, prevPageUrl 
         </div>
         <div className="overflow-y-auto px-4 product-container">
           <Products products={{ data: products }} />
-          <div className="flex justify-between mt-4">
-          <button onClick={handlePrevPage} disabled={!prevPageUrl}>
-            Previous
-          </button>
-          <button onClick={handleNextPage} disabled={!nextPageUrl}>
-            Next
-          </button>
+          <div className="flex justify-between mt-8">
+            <button
+              onClick={handlePrevPage}
+              disabled={!currentPrevPageUrl}
+              className={`border rounded-lg h-[40px] px-6 ${
+                currentPrevPageUrl
+                  ? "hover:bg-[#1B2E3C] hover:text-[#F3E3E2]"
+                  : "text-[#F3E3E2]"
+              } ${currentPage === 1 ? "active" : ""}`}
+            >
+              Previous
+            </button>
+            <h2>Page: {currentPage}</h2>
+            <button
+              onClick={handleNextPage}
+              disabled={!currentNextPageUrl}
+              className={`border rounded-lg h-[40px] px-6 ${
+                currentNextPageUrl
+                  ? "hover:bg-[#1B2E3C] hover:text-[#F3E3E2]"
+                  : "text-[#F3E3E2]"
+              }`}
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>
@@ -92,7 +124,8 @@ const Index: React.FC<HomeProps> = ({ initialProducts, nextPageUrl, prevPageUrl 
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product";
+  const apiUrl =
+    "https://weird-entry-lara-production.up.railway.app/api/product";
 
   try {
     const response = await axios.get(apiUrl);

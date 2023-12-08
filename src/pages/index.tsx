@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import { Nokora } from "next/font/google";
 import Navbar from "@/components/Layout/Navbar";
 import Banner from "@/components/Banner";
+import axios from "axios";
+
 
 import banner1 from "../../public/Images/banner1.png";
 import Energy from "../../public/Images/Energy.svg";
@@ -106,7 +108,7 @@ const Home: React.FC<HomeProps> = ({ products }) => {
         <h2 className="text-4xl font-normal">TRENDING</h2>
       </div>
       <div className="w-[1200px] mx-auto my-[50px]">
-        <RelatedProducts products={products} />
+        <RelatedProducts products={{ data: products }} />
       </div>
       <div className="w-[1200px] mx-auto my-10">
         <div className="grid grid-cols-2">
@@ -135,14 +137,22 @@ const Home: React.FC<HomeProps> = ({ products }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  // Fetch your JSON data here, for example, using `import`
-  const productData = await import("../../assets/productData.json");
+  // Fetch data from the API using Axios
+  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
 
-  return {
-    props: {
-      products: productData.products as ProductData[], // Cast the products data to ProductData[]
-    },
-  };
+  try {
+    const response = await axios.get(apiUrl);
+    const productData = response.data;
+    console.log("Product Data", productData);
+
+    return {
+      props: {
+        products: productData as ProductData[],
+      },
+    };
+  } catch (error: any) {
+    console.error("Error fetching data from API:", error.message);
+    throw new Error(`Failed to fetch data from API: ${error.message}`);
+  }
 };
-
 export default Home;

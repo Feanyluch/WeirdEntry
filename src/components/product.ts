@@ -1,4 +1,5 @@
 export interface ProductData {
+  page: number;
   id: number;
   title: string;
   description: string;

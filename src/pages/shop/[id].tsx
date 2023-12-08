@@ -76,6 +76,12 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
   const router = useRouter();
   const { id } = router.query; // Get the product ID from the router
 
+  console.log("Router Query:", router.query);
+  console.log(
+    "Product IDs:",
+    products?.data.map((product) => product.id)
+  );
+
   // Find the selected product based on the ID
   const selectedProduct = products?.data.find(
     (product) => product.id === parseInt(id as string, 10)
@@ -211,13 +217,13 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl =
-    "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+  const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product`;
 
   try {
     const response = await axios.get(apiUrl);
     const productData = response.data;
-    console.log("Product Data", productData);
+
+    console.log("Product Data Page 2:", productData);
 
     return {
       props: {
@@ -231,15 +237,15 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const apiUrl =
-    "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product";
 
   try {
     const response = await axios.get(apiUrl);
     const productData = response.data;
-    console.log("Product Data", productData);
 
-    if (!Array.isArray(productData)) {
+    console.log("API Response:", productData);
+
+    if (!Array.isArray(productData.data)) {
       console.error("Error: Product data is not an array.");
       return {
         paths: [],
@@ -247,12 +253,24 @@ export const getStaticPaths: GetStaticPaths = async () => {
       };
     }
 
-    // Create an array of product IDs for the dynamic paths
-    const paths = productData.map(
-      (product: { id: { toString: () => any } }) => ({
-        params: { id: product.id.toString() },
-      })
-    );
+    const { total, per_page } = productData;
+    const totalPages = Math.ceil(total / per_page);
+
+    const paths = [];
+    for (let page = 1; page <= totalPages; page++) {
+      const pageResponse = await axios.get(`${apiUrl}?page=${page}`);
+      const pageData = pageResponse.data;
+
+      const pagePaths = pageData.data.map((product: { id: number }) => {
+        const path = { params: { page: page.toString(), id: product.id.toString() } };
+        console.log("Generated Path:", path);
+        return path;
+      });
+
+      paths.push(...pagePaths);
+    }
+
+    console.log("All Paths:", paths);
 
     return {
       paths,
@@ -263,5 +281,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     throw new Error(`Failed to fetch data from API: ${error.message}`);
   }
 };
+
+
 
 export default ProductDescription;
