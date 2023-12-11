@@ -14,6 +14,7 @@ import { useLogin } from "@/hook/useLogin";
 
 import toright from "../../../public/Images/To-Right.svg";
 import { login } from "@/service/authService";
+import axios from "axios";
 
 interface HomeProps {
   products: ProductData[];
@@ -21,21 +22,11 @@ interface HomeProps {
 
 const Index: React.FC<HomeProps> = ({ products }) => {
   const {
-    lastName,
-    setLastName,
-    lastNameError,
     email,
-    setEmail,
     emailError,
     password,
-    setPassword,
-    setPasswordError,
-    // setEmailError,
     passwordError,
     showPassword,
-    rememberMe,
-    setRememberMe,
-    isPasswordFocused,
     setIsPasswordFocused,
     isEmailFocused,
     setIsEmailFocused,
@@ -153,13 +144,23 @@ const Index: React.FC<HomeProps> = ({ products }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const productData = await import("../../../assets/productData.json");
+  // Fetch data from the API using Axios
+  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
 
-  return {
-    props: {
-      products: productData.products as ProductData[],
-    },
-  };
+  try {
+    const response = await axios.get(apiUrl);
+    const productData = response.data;
+    console.log("Product Data", productData);
+
+    return {
+      props: {
+        products: productData as ProductData[],
+      },
+    };
+  } catch (error: any) {
+    console.error("Error fetching data from API:", error.message);
+    throw new Error(`Failed to fetch data from API: ${error.message}`);
+  }
 };
 
 export default Index;
