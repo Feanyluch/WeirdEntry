@@ -36,6 +36,12 @@ const Index: React.FC<HomeProps> = ({
         const response = await axios.get(currentPrevPageUrl);
         const productData = response.data;
 
+        const reversedProductIds = productData.data
+          .map((product: { id: any; }) => product.id)
+          .reverse();
+
+          console.log({ reversedProductIds })
+
         // Update the component state with the new data and URLs
         setProducts(productData.data);
         setCurrentPrevPageUrl(productData.prev_page_url);
@@ -63,6 +69,12 @@ const Index: React.FC<HomeProps> = ({
         const response = await axios.get(currentNextPageUrl);
         const productData = response.data;
 
+        const reversedProductIds = productData.data
+          .map((product: { id: any; }) => product.id)
+          .reverse();
+
+          console.log({ reversedProductIds })
+
         // Update the component state with the new data and URLs
         setProducts(productData.data);
         setCurrentPrevPageUrl(productData.prev_page_url);
@@ -75,6 +87,8 @@ const Index: React.FC<HomeProps> = ({
         console.log("Next Page URL:", productData.next_page_url);
         console.log("Previous Page URL:", productData.prev_page_url);
         console.log("Product Data:", productData);
+
+
       } catch (error: any) {
         console.error("Error fetching next page data from API:", error.message);
       }

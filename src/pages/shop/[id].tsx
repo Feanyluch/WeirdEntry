@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -72,30 +72,40 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
     }
   };
 
-  // console.log({ products });
   const router = useRouter();
   const { id } = router.query; // Get the product ID from the router
 
-  console.log("Router Query:", router.query);
-  console.log(
-    "Product IDs:",
-    products?.data.map((product) => product.id)
-  );
+  // Use state to store the selected product
+  const [selectedProduct, setSelectedProduct] = useState<
+    ProductData | undefined
+  >(undefined);
 
-  // Find the selected product based on the ID
-  const selectedProduct = products?.data.find(
-    (product) => product.id === parseInt(id as string, 10)
-  );
+  useEffect(() => {
+    const fetchProductData = async () => {
+      const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product/${id}`;
 
-  // console.log("Product ID", id);
-  // console.log("Selected Product", selectedProduct);
+      try {
+        const response = await axios.get(apiUrl);
+        const productData = response.data;
+
+        // Set the selected product in the component state
+        setSelectedProduct(productData);
+      } catch (error: any) {
+        console.error("Error fetching product data from API:", error.message);
+      }
+    };
+
+    if (id) {
+      fetchProductData();
+    }
+  }, [id]);
+
+  // ... (rest of the code)
 
   if (!selectedProduct) {
     // Handle the case where the product is not found
     return <div>Product not found</div>;
   }
-
-  const sizes = selectedProduct.sizes || [];
   return (
     <div>
       <Breadcrumb products={products} />
@@ -161,14 +171,15 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
               <div className="my-8">
                 <h4>Colors</h4>
                 <div className="flex gap-4 my-2">
-                  {selectedProduct.colors.map((color, index) => (
-                    <button
-                      key={index}
-                      className="text-sm border border-[#0C0C1E80] px-2 h-[25px] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300 rounded-md"
-                    >
-                      {color.title}
-                    </button>
-                  ))}
+                  {selectedProduct.colors &&
+                    selectedProduct.colors.map((color, index) => (
+                      <button
+                        key={index}
+                        className="text-sm border border-[#0C0C1E80] px-2 h-[25px] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300 rounded-md"
+                      >
+                        {color.title}
+                      </button>
+                    ))}
                 </div>
               </div>
               <div className="flex justify-start items-center gap-4">
@@ -237,7 +248,8 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product";
+  const apiUrl =
+    "https://weird-entry-lara-production.up.railway.app/api/product";
 
   try {
     const response = await axios.get(apiUrl);
@@ -262,7 +274,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
       const pageData = pageResponse.data;
 
       const pagePaths = pageData.data.map((product: { id: number }) => {
-        const path = { params: { page: page.toString(), id: product.id.toString() } };
+        const path = {
+          params: { page: page.toString(), id: product.id.toString() },
+        };
         console.log("Generated Path:", path);
         return path;
       });
@@ -281,7 +295,5 @@ export const getStaticPaths: GetStaticPaths = async () => {
     throw new Error(`Failed to fetch data from API: ${error.message}`);
   }
 };
-
-
 
 export default ProductDescription;

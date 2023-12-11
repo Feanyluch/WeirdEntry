@@ -3,7 +3,7 @@ import ProductCard from "../components/ProductCard";
 import { ProductData } from "./product";
 
 interface ProductsProps {
-  products?: { data: ProductData[] } | undefined; // Make the prop optional
+  products?: { data: ProductData[] } | ProductData[] | undefined; // Adjusted prop type
 }
 
 const Products: React.FC<ProductsProps> = ({ products }) => {

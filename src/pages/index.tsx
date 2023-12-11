@@ -26,7 +26,7 @@ import { ProductData } from "@/components/product";
 import { GetStaticProps } from "next";
 
 interface HomeProps {
-  products: ProductData[]; // Make sure the interface matches the expected prop
+  products?: { data: ProductData[] } | undefined; // Make sure the interface matches the expected prop
 }
 
 const inter = Inter({ subsets: ["latin"] });
@@ -108,7 +108,7 @@ const Home: React.FC<HomeProps> = ({ products }) => {
         <h2 className="text-4xl font-normal">TRENDING</h2>
       </div>
       <div className="w-[1200px] mx-auto my-[50px]">
-        <RelatedProducts products={{ data: products }} />
+        <RelatedProducts products={products} />
       </div>
       <div className="w-[1200px] mx-auto my-10">
         <div className="grid grid-cols-2">
