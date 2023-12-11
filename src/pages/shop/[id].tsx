@@ -76,9 +76,7 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
   const { id } = router.query; // Get the product ID from the router
 
   // Use state to store the selected product
-  const [selectedProduct, setSelectedProduct] = useState<
-    ProductData | undefined
-  >(undefined);
+  const [selectedProduct, setSelectedProduct] = useState<ProductData | undefined>(undefined);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -171,15 +169,14 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
               <div className="my-8">
                 <h4>Colors</h4>
                 <div className="flex gap-4 my-2">
-                  {selectedProduct.colors &&
-                    selectedProduct.colors.map((color, index) => (
-                      <button
-                        key={index}
-                        className="text-sm border border-[#0C0C1E80] px-2 h-[25px] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300 rounded-md"
-                      >
-                        {color.title}
-                      </button>
-                    ))}
+                {selectedProduct.sizes.map((color, index) => (
+                    <button
+                      key={index}
+                      className="text-sm border border-[#0C0C1E80] px-2 h-[25px] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300 rounded-md"
+                    >
+                      {color.title}
+                    </button>
+                  ))}
                 </div>
               </div>
               <div className="flex justify-start items-center gap-4">
@@ -248,8 +245,7 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const apiUrl =
-    "https://weird-entry-lara-production.up.railway.app/api/product";
+  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product";
 
   try {
     const response = await axios.get(apiUrl);
@@ -274,9 +270,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
       const pageData = pageResponse.data;
 
       const pagePaths = pageData.data.map((product: { id: number }) => {
-        const path = {
-          params: { page: page.toString(), id: product.id.toString() },
-        };
+        const path = { params: { page: page.toString(), id: product.id.toString() } };
         console.log("Generated Path:", path);
         return path;
       });
@@ -295,5 +289,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     throw new Error(`Failed to fetch data from API: ${error.message}`);
   }
 };
+
+
 
 export default ProductDescription;
