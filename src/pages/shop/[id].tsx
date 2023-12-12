@@ -42,9 +42,17 @@ interface Size {
   // Add other properties if necessary
 }
 
+interface Color {
+  id: number;
+  title: string;
+  description: string;
+  // Add other properties if necessary
+}
+
 interface HomeProps {
   products?: { data: ProductData[] } | undefined; // Make the prop optional
   sizes: Size[];
+  colors: Color[];
 }
 
 const ProductDescription: React.FC<HomeProps> = ({ products }) => {
@@ -169,7 +177,7 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
               <div className="my-8">
                 <h4>Colors</h4>
                 <div className="flex gap-4 my-2">
-                {selectedProduct.sizes.map((color, index) => (
+                {selectedProduct.colors.map((color, index) => (
                     <button
                       key={index}
                       className="text-sm border border-[#0C0C1E80] px-2 h-[25px] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300 rounded-md"

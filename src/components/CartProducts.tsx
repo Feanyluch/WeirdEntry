@@ -47,11 +47,9 @@ const CartProducts: React.FC<MiniProductProps> = ({ product }) => {
   };
 
   return (
-    <div className="grid grid-cols-2 py-4 gap-8">
-      <div className="rounded-lg">
-        <Image src={product.product_image} alt="item1" width={200} height={50} className="rounded-lg" />
-      </div>
-      <div className="flex flex-col py-4 gap-[5px]">
+    <div className="grid grid-cols-2 gap-4">
+        <Image src={product.product_image} alt="item1" width={200} height={50} className="rounded-lg h-[150px]" />
+      <div className="flex flex-col gap-[5px]">
         <h2 className="text-sm font-normal uppercase">{product.title}</h2>
         <h1 className="font-bold text-sm my-1">₦ {(product.price).toLocaleString()}</h1>
         

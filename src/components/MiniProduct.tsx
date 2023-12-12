@@ -14,7 +14,7 @@ import {
   decrementItem,
   addSelectedProduct,
   updateItemQuantity,
-  deleteSelectedProduct
+  deleteSelectedProduct,
 } from "@/redux/slices/cartSlice";
 
 interface MiniProductProps {
@@ -51,7 +51,7 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
     const cartItem = { id: product.id, quantity: 1 };
     dispatch(removeFromCart({ id: cartItem.id }));
     dispatch(deleteSelectedProduct({ id: cartItem.id }));
-    dispatch(decrementCartCount())
+    dispatch(decrementCartCount());
     console.log("Item removed", cartItem);
   };
 
@@ -60,15 +60,23 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
   // );
 
   // console.log("produuuuuuuuuuu price", priceAsNumber)
-  
 
   return (
     <div className="p-4 flex justify-between gap-4">
-      <div className="flex items-center justify-start gap-4">
+      <div className="flex items-center justify-start gap-2">
         <div className="w-[50px]">
-          <Image src={product.product_image} alt="item1" width={100} height={100} />
+          <Image
+            src={product.product_image}
+            alt="item1"
+            width={100}
+            height={100}
+          />
         </div>
-        <h2 className="text-sm">{product.title}</h2>
+        <div className="w-[80px] h-16 overflow-auto">
+          <h2 className="text-sm w-fit h-fit break-all">
+            {product.title}
+          </h2>
+        </div>
       </div>
       <div className="flex items-center justify-center">
         <div className="flex items-center justify-between text-xl gap-2 border border-[#1B2E3C80]">
@@ -89,7 +97,7 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
       </div>
 
       <h1 className="font-bold text-xs flex items-center justify-center">
-      ₦{(product.price * quantity).toLocaleString()}
+        ₦{(product.price * quantity).toLocaleString()}
       </h1>
       <div
         className="flex items-center justify-center"

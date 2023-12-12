@@ -86,7 +86,7 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
       <Breadcrumb products={products} />
       <div className="bg-[#fdf9f9] max-w-[1200px] px-[70px] pt-[60px] pb-[30px] mx-auto my-[60px]">
         <div className="flex w-full gap-[30px] h-[480px]">
-          <div className="w-[60%] bg-[#F3E3E2] rounded-lg px-[40px] overflow-auto">
+          <div className="w-[60%] bg-[#F3E3E2] rounded-lg px-[40px] overflow-auto py-6 flex flex-col gap-6">
             {uniqueSelectedProducts.map((product) => (
               <CartProducts
                 key={product.id}

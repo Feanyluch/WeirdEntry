@@ -117,14 +117,14 @@ const Navbar: React.FC = () => {
                   {cartCount}
                 </h2>
               </div>
-              {isCartOpen && (
+              
+              
+            </div>
+            {isCartOpen && (
                 <div className="absolute top-[50px] right-0" ref={cartContainerRef}>
                   <CartItems />
                 </div>
               )}
-              
-            </div>
-            
 
             <div className="p-2 relative cursor-pointer">
               <Image src={Heart} alt="Heart" height={22} width={22} />

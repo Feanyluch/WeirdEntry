@@ -1,4 +1,4 @@
-// userTypes.ts
+
 export interface User {
   id: number;
   username: string;
@@ -38,5 +38,3 @@ export interface Order {
   total: number;
   // Add more order-related fields here
 }
-
-// export type { User, CartItem, Product, FavoriteItem, Order };

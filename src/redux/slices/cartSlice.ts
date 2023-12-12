@@ -1,5 +1,6 @@
 // cartSlice.ts
 import { ProductData } from "@/components/product";
+import { saveCartToLocalStorage } from "@/utils/localStorageHelper";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define the type for a product in the cart
@@ -9,7 +10,7 @@ interface CartItem {
   // Other properties of the product
 }
 
-interface CartState {
+export interface CartState {
   items: CartItem[];
   cartCount: number;
   itemQuantity: number;
@@ -29,6 +30,7 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action: PayloadAction<CartItem>) => {
       state.items.push(action.payload);
+      saveCartToLocalStorage(state);
     },
     
     incrementCartCount: (state) => {
@@ -56,16 +58,20 @@ const cartSlice = createSlice({
     addSelectedProduct: (state, action: PayloadAction<ProductData>) => {
       state.selectedProduct.push(action.payload);
     },
+    
     deleteSelectedProduct: (state, action: PayloadAction<{ id: number }>) => {
       state.selectedProduct = state.selectedProduct.filter(
         (product) => product.id !== action.payload.id
       );
-    },    
+      saveCartToLocalStorage(state);
+    },
+    
     updateItemQuantity: (state, action: PayloadAction<{ productId: number; quantity: number }>) => {
       const { productId, quantity } = action.payload;
       const product = state.items.find((item) => item.id === productId);
       if (product) {
         product.quantity = quantity;
+        saveCartToLocalStorage(state);
       }
     },
   },
