@@ -7,14 +7,18 @@ interface ProductsProps {
 }
 
 const Products: React.FC<ProductsProps> = ({ products }) => {
-  console.log({ products });
 
-  if (!products) {
-    // Handle the case where products is undefined, you can show a loading state or return null
-    return null;
+  if (!products || (!Array.isArray(products) && !products.data)) {
+    return <p>No products available.</p>;
   }
 
-  const productsArray = Array.isArray(products) ? products : products.data;
+  const productsArray = Array.isArray(products)
+    ? (products as ProductData[])
+    : products.data || [];
+
+  if (productsArray.length === 0) {
+    return <p>No products available.</p>;
+  }
 
   return (
     <div className="grid grid-cols-3 gap-8">
@@ -24,5 +28,6 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
     </div>
   );
 };
+
 
 export default Products;

@@ -3,6 +3,10 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import Skeleton from "react-loading-skeleton";
+import { RingLoader } from "react-spinners";
+
+
 import shirt1 from "../../../public/Images/shirt1.png";
 import shirt2 from "../../../public/Images/shirt2.png";
 import shirt3 from "../../../public/Images/shirt3.png";
@@ -58,6 +62,7 @@ interface HomeProps {
 const ProductDescription: React.FC<HomeProps> = ({ products }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
+  const [loading, setLoading] = useState(true);
 
   const handleAddToCart = () => {
     // Check if selectedProduct is defined
@@ -84,7 +89,9 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
   const { id } = router.query; // Get the product ID from the router
 
   // Use state to store the selected product
-  const [selectedProduct, setSelectedProduct] = useState<ProductData | undefined>(undefined);
+  const [selectedProduct, setSelectedProduct] = useState<
+    ProductData | undefined
+  >(undefined);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -93,11 +100,11 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
       try {
         const response = await axios.get(apiUrl);
         const productData = response.data;
-
-        // Set the selected product in the component state
         setSelectedProduct(productData);
       } catch (error: any) {
         console.error("Error fetching product data from API:", error.message);
+      } finally {
+        setLoading(false); // Set loading to false regardless of success or failure
       }
     };
 
@@ -106,7 +113,13 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
     }
   }, [id]);
 
-  // ... (rest of the code)
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <RingLoader color="#1B2E3C" loading={loading} size={150} />
+      </div>
+    );
+  }
 
   if (!selectedProduct) {
     // Handle the case where the product is not found
@@ -137,12 +150,6 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
               <div className="col-span-1">
                 <Image src={shirt4} alt="shirt2" />
               </div>
-            </div>
-            <div className="my-4 border-t border-b border-[#0C0C1E80] flex items-center justify-between">
-              <h2 className="uppercase text-[#0C0C1E80]">
-                ADDITIONAL INFORMATION
-              </h2>
-              <Image src={todown} alt="" className="cursor-pointer" />
             </div>
           </div>
           <div className="">
@@ -177,7 +184,7 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
               <div className="my-8">
                 <h4>Colors</h4>
                 <div className="flex gap-4 my-2">
-                {selectedProduct.colors.map((color, index) => (
+                  {selectedProduct.sizes.map((color, index) => (
                     <button
                       key={index}
                       className="text-sm border border-[#0C0C1E80] px-2 h-[25px] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300 rounded-md"
@@ -212,7 +219,7 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
                 Estimated delivery time:{" "}
                 <span className="font-bold">xyz minutes or date</span>
               </p>
-              <button className="flex items-center justify-center gap-4 my-10 rounded-lg bg-[#1B2E3C] h-[50px] w-[400px] text-[#F3E3E2]">
+              <button className="flex items-center justify-center gap-4 my-6 rounded-lg bg-[#1B2E3C] h-[50px] w-[400px] text-[#F3E3E2]">
                 <Image src={bag} alt="" />
                 Buy Now
               </button>
@@ -239,7 +246,7 @@ export const getStaticProps: GetStaticProps = async () => {
     const response = await axios.get(apiUrl);
     const productData = response.data;
 
-    console.log("Product Data Page 2:", productData);
+    // console.log("Product Data Page 2:", productData);
 
     return {
       props: {
@@ -253,13 +260,14 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product";
+  const apiUrl =
+    "https://weird-entry-lara-production.up.railway.app/api/product";
 
   try {
     const response = await axios.get(apiUrl);
     const productData = response.data;
 
-    console.log("API Response:", productData);
+    // console.log("API Response:", productData);
 
     if (!Array.isArray(productData.data)) {
       console.error("Error: Product data is not an array.");
@@ -278,15 +286,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
       const pageData = pageResponse.data;
 
       const pagePaths = pageData.data.map((product: { id: number }) => {
-        const path = { params: { page: page.toString(), id: product.id.toString() } };
-        console.log("Generated Path:", path);
+        const path = {
+          params: { page: page.toString(), id: product.id.toString() },
+        };
+        // console.log("Generated Path:", path);
         return path;
       });
 
       paths.push(...pagePaths);
     }
 
-    console.log("All Paths:", paths);
+    // console.log("All Paths:", paths);
 
     return {
       paths,
@@ -297,7 +307,5 @@ export const getStaticPaths: GetStaticPaths = async () => {
     throw new Error(`Failed to fetch data from API: ${error.message}`);
   }
 };
-
-
 
 export default ProductDescription;

@@ -1,22 +1,38 @@
 // src/redux/store.ts
 
 import { configureStore } from '@reduxjs/toolkit';
-import cartReducer, { CartState } from './slices/cartSlice';
+import cartReducer, { CartState, initialState } from './slices/cartSlice';
 import authReducer from './slices/authSlice';
 import { saveCartToLocalStorage } from '@/utils/localStorageHelper';
 
-// Load the initial state from localStorage
+// src/redux/store.ts
+
 const loadInitialState = () => {
   if (typeof window !== 'undefined') {
     // Check if window is defined (client-side)
     const storedState = localStorage.getItem('cartState');
-    console.log({storedState})
+    console.log({ storedState });
+
     if (storedState) {
-      return JSON.parse(storedState);
+      try {
+        // Parse the stored state
+        const parsedState = JSON.parse(storedState);
+
+        // Ensure that the selectedProduct array is loaded correctly
+        return {
+          ...parsedState,
+          cart: {
+            ...parsedState.cart,
+            selectedProduct: parsedState.cart?.selectedProduct || [], // Use optional chaining to avoid errors if cart is undefined
+          },
+        };
+      } catch (error) {
+        console.error('Error parsing stored state:', error);
+      }
     }
   }
 
-  // Return default state if localStorage is not available
+  // Return default state if localStorage is not available or parsing fails
   return {
     cart: {
       items: [],
@@ -29,6 +45,7 @@ const loadInitialState = () => {
     },
   };
 };
+
 
 const store = configureStore({
   reducer: {

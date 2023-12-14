@@ -17,7 +17,7 @@ export interface CartState {
   selectedProduct: ProductData[]; // Add the selectedProduct property
 }
 
-const initialState: CartState = {
+export const initialState: CartState = {
   items: [],
   cartCount: 0,
   itemQuantity: 0,
@@ -29,7 +29,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<CartItem>) => {
-      state.items.push(action.payload);
+      state.items = [...state.items, action.payload];
       saveCartToLocalStorage(state);
     },
     
@@ -56,8 +56,11 @@ const cartSlice = createSlice({
     },
 
     addSelectedProduct: (state, action: PayloadAction<ProductData>) => {
+      console.log('Before addSelectedProduct:', state.selectedProduct);
       state.selectedProduct.push(action.payload);
-    },
+      console.log('After addSelectedProduct:', state.selectedProduct);
+      saveCartToLocalStorage(state);
+    },    
     
     deleteSelectedProduct: (state, action: PayloadAction<{ id: number }>) => {
       state.selectedProduct = state.selectedProduct.filter(

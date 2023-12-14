@@ -37,10 +37,10 @@ const Index: React.FC<HomeProps> = ({
         const productData = response.data;
 
         const reversedProductIds = productData.data
-          .map((product: { id: any; }) => product.id)
+          .map((product: { id: any }) => product.id)
           .reverse();
 
-          console.log({ reversedProductIds })
+        console.log({ reversedProductIds });
 
         // Update the component state with the new data and URLs
         setProducts(productData.data);
@@ -70,10 +70,10 @@ const Index: React.FC<HomeProps> = ({
         const productData = response.data;
 
         const reversedProductIds = productData.data
-          .map((product: { id: any; }) => product.id)
+          .map((product: { id: any }) => product.id)
           .reverse();
 
-          console.log({ reversedProductIds })
+        console.log({ reversedProductIds });
 
         // Update the component state with the new data and URLs
         setProducts(productData.data);
@@ -87,8 +87,6 @@ const Index: React.FC<HomeProps> = ({
         console.log("Next Page URL:", productData.next_page_url);
         console.log("Previous Page URL:", productData.prev_page_url);
         console.log("Product Data:", productData);
-
-
       } catch (error: any) {
         console.error("Error fetching next page data from API:", error.message);
       }
@@ -105,7 +103,8 @@ const Index: React.FC<HomeProps> = ({
           </div>
         </div>
         <div className="overflow-y-auto px-4 product-container">
-          <Products products={{ data: products }} />
+          <Products products={initialProducts} />
+
           <div className="flex justify-between mt-8">
             <button
               onClick={handlePrevPage}
@@ -143,13 +142,16 @@ export const getStaticProps: GetStaticProps = async () => {
 
   try {
     const response = await axios.get(apiUrl);
+    console.log({response})
     const productData = response.data;
+
+    console.log( {productData});
 
     return {
       props: {
         initialProducts: productData,
-        nextPageUrl: productData.next_page_url,
-        prevPageUrl: productData.prev_page_url,
+        nextPageUrl: productData.next_page_url || null,
+        prevPageUrl: productData.prev_page_url || null,
       },
     };
   } catch (error: any) {
@@ -157,5 +159,6 @@ export const getStaticProps: GetStaticProps = async () => {
     throw new Error(`Failed to fetch data from API: ${error.message}`);
   }
 };
+
 
 export default Index;
