@@ -1,5 +1,8 @@
 import { CartState } from '../redux/slices/cartSlice';
 
+// localStorageHelper.ts
 export const saveCartToLocalStorage = (state: CartState) => {
-  localStorage.setItem('cartState', JSON.stringify(state));
+  const { items, selectedProduct, cartCount } = state;
+  const newState = { items, selectedProduct, cartCount };
+  localStorage.setItem('cartState', JSON.stringify(newState));
 };

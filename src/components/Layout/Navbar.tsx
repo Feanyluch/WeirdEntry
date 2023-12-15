@@ -18,7 +18,7 @@ import weirdlogo from "../../../public/Images/weirdlogo.png";
 
 import CartItems from "@/components/CartItems";
 import { ProductData } from "@/components/product";
-import { GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import axios from "axios";
 
 
@@ -42,15 +42,16 @@ const Navbar: React.FC = () => {
         setIsCartOpen(false);
       }
     };
-
+  
     if (isCartOpen) {
       document.addEventListener("mousedown", handleOutsideClick);
     }
-
+  
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [isCartOpen]);
+  
 
   return (
     <nav className="bg-[#FFFFFF] text-[#1B2E3C] sticky top-0 bg-opacity-70 backdrop-blur-xl z-[999]">
@@ -142,18 +143,26 @@ const Navbar: React.FC = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product";
 
   try {
     const response = await axios.get(apiUrl);
     const productData = response.data;
-    console.log("Product Data", productData);
+
+    // Retrieve the cart count from the localStorage
+    const storedState = localStorage.getItem('cartState');
+    const parsedState = storedState ? JSON.parse(storedState) : { cart: {} };
+    console.log({parsedState})
+    const initialCartCount = parsedState.cart.cartCount || 0;
+
+    console.log('Initial Cart Count:', initialCartCount);
 
     return {
       props: {
         products: productData as ProductData[],
+        initialCartCount,
       },
     };
   } catch (error: any) {

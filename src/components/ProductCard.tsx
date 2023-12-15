@@ -30,23 +30,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   const handleAddToCart = () => {
     const existingProduct = cartItems.find((item) => item.id === product.id);
-
+  
     if (existingProduct) {
       // If the product is already in the cart, increment its quantity
       dispatch(incrementItem(existingProduct.id));
-      // console.log("Increment Items", incrementItem(existingProduct.id));
     } else {
       // If the product is not in the cart, add it with a quantity of 1
       const cartItem = { id: product.id, quantity: 1 };
       dispatch(addToCart(cartItem));
       dispatch(incrementCartCount());
-
-      // console.log("Item added", cartItem);
     }
-
+  
     dispatch(addSelectedProduct(product));
-    console.log('Selected Product in State:', store.getState().cart.selectedProduct);
-  };
+  };  
 
   return (
     <div>

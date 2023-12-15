@@ -29,9 +29,17 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<CartItem>) => {
-      state.items = [...state.items, action.payload];
-      saveCartToLocalStorage(state);
+      const newItem = action.payload;
+      console.log('Previous State:', state);
+      const updatedState = {
+        ...state,
+        items: [...state.items, newItem],
+      };
+      saveCartToLocalStorage(updatedState);
+      console.log('Updated State:', updatedState);
+      return updatedState;
     },
+   
     
     incrementCartCount: (state) => {
       state.cartCount += 1;
@@ -56,11 +64,8 @@ const cartSlice = createSlice({
     },
 
     addSelectedProduct: (state, action: PayloadAction<ProductData>) => {
-      console.log('Before addSelectedProduct:', state.selectedProduct);
       state.selectedProduct.push(action.payload);
-      console.log('After addSelectedProduct:', state.selectedProduct);
-      saveCartToLocalStorage(state);
-    },    
+    },
     
     deleteSelectedProduct: (state, action: PayloadAction<{ id: number }>) => {
       state.selectedProduct = state.selectedProduct.filter(
