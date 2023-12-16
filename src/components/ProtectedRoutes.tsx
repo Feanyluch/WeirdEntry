@@ -14,13 +14,17 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
   const [redirectPath, setRedirectPath] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log('user:', user);
+    console.log('redirectPath:', redirectPath);
+
     if (!user) {
       // Save the requested path if the user is not logged in
       setRedirectPath(router.pathname);
       // Redirect to login page
       router.replace('/login');
     } else if (redirectPath) {
-      // If the user is logged in and there's a saved path, redirect to that path
+      // If the user is logged in and there's a saved path, trigger navigation after login
+      console.log('Navigating back to:', redirectPath);
       router.replace(redirectPath);
       setRedirectPath(null); // Reset the saved path
     }

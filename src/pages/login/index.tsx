@@ -15,6 +15,7 @@ import { useLogin } from "@/hook/useLogin";
 import toright from "../../../public/Images/To-Right.svg";
 import { login } from "@/service/authService";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 interface HomeProps {
   products: ProductData[];
@@ -40,6 +41,8 @@ const Index: React.FC<HomeProps> = ({ products }) => {
   } = useLogin();
   const [isChecked, setIsChecked] = useState(false);
 
+  const router = useRouter()
+
   const handleCheckboxChange = (newCheckedState: boolean) => {
     console.log(newCheckedState);
     setIsChecked(newCheckedState);
@@ -50,9 +53,10 @@ const Index: React.FC<HomeProps> = ({ products }) => {
   const handleLogin = async () => {
     try {
       const user = await login({ email, password });
-      console.log("user details", user);
       dispatch(setUser(user));
-      // Redirect or perform further actions
+
+      // Navigate back by one step in the browser's history
+      router.back();
     } catch (error) {
       // Handle login error
     }

@@ -13,6 +13,7 @@ import {
   addSelectedProduct,
 } from "@/redux/slices/cartSlice";
 import store, { RootState } from "@/redux/store";
+import axios from "axios";
 interface ProductCardProps {
   product: ProductData;
 }
@@ -27,6 +28,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
+  const user = useSelector((state: RootState) => state.auth.user)
+  
 
   const handleAddToCart = () => {
     const existingProduct = cartItems.find((item) => item.id === product.id);
@@ -42,7 +45,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     }
   
     dispatch(addSelectedProduct(product));
-  };  
+  };
 
   return (
     <div>

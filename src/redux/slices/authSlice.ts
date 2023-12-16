@@ -1,10 +1,10 @@
 // authSlice.ts
 import { createSlice } from '@reduxjs/toolkit';
 
-// interface User {
-//   email: string;
-//   password: string;
-// }
+interface User {
+  email: string;
+  password: string;
+}
 
 // Declare functions at the top
 const loadUserFromLocalStorage = () => {

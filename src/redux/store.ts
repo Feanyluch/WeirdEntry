@@ -6,12 +6,12 @@ import authReducer from './slices/authSlice';
 import { saveCartToLocalStorage } from '@/utils/localStorageHelper';;
 
 const loadInitialState = () => {
-  console.log('Loading Initial State...');
+  // console.log('Loading Initial State...');
   if (typeof window !== 'undefined') {
     const storedState = localStorage.getItem('cartState');
     const storedUser = localStorage.getItem('user');
-    console.log('Stored State:', storedState);
-    console.log('Stored User:', storedUser);
+    // console.log('Stored State:', storedState);
+    // console.log('Stored User:', storedUser);
     if (storedState) {
       const parsedState = JSON.parse(storedState);
       return { cart: { ...initialState, ...parsedState } };
@@ -21,7 +21,7 @@ const loadInitialState = () => {
       return { auth: { user: parsedUser } };
     }
   }
-  console.log('Default State:', initialState);
+  // console.log('Default State:', initialState);
   return { cart: initialState }; // Make sure it follows the same structure as the reducer
 };
 
