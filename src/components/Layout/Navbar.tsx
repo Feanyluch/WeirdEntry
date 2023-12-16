@@ -25,6 +25,7 @@ import axios from "axios";
 
 const Navbar: React.FC = () => {
   const cartCount = useSelector((state: RootState) => state.cart.cartCount);
+  const user = useSelector((state: RootState) => state.auth.user);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const cartContainerRef = useRef<HTMLDivElement | null>(null);
@@ -98,7 +99,7 @@ const Navbar: React.FC = () => {
                     onClick={toggleSearch}
                     className="absolute top-3 right-3 cursor-pointer"
                   >
-                    <Image src={Close} alt="close" />
+                    <Image src={Close} alt="close" className="h-[15px] w-[15px]" />
                   </div>
                 </div>
               ) : (
@@ -106,14 +107,14 @@ const Navbar: React.FC = () => {
                   className=" p-2 cursor-pointer flex justify-center items-center rounded-full border-transparent focus:outline-none focus:border-white"
                   onClick={toggleSearch}
                 >
-                  <Image src={Search} alt="search" height={17} width={17} />
+                  <Image src={Search} alt="search" height={17} width={17} className="h-[18px] w-[22px]" />
                 </div>
               )}
             </div>
             <div className="relative">
               
               <div className="p-2 relative cursor-pointer" onClick={toggleCart}>
-                <Image src={cart} alt="Logo" height={22} width={22} />
+                <Image src={cart} alt="Logo" height={22} width={22} className="h-[25px] w-[22px]" />
                 <h2 className="absolute top-0 right-0 bg-[#1B2E3C] text-white rounded-[50%] p-1 flex items-center justify-center h-5 w-5 text-sm">
                   {cartCount}
                 </h2>
@@ -128,14 +129,26 @@ const Navbar: React.FC = () => {
               )}
 
             <div className="p-2 relative cursor-pointer">
-              <Image src={Heart} alt="Heart" height={22} width={22} />
+              <Image src={Heart} alt="Heart" height={22} width={22} className="h-[25px] w-[22px]" />
               <h2 className="absolute top-0 right-0 bg-[#1B2E3C] text-white rounded-[50%] p-1 flex items-center justify-center h-5 w-5 text-sm">
                 0
               </h2>
             </div>
-            <div className="p-2">
-              <Image src={User} alt="User" height={22} width={22} />
-            </div>
+            {user ? (
+              // If user is logged in, display image with user's first name
+              <div className="p-2 cursor-pointer">
+                {/* <Image src={user} alt={user.firstName} height={22} width={22} /> */}
+                <span className="bg-[#1B2E3C] text-white p-1 text-sm">
+                  User - {user.user.first_name}
+                </span>
+              </div>
+            ) : (
+              // If user is not logged in, display default user icon
+              <div className="p-2">
+                <Image src={User} alt="User" height={22} width={22} />
+              </div>
+            )}
+
           </div>
         </div>
       </div>

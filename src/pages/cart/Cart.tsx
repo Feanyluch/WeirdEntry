@@ -2,22 +2,14 @@ import Breadcrumb from "@/components/BreadCrumb";
 import CartProducts from "@/components/CartProducts";
 import Image from "next/image";
 import React from "react";
-
-import { ProductData } from "@/components/product";
-
 import cartempty from "../../../public/Images/cartempty.png";
 import Link from "next/link";
-import { GetStaticProps } from "next";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import axios from "axios";
 import ProtectedRoute from "@/components/ProtectedRoutes";
+import { HomeProps } from ".";
 
-interface HomeProps {
-  products?: { data: ProductData[] } | undefined; // Make the prop optional
-}
-
-const Cart: React.FC<HomeProps> = ({ products }) => {
+export const Cart: React.FC<HomeProps> = ({ products }) => {
   const selectedProducts = useSelector(
     (state: RootState) => state.cart.selectedProduct
   );
@@ -147,26 +139,3 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
     </ProtectedRoute>
   );
 };
-
-export const getStaticProps: GetStaticProps = async () => {
-  // Fetch data from the API using Axios
-  const apiUrl =
-    "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
-
-  try {
-    const response = await axios.get(apiUrl);
-    const productData = response.data;
-    console.log("Product Data", productData);
-
-    return {
-      props: {
-        products: productData as ProductData[],
-      },
-    };
-  } catch (error: any) {
-    console.error("Error fetching data from API:", error.message);
-    throw new Error(`Failed to fetch data from API: ${error.message}`);
-  }
-};
-
-export default Cart;

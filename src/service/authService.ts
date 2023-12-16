@@ -26,7 +26,7 @@ export const login = async (credentials: {
 }) => {
   try {
     const response = await axios.post(
-      "https://d8e8-154-118-74-220.ngrok-free.app/api/login",
+      "https://weird-entry-lara-production.up.railway.app/api/login",
       credentials
     );
     return response.data;
