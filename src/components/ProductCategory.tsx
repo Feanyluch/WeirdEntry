@@ -20,7 +20,7 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({ onSelectCategory }) =
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get<(string | Category)[]>(`${API_URL}category`, {
+        const response = await axios.get<(string | Category)[]>("https://weird-entry-lara-production.up.railway.app/api/category", {
           headers: {
             Authorization: "Bearer Token",
             Accept: "application/json",
