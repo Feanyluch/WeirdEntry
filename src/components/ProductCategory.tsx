@@ -1,12 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "react-slider";
+import axios from "axios";
 
-const ProductCategory: React.FC = () => {
+interface Category {
+  title: string;
+}
+
+interface ProductCategoryProps {
+  onSelectCategory: (category: string) => void;
+}
+
+const ProductCategory: React.FC<ProductCategoryProps> = ({ onSelectCategory }) => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
+  const [categories, setCategories] = useState<(string | Category)[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get<(string | Category)[]>(`${API_URL}category`, {
+          headers: {
+            Authorization: "Bearer Token",
+            Accept: "application/json",
+          },
+        });
+
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories", error);
+      }
+    };
+
+    fetchCategories();
+  }, [API_URL]);
 
   const handlePriceRangeChange = (newRange: [number, number]) => {
     setPriceRange(newRange);
   };
+
+  const handleCategoryClick = (category: string) => {
+    onSelectCategory(category);
+    setSelectedCategory(category);
+  };
+
+  const handleCancelCategory = () => {
+    onSelectCategory(""); // Clear the selected category
+    setSelectedCategory(null);
+  };
+
+  const displayedCategories = categories.slice(0, 6)
 
   return (
     <div className="border border-[#1B2E3C] p-4 w-[270px] text-[#1B2E3C] rounded-lg">
@@ -19,10 +63,17 @@ const ProductCategory: React.FC = () => {
           </h2>
         </div>
         <div className="list-none text-sm font-light mt-4">
-          <li className="py-2 pl-2 cursor-pointer rounded-lg hover:bg-[#f1f1f2] hover:font-bold transition-all">Shirts</li>
-          <li className="py-2 pl-2 cursor-pointer rounded-lg hover:bg-[#f1f1f2] hover:font-bold transition-all">Cargo pants</li>
-          <li className="py-2 pl-2 cursor-pointer rounded-lg hover:bg-[#f1f1f2] hover:font-bold transition-all">Category 3</li>
-          <li className="py-2 pl-2 cursor-pointer rounded-lg hover:bg-[#f1f1f2] hover:font-bold transition-all">Category 4</li>
+          {displayedCategories.map((category, index) => (
+            <li
+              key={index}
+              onClick={() => handleCategoryClick(typeof category === "string" ? category : category.title)}
+              className={`list-decimal py-2 pl-2 cursor-pointer capitalize rounded-lg hover:bg-[#f1f1f2] hover:font-bold transition-all ${
+                selectedCategory === (typeof category === "string" ? category : category.title) ? "bg-[#f1f1f2] font-bold" : ""
+              }`}
+            >
+              {typeof category === "string" ? category : category.title}
+            </li>
+          ))}
         </div>
       </div>
       <div className="my-4">
@@ -37,14 +88,19 @@ const ProductCategory: React.FC = () => {
           thumbClassName="slider-thumb" // Custom class for the slider handles
         />
         <div className="flex text-sm mt-4">
-          <p className="mr-2 ">Price: N{priceRange[0]}</p> - 
+          <p className="mr-2 ">Price: N{priceRange[0]}</p> -
           <p className="mx-2">N{priceRange[1]}</p>
         </div>
-        <div className="flex items-center justify-center my-4">
-          <button className="uppercase py-2 text-sm px-8 w-[220px] border border-[#1B2E3C] rounded-lg hover:bg-[#1B2E3C] hover:text-white">
-            Filter
-          </button>
-        </div>
+        {selectedCategory && (
+          <div className="flex items-center justify-center my-4">
+            <button
+              onClick={handleCancelCategory}
+              className="uppercase py-2 text-sm px-8 w-[220px] border border-[#1B2E3C] rounded-lg hover:bg-[#1B2E3C] hover:text-white"
+            >
+              Cancel {selectedCategory}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

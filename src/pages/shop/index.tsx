@@ -21,6 +21,7 @@ const Index: React.FC<HomeProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [currentNextPageUrl, setCurrentNextPageUrl] = useState(nextPageUrl);
   const [currentPrevPageUrl, setCurrentPrevPageUrl] = useState(prevPageUrl);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   useEffect(() => {
     setProducts(initialProducts?.data || []);
@@ -29,6 +30,22 @@ const Index: React.FC<HomeProps> = ({
     console.log("Initial Prev Page URL:", prevPageUrl);
     console.log("Initial Next Page URL:", nextPageUrl);
   }, [initialProducts, prevPageUrl, nextPageUrl]);
+
+  const handleSelectCategory = (category: string) => {
+    // Check if the category is not already in the list
+    if (!selectedCategories.includes(category)) {
+      setSelectedCategories((prevSelectedCategories) => [...prevSelectedCategories, category]);
+    }
+  };
+  
+
+  const handleCancelCategory = (category: string) => {
+    setSelectedCategories((prevSelectedCategories) =>
+      prevSelectedCategories.filter(
+        (selectedCategory) => selectedCategory !== category
+      )
+    );
+  };
 
   const handlePrevPage = async () => {
     if (currentPrevPageUrl) {
@@ -98,11 +115,31 @@ const Index: React.FC<HomeProps> = ({
       <Breadcrumb products={products} />
       <div className="w-[1200px] mx-auto flex gap-8 my-12">
         <div className="w-1/4 flex-shrink-0">
-          <div className="sticky top-40">
-            <ProductCategory />
+          <div className="sticky top-28">
+            <ProductCategory onSelectCategory={handleSelectCategory} />
           </div>
         </div>
         <div className="overflow-y-auto px-4 product-container">
+          <div className=" my-2">
+            {selectedCategories.length > 0 && (
+              <div className="flex items-center justify-start gap-2">
+                <h2>Selected Categories:</h2>
+                <ul className="flex items-center justify-start gap-2">
+                  {selectedCategories.map((selectedCategory, index) => (
+                    <li key={index} className="bg-[#f1f1f2] p-1 rounded-lg text-sm">
+                      {selectedCategory}{" "}
+                      <button
+                        onClick={() => handleCancelCategory(selectedCategory)} className="bg-white px-2 rounded-lg"
+                      >
+                        x
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
           <Products products={initialProducts} />
 
           <div className="flex justify-between mt-8">
@@ -142,10 +179,10 @@ export const getStaticProps: GetStaticProps = async () => {
 
   try {
     const response = await axios.get(apiUrl);
-    console.log({response})
+    console.log({ response });
     const productData = response.data;
 
-    console.log( {productData});
+    console.log({ productData });
 
     return {
       props: {
@@ -159,6 +196,5 @@ export const getStaticProps: GetStaticProps = async () => {
     throw new Error(`Failed to fetch data from API: ${error.message}`);
   }
 };
-
 
 export default Index;

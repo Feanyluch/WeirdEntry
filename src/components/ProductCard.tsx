@@ -28,12 +28,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
-  const user = useSelector((state: RootState) => state.auth.user)
-  
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  console.log({ user });
 
   const handleAddToCart = () => {
     const existingProduct = cartItems.find((item) => item.id === product.id);
-  
+
     if (existingProduct) {
       // If the product is already in the cart, increment its quantity
       dispatch(incrementItem(existingProduct.id));
@@ -43,8 +44,41 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       dispatch(addToCart(cartItem));
       dispatch(incrementCartCount());
     }
-  
+
     dispatch(addSelectedProduct(product));
+
+    // Make the POST request to the server
+  if (typeof window !== 'undefined') {
+    // Execute only on the client side
+    const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/cart/create";
+    const token = `${user.token}`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    };
+
+    const requestData = {
+      user_email: `${user.user.email}`,
+      items: {
+        [product.id]: {
+          title: product.title,
+          price: product.price,
+          id: product.id,
+        },
+      },
+    };
+
+    axios
+      .post(apiUrl, requestData, { headers })
+      .then((response) => {
+        console.log("POST request successful", response.data);
+        // You can handle the response as needed
+      })
+      .catch((error) => {
+        console.error("Error making POST request", error);
+        // Handle error appropriately
+      });
+  }
   };
 
   return (
@@ -83,7 +117,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               />
             ))}
           </div> */}
-          <h2 className="text-sm my-4">₦ {(product.price).toLocaleString()}</h2>
+          <h2 className="text-sm my-4">₦ {product.price.toLocaleString()}</h2>
         </div>
       </Link>
       <div className="flex gap-4 w-full">

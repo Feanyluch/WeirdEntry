@@ -7,7 +7,10 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import ProtectedRoute from "@/components/ProtectedRoutes";
-import { HomeProps } from ".";
+import { ProductData } from "@/components/product";
+interface HomeProps {
+  products?: { data: ProductData[] } | undefined; // Make the prop optional
+}
 
 export const Cart: React.FC<HomeProps> = ({ products }) => {
   const selectedProducts = useSelector(
