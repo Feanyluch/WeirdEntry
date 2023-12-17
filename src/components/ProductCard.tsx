@@ -11,9 +11,11 @@ import {
   incrementItem,
   decrementItem,
   addSelectedProduct,
+  CartItem,
 } from "@/redux/slices/cartSlice";
 import store, { RootState } from "@/redux/store";
 import axios from "axios";
+import { saveCartToLocalStorage } from "@/utils/localStorageHelper";
 interface ProductCardProps {
   product: ProductData;
 }
@@ -34,7 +36,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   const handleAddToCart = () => {
     const existingProduct = cartItems.find((item) => item.id === product.id);
-
+  
     if (existingProduct) {
       // If the product is already in the cart, increment its quantity
       dispatch(incrementItem(existingProduct.id));
@@ -44,42 +46,67 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       dispatch(addToCart(cartItem));
       dispatch(incrementCartCount());
     }
-
+  
     dispatch(addSelectedProduct(product));
-
+  
     // Make the POST request to the server
-  if (typeof window !== 'undefined') {
-    // Execute only on the client side
-    const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/cart/create";
-    const token = `${user.token}`;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/json",
-    };
-
-    const requestData = {
-      user_email: `${user.user.email}`,
-      items: {
-        [product.id]: {
-          title: product.title,
-          price: product.price,
-          id: product.id,
+    if (typeof window !== 'undefined') {
+      // Execute only on the client side
+      const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/cart/create";
+      const token = `${user.token}`;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      };
+  
+      const requestData = {
+        user_email: `${user.user.email}`,
+        items: {
+          [product.id]: {
+            title: product.title,
+            price: product.price,
+            id: product.id,
+          },
         },
-      },
-    };
-
-    axios
-      .post(apiUrl, requestData, { headers })
-      .then((response) => {
-        console.log("POST request successful", response.data);
-        // You can handle the response as needed
-      })
-      .catch((error) => {
-        console.error("Error making POST request", error);
-        // Handle error appropriately
-      });
-  }
+      };
+  
+      axios
+        .post(apiUrl, requestData, { headers })
+        .then((response) => {
+          console.log("POST request successful", response.data);
+  
+          const updatedCartState: {
+            items: CartItem[];
+            cartCount: number;
+            itemQuantity: number;
+            selectedProduct: never[];
+          } = {
+            items: [
+              ...cartItems,
+              {
+                // id: product.id,
+                quantity: 1, // Add the quantity property
+                ...requestData.items[product.id],
+              },
+            ],
+            cartCount: cartItems.length + 1,
+            itemQuantity: 0, // Update with the correct value
+            selectedProduct: [], // Update with the correct value
+          };       
+          
+  
+          // Save the updated state to local storage
+          saveCartToLocalStorage(updatedCartState);
+  
+          // You can handle the response as needed
+        })
+        .catch((error) => {
+          console.error("Error making POST request", error);
+          // Handle error appropriately
+        });
+    }
   };
+  
 
   return (
     <div>

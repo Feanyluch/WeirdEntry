@@ -12,7 +12,7 @@ interface HomeProps {
   products?: { data: ProductData[] } | undefined; // Make the prop optional
 }
 
-export const Cart: React.FC<HomeProps> = ({ products }) => {
+const Cart: React.FC<HomeProps> = ({ products }) => {
   const selectedProducts = useSelector(
     (state: RootState) => state.cart.selectedProduct
   );
@@ -142,3 +142,5 @@ export const Cart: React.FC<HomeProps> = ({ products }) => {
     </ProtectedRoute>
   );
 };
+
+export default Cart
