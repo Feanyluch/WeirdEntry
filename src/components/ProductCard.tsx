@@ -32,8 +32,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const user = useSelector((state: RootState) => state.auth.user);
 
-  console.log({ user });
-
   const handleAddToCart = () => {
     const existingProduct = cartItems.find((item) => item.id === product.id);
   
@@ -47,7 +45,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       dispatch(incrementCartCount());
     }
   
-    dispatch(addSelectedProduct(product));
+    // dispatch(addSelectedProduct(product));
   
     // Make the POST request to the server
     if (typeof window !== 'undefined') {
@@ -71,39 +69,43 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       };
   
       axios
-        .post(apiUrl, requestData, { headers })
-        .then((response) => {
-          console.log("POST request successful", response.data);
-  
-          const updatedCartState: {
-            items: CartItem[];
-            cartCount: number;
-            itemQuantity: number;
-            selectedProduct: never[];
-          } = {
-            items: [
-              ...cartItems,
-              {
-                // id: product.id,
-                quantity: 1, // Add the quantity property
-                ...requestData.items[product.id],
-              },
-            ],
-            cartCount: cartItems.length + 1,
-            itemQuantity: 0, // Update with the correct value
-            selectedProduct: [], // Update with the correct value
-          };       
-          
-  
-          // Save the updated state to local storage
-          saveCartToLocalStorage(updatedCartState);
-  
-          // You can handle the response as needed
-        })
-        .catch((error) => {
-          console.error("Error making POST request", error);
-          // Handle error appropriately
-        });
+  .post(apiUrl, requestData, { headers })
+  .then((response) => {
+    console.log("POST request successful", response.data);
+
+    // Create an updated state with the received data
+    const updatedCartState: {
+      items: CartItem[];
+      cartCount: number;
+      itemQuantity: number;
+      selectedProduct: ProductData[];
+    } = {
+      items: [
+        ...cartItems,
+        {
+          // id: product.id,
+          quantity: 1,
+          ...requestData.items[product.id],
+        },
+      ],
+      cartCount: cartItems.length + 1,
+      itemQuantity: 0, // Update with the correct value
+      selectedProduct: [], // Update with the correct value
+    };
+
+    // Save the updated state to local storage
+    saveCartToLocalStorage(updatedCartState);
+
+    // Dispatch the action to update the Redux state
+    dispatch(addSelectedProduct(product));
+
+    // You can handle the response as needed
+  })
+  .catch((error) => {
+    console.error("Error making POST request", error);
+    // Handle error appropriately
+  });
+
     }
   };
   

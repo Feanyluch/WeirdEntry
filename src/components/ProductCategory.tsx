@@ -3,29 +3,37 @@ import Slider from "react-slider";
 import axios from "axios";
 
 interface Category {
+  id: number;
   title: string;
 }
 
 interface ProductCategoryProps {
-  onSelectCategory: (category: string) => void;
+  onSelectCategory: (category: Category) => void;
 }
 
-const ProductCategory: React.FC<ProductCategoryProps> = ({ onSelectCategory }) => {
+const ProductCategory: React.FC<ProductCategoryProps> = ({
+  onSelectCategory,
+}) => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
   const [categories, setCategories] = useState<(string | Category)[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<
+    string | Category | null
+  >(null);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get<(string | Category)[]>("https://weird-entry-lara-production.up.railway.app/api/category", {
-          headers: {
-            Authorization: "Bearer Token",
-            Accept: "application/json",
-          },
-        });
+        const response = await axios.get<(string | Category)[]>(
+          "https://weird-entry-lara-production.up.railway.app/api/category",
+          {
+            headers: {
+              Authorization: "Bearer Token",
+              Accept: "application/json",
+            },
+          }
+        );
 
         setCategories(response.data);
       } catch (error) {
@@ -40,17 +48,18 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({ onSelectCategory }) =
     setPriceRange(newRange);
   };
 
-  const handleCategoryClick = (category: string) => {
+  const handleCategoryClick = (category: Category) => {
     onSelectCategory(category);
     setSelectedCategory(category);
   };
 
   const handleCancelCategory = () => {
-    onSelectCategory(""); // Clear the selected category
+    const emptyCategory: Category = { id: 0, title: "" };
+    onSelectCategory(emptyCategory);
     setSelectedCategory(null);
   };
 
-  const displayedCategories = categories.slice(0, 6)
+  const displayedCategories = categories.slice(0, 6);
 
   return (
     <div className="border border-[#1B2E3C] p-4 w-[270px] text-[#1B2E3C] rounded-lg">
@@ -63,12 +72,21 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({ onSelectCategory }) =
           </h2>
         </div>
         <div className="list-none text-sm font-light mt-4">
-          {displayedCategories.map((category, index) => (
+          {displayedCategories.map((category) => (
             <li
-              key={index}
-              onClick={() => handleCategoryClick(typeof category === "string" ? category : category.title)}
+              key={typeof category === "string" ? category : category.id}
+              onClick={() => {
+                if (typeof category !== "string") {
+                  handleCategoryClick(category);
+                }
+              }}
               className={`list-decimal py-2 pl-2 cursor-pointer capitalize rounded-lg hover:bg-[#f1f1f2] hover:font-bold transition-all ${
-                selectedCategory === (typeof category === "string" ? category : category.title) ? "bg-[#f1f1f2] font-bold" : ""
+                selectedCategory &&
+                typeof selectedCategory !== "string" &&
+                selectedCategory.id ===
+                  (typeof category === "string" ? category : category.id)
+                  ? "bg-[#f1f1f2] font-bold"
+                  : ""
               }`}
             >
               {typeof category === "string" ? category : category.title}
@@ -91,16 +109,14 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({ onSelectCategory }) =
           <p className="mr-2 ">Price: N{priceRange[0]}</p> -
           <p className="mx-2">N{priceRange[1]}</p>
         </div>
-        {selectedCategory && (
-          <div className="flex items-center justify-center my-4">
+        
+        <div className="flex items-center justify-center my-4">
             <button
-              onClick={handleCancelCategory}
               className="uppercase py-2 text-sm px-8 w-[220px] border border-[#1B2E3C] rounded-lg hover:bg-[#1B2E3C] hover:text-white"
             >
-              Cancel {selectedCategory}
+              Filter
             </button>
           </div>
-        )}
       </div>
     </div>
   );

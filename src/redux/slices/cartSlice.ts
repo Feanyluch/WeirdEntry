@@ -64,7 +64,10 @@ const cartSlice = createSlice({
 
     addSelectedProduct: (state, action: PayloadAction<ProductData>) => {
       state.selectedProduct.push(action.payload);
+      console.log("Updated selectedProduct:", state.selectedProduct);
+      saveCartToLocalStorage(state);
     },
+    
 
     deleteSelectedProduct: (state, action: PayloadAction<{ id: number }>) => {
       state.selectedProduct = state.selectedProduct.filter(

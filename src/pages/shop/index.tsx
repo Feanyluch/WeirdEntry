@@ -7,9 +7,14 @@ import Breadcrumb from "@/components/BreadCrumb";
 import axios from "axios";
 
 interface HomeProps {
-  initialProducts?: { data: ProductData[] } | undefined;
+  initialProducts?: ProductData[] | undefined; // Adjusted prop type
   nextPageUrl?: string | null;
   prevPageUrl?: string | null;
+}
+
+interface Category {
+  id: number;
+  title: string;
 }
 
 const Index: React.FC<HomeProps> = ({
@@ -17,32 +22,66 @@ const Index: React.FC<HomeProps> = ({
   nextPageUrl,
   prevPageUrl,
 }) => {
-  const [products, setProducts] = useState(initialProducts?.data || []);
+  const [products, setProducts] = useState(initialProducts || []);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentNextPageUrl, setCurrentNextPageUrl] = useState(nextPageUrl);
   const [currentPrevPageUrl, setCurrentPrevPageUrl] = useState(prevPageUrl);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+  
 
   useEffect(() => {
-    setProducts(initialProducts?.data || []);
+    if (initialProducts) {
+      setProducts(initialProducts);
+      console.log({ initialProducts });
+    }
     setCurrentPrevPageUrl(prevPageUrl);
     setCurrentNextPageUrl(nextPageUrl);
     console.log("Initial Prev Page URL:", prevPageUrl);
     console.log("Initial Next Page URL:", nextPageUrl);
   }, [initialProducts, prevPageUrl, nextPageUrl]);
-
-  const handleSelectCategory = (category: string) => {
-    // Check if the category is not already in the list
-    if (!selectedCategories.includes(category)) {
-      setSelectedCategories((prevSelectedCategories) => [...prevSelectedCategories, category]);
-    }
-  };
   
 
-  const handleCancelCategory = (category: string) => {
+  const handleSelectCategory = async (category: Category) => {
+    // Check if the category is not already in the list
+    if (!selectedCategories.some((selectedCategory) => selectedCategory.id === category.id)) {
+      try {
+        const response = await axios.get(`https://weird-entry-lara-production.up.railway.app/api/category/${category.id}`, {
+          headers: {
+            Authorization: "Bearer Token",
+            Accept: "application/json",
+          },
+        });
+
+        const productData = response.data;
+
+      // Update the component state with the new data
+      setProducts(productData.products);
+
+        // Update the component state with the new data
+        // setProducts(productData.products);
+        setCurrentPrevPageUrl(productData.prev_page_url);
+        setCurrentNextPageUrl(productData.next_page_url);
+
+        // Update the selected categories
+        setSelectedCategories((prevSelectedCategories) => [...prevSelectedCategories, category]);
+
+        // Reset the current page to 1 when a new category is selected
+        setCurrentPage(1);
+
+        // Log the values for debugging
+        console.log("Next Page URL:", productData.next_page_url);
+        console.log("Previous Page URL:", productData.prev_page_url);
+        console.log("Product Data:", productData.products);
+      } catch (error: any) {
+        console.error("Error fetching data from API:", error.message);
+      }
+    }
+  };
+
+  const handleCancelCategory = (category: Category) => {
     setSelectedCategories((prevSelectedCategories) =>
       prevSelectedCategories.filter(
-        (selectedCategory) => selectedCategory !== category
+        (selectedCategory) => selectedCategory.id !== category.id
       )
     );
   };
@@ -127,7 +166,7 @@ const Index: React.FC<HomeProps> = ({
                 <ul className="flex items-center justify-start gap-2">
                   {selectedCategories.map((selectedCategory, index) => (
                     <li key={index} className="bg-[#f1f1f2] p-1 rounded-lg text-sm">
-                      {selectedCategory}{" "}
+                      {selectedCategory.title}{" "}
                       <button
                         onClick={() => handleCancelCategory(selectedCategory)} className="bg-white px-2 rounded-lg"
                       >
@@ -140,7 +179,7 @@ const Index: React.FC<HomeProps> = ({
             )}
           </div>
 
-          <Products products={initialProducts} />
+          <Products products={products} />
 
           <div className="flex justify-between mt-8">
             <button
@@ -174,15 +213,14 @@ const Index: React.FC<HomeProps> = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const apiUrl =
-    "https://weird-entry-lara-production.up.railway.app/api/product";
+  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product";
 
   try {
     const response = await axios.get(apiUrl);
-    console.log({ response });
     const productData = response.data;
 
-    console.log({ productData });
+    // Log the entire productData object to inspect its structure
+    console.log("Product Data:", productData);
 
     return {
       props: {
@@ -196,5 +234,6 @@ export const getStaticProps: GetStaticProps = async () => {
     throw new Error(`Failed to fetch data from API: ${error.message}`);
   }
 };
+
 
 export default Index;
