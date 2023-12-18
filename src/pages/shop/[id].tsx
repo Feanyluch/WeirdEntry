@@ -20,7 +20,7 @@ import nostar from "../../../public/Images/nostarticon.svg";
 
 import toright from "../../../public/Images/toRight.svg";
 import RelatedProducts from "@/components/RelatedProducts";
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import { ProductData } from "@/components/product";
 import Breadcrumb from "@/components/BreadCrumb";
 import { useRouter } from "next/router";
@@ -238,74 +238,100 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  // Fetch data from the API using Axios
-  const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product`;
+// export const getStaticProps: GetStaticProps = async () => {
+//   // Fetch data from the API using Axios
+//   const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product`;
+
+//   try {
+//     const response = await axios.get(apiUrl);
+//     const productData = response.data;
+
+//     // console.log("Product Data Page 2:", productData);
+
+//     return {
+//       props: {
+//         products: productData as ProductData[],
+//       },
+//     };
+//   } catch (error: any) {
+//     console.error("Error fetching data from API:", error.message);
+//     throw new Error(`Failed to fetch data from API: ${error.message}`);
+//   }
+// };
+
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const apiUrl =
+//     "https://weird-entry-lara-production.up.railway.app/api/product";
+
+//   try {
+//     const response = await axios.get(apiUrl);
+//     const productData = response.data;
+
+
+//     console.log("API Response:", productData);
+
+//     if (!Array.isArray(productData.data)) {
+//       console.error("Error: Product data is not an array.");
+//       return {
+//         paths: [],
+//         fallback: false,
+//       };
+//     }
+
+//     const { total, per_page } = productData;
+//     const totalPages = Math.ceil(total / per_page);
+
+//     const paths = [];
+//     for (let page = 1; page <= totalPages; page++) {
+//       const pageResponse = await axios.get(`${apiUrl}?page=${page}`);
+//       const pageData = pageResponse.data;
+
+//       const pagePaths = pageData.data.map((product: { id: number }) => {
+//         const path = {
+//           params: { page: page.toString(), id: product.id.toString() },
+//         };
+//         // console.log("Generated Path:", path);
+//         return path;
+//       });
+
+//       paths.push(...pagePaths);
+//     }
+
+//     // console.log("All Paths:", paths);
+
+//     return {
+//       paths,
+//       fallback: false,
+//     };
+//   } catch (error: any) {
+//     console.error("Error fetching data from API:", error.message);
+//     throw new Error(`Failed to fetch data from API: ${error.message}`);
+//   }
+// };
+
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { params } = context;
+  const id = params?.id;
 
   try {
+    // Fetch data for the specific product using the id
+    const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product/${id}`;
     const response = await axios.get(apiUrl);
     const productData = response.data;
 
-    // console.log("Product Data Page 2:", productData);
-
     return {
       props: {
-        products: productData as ProductData[],
+        selectedProduct: productData as ProductData,
       },
     };
   } catch (error: any) {
     console.error("Error fetching data from API:", error.message);
-    throw new Error(`Failed to fetch data from API: ${error.message}`);
-  }
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const apiUrl =
-    "https://weird-entry-lara-production.up.railway.app/api/product";
-
-  try {
-    const response = await axios.get(apiUrl);
-    const productData = response.data;
-
-    // console.log("API Response:", productData);
-
-    if (!Array.isArray(productData.data)) {
-      console.error("Error: Product data is not an array.");
-      return {
-        paths: [],
-        fallback: false,
-      };
-    }
-
-    const { total, per_page } = productData;
-    const totalPages = Math.ceil(total / per_page);
-
-    const paths = [];
-    for (let page = 1; page <= totalPages; page++) {
-      const pageResponse = await axios.get(`${apiUrl}?page=${page}`);
-      const pageData = pageResponse.data;
-
-      const pagePaths = pageData.data.map((product: { id: number }) => {
-        const path = {
-          params: { page: page.toString(), id: product.id.toString() },
-        };
-        // console.log("Generated Path:", path);
-        return path;
-      });
-
-      paths.push(...pagePaths);
-    }
-
-    // console.log("All Paths:", paths);
-
     return {
-      paths,
-      fallback: false,
+      notFound: true,
     };
-  } catch (error: any) {
-    console.error("Error fetching data from API:", error.message);
-    throw new Error(`Failed to fetch data from API: ${error.message}`);
   }
 };
+
 
 export default ProductDescription;
