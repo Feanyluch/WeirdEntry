@@ -17,7 +17,7 @@ interface HomeProps {
   products?: { data: ProductData[] } | undefined; // Make the prop optional
 }
 
-const Cart: React.FC<HomeProps> = ({ products }) => {
+const Cart: React.FC<HomeProps> & { title: string }= ({ products }) => {
   const selectedProducts = useSelector(
     (state: RootState) => state.cart.selectedProduct
   );
@@ -82,7 +82,6 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
   const total = calculateTotal();
 
   return (
-    <ProtectedRoute>
       <div className="">
         <Breadcrumb products={products} />
         <div className="bg-[#fdf9f9] max-w-[1200px] px-[70px] pt-[60px] pb-[30px] mx-auto my-[60px]">
@@ -144,9 +143,10 @@ const Cart: React.FC<HomeProps> = ({ products }) => {
           </div>
         </div>
       </div>
-    </ProtectedRoute>
   );
 };
+
+Cart.title = 'Cart - Weird Entry';
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios

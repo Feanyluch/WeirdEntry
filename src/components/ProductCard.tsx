@@ -85,6 +85,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {
           // id: product.id,
           quantity: 1,
+          // selectedProduct: [],
           ...requestData.items[product.id],
         },
       ],
@@ -93,8 +94,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       selectedProduct: [], // Update with the correct value
     };
 
+
     // Save the updated state to local storage
     saveCartToLocalStorage(updatedCartState);
+
+    console.log({updatedCartState})
 
     // Dispatch the action to update the Redux state
     dispatch(addSelectedProduct(product));
@@ -125,7 +129,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         <div className="my-5">
-          <h2 className="">{product.title}</h2>
+          <h2 className="capitalize">{product.title}</h2>
           {/* <div className="flex my-2">
             {[...Array(displayStars)].map((_, index) => (
               <Image
@@ -146,7 +150,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               />
             ))}
           </div> */}
-          <h2 className="text-sm my-4">₦ {product.price.toLocaleString()}</h2>
+          <h2 className="text-lg my-4 font-bold">₦ {product.price.toLocaleString()}</h2>
         </div>
       </Link>
       <div className="flex gap-4 w-full">

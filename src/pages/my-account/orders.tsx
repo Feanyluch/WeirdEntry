@@ -14,7 +14,7 @@ interface HomeProps {
   products: ProductData[]; // Make sure the interface matches the expected prop
 }
 
-const MyAccount: React.FC<HomeProps> = ({ products }) => {
+const MyAccount: React.FC<HomeProps> & {title: string} = ({ products }) => {
   return (
     <div className="" style={{ fontFamily: "'Nokora', sans-serif" }}>
       <Breadcrumb products={products} />
@@ -62,6 +62,9 @@ const MyAccount: React.FC<HomeProps> = ({ products }) => {
     </div>
   );
 };
+
+MyAccount.title = 'Orders - Weird Entry';
+
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios

@@ -13,7 +13,7 @@ interface HomeProps {
   products?: { data: ProductData[] } | undefined; // Make the prop optional
 }
 
-const index: React.FC<HomeProps> = ({ products }) => {
+const Index: React.FC<HomeProps> & { title: string}= ({ products }) => {
   return (
     <div>
       <Breadcrumb products={products} />
@@ -26,6 +26,9 @@ const index: React.FC<HomeProps> = ({ products }) => {
     </div>
   );
 };
+
+Index.title = 'About Page - Weird Entry';
+
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
@@ -47,4 +50,4 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 };
 
-export default index;
+export default Index;

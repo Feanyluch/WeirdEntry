@@ -5,10 +5,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define the type for a product in the cart
 export interface CartItem {
-  id: number; // Adjust the type according to your product ID type
+  id: number;
   quantity: number;
+  // selectedProduct: ProductData[]; // Add the selectedProduct property
   // Other properties of the product
 }
+
 
 export interface CartState {
   items: CartItem[];
@@ -23,6 +25,7 @@ export const initialState: CartState = {
   itemQuantity: 0,
   selectedProduct: [],
 };
+
 
 const cartSlice = createSlice({
   name: "cart",
@@ -73,6 +76,11 @@ const cartSlice = createSlice({
       state.selectedProduct = state.selectedProduct.filter(
         (product) => product.id !== action.payload.id
       );
+      saveCartToLocalStorage(state);
+    },
+
+    updateSelectedProducts: (state, action: PayloadAction<ProductData[]>) => {
+      state.selectedProduct = action.payload;
       saveCartToLocalStorage(state);
     },
 

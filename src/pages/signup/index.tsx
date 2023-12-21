@@ -20,7 +20,7 @@ interface HomeProps {
   products: ProductData[];
 }
 
-const Index: React.FC<HomeProps> = ({ products }) => {
+const Index: React.FC<HomeProps> & {title: string} = ({ products }) => {
   const {
     first_name,
     setFirstName,
@@ -309,6 +309,8 @@ const Index: React.FC<HomeProps> = ({ products }) => {
     </div>
   );
 };
+
+Index.title = 'Sign up - WeirdEntry';
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios

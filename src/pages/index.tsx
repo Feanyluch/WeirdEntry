@@ -31,7 +31,7 @@ interface HomeProps {
 
 const inter = Inter({ subsets: ["latin"] });
 
-const Home: React.FC<HomeProps> = ({ products }) => {
+const Home: React.FC<HomeProps> & { title: string } = ({ products }) => {
   return (
     <div
       style={{ fontFamily: "'Nokora', sans-serif" }}
@@ -135,6 +135,8 @@ const Home: React.FC<HomeProps> = ({ products }) => {
     </div>
   );
 };
+
+Home.title = 'Weird Entry - A brand collection for clothing';
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios

@@ -32,7 +32,7 @@ interface CheckboxStates {
   // Add more checkboxes as needed
 }
 
-const Checkout: React.FC<HomeProps> = ({ products }) => {
+const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
   // Create an array of checkbox states
   const [checkboxStates, setCheckboxStates] = useState<CheckboxStates>({
     addCard: false,
@@ -284,6 +284,9 @@ const Checkout: React.FC<HomeProps> = ({ products }) => {
     </div>
   );
 };
+
+Checkout.title = 'Check out - Weird Entry';
+
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios

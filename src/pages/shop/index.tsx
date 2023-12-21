@@ -17,7 +17,7 @@ interface Category {
   title: string;
 }
 
-const Index: React.FC<HomeProps> = ({
+const Index: React.FC<HomeProps> & {title: string}= ({
   initialProducts,
   nextPageUrl,
   prevPageUrl,
@@ -78,13 +78,68 @@ const Index: React.FC<HomeProps> = ({
     }
   };
 
-  const handleCancelCategory = (category: Category) => {
+  const handleCancelCategory = async (category: Category) => {
     setSelectedCategories((prevSelectedCategories) =>
       prevSelectedCategories.filter(
         (selectedCategory) => selectedCategory.id !== category.id
       )
     );
+  
+    try {
+      if (selectedCategories.length > 0) {
+        // There are other selected categories, update products based on the remaining selected category
+        const remainingCategoryId = selectedCategories[0].id; // Assuming you want to use the first remaining category
+        const response = await axios.get(`https://weird-entry-lara-production.up.railway.app/api/category/${remainingCategoryId}`, {
+          headers: {
+            Authorization: "Bearer Token",
+            Accept: "application/json",
+          },
+        });
+  
+        const productData = response.data;
+  
+        // Update the component state with the products for the remaining selected category
+        setProducts(productData.products);
+        setCurrentPrevPageUrl(productData.prev_page_url || null);
+        setCurrentNextPageUrl(productData.next_page_url || null);
+  
+        // Reset the current page to 1
+        setCurrentPage(1);
+  
+        // Log the values for debugging
+        console.log("Next Page URL:", productData.next_page_url);
+        console.log("Previous Page URL:", productData.prev_page_url);
+        console.log("Product Data:", productData.products);
+      } else {
+        // No other selected categories, fetch and set the initial list of products
+        const response = await axios.get("https://weird-entry-lara-production.up.railway.app/api/product", {
+          headers: {
+            Authorization: "Bearer Token",
+            Accept: "application/json",
+          },
+        });
+  
+        const productData = response.data;
+  
+        // Update the component state with the initial list of products
+        setProducts(productData.products);
+        setCurrentPrevPageUrl(productData.prev_page_url || null);
+        setCurrentNextPageUrl(productData.next_page_url || null);
+  
+        // Reset the current page to 1
+        setCurrentPage(1);
+  
+        // Log the values for debugging
+        console.log("Next Page URL:", productData.next_page_url);
+        console.log("Previous Page URL:", productData.prev_page_url);
+        console.log("Product Data:", productData.products);
+      }
+    } catch (error: any) {
+      console.error("Error handling canceled category:", error.message);
+    }
   };
+  
+  
 
   const handlePrevPage = async () => {
     if (currentPrevPageUrl) {
@@ -211,6 +266,8 @@ const Index: React.FC<HomeProps> = ({
     </div>
   );
 };
+
+Index.title = 'Shop Products- WeirdEntry';
 
 export const getStaticProps: GetStaticProps = async () => {
   const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product";

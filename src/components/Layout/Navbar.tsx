@@ -20,8 +20,7 @@ import CartItems from "@/components/CartItems";
 import { ProductData } from "@/components/product";
 import { GetServerSideProps, GetStaticProps } from "next";
 import axios from "axios";
-
-
+import SignedinItem from "../SignedinItem";
 
 const Navbar: React.FC = () => {
   const cartCount = useSelector((state: RootState) => state.cart.cartCount);
@@ -29,6 +28,32 @@ const Navbar: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const cartContainerRef = useRef<HTMLDivElement | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isDropdownOpen]);
+
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
   };
@@ -39,20 +64,22 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
-      if (cartContainerRef.current && !cartContainerRef.current.contains(e.target as Node)) {
+      if (
+        cartContainerRef.current &&
+        !cartContainerRef.current.contains(e.target as Node)
+      ) {
         setIsCartOpen(false);
       }
     };
-  
+
     if (isCartOpen) {
       document.addEventListener("mousedown", handleOutsideClick);
     }
-  
+
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [isCartOpen]);
-  
 
   return (
     <nav className="bg-[#FFFFFF] text-[#1B2E3C] sticky top-0 bg-opacity-70 backdrop-blur-xl z-[999]">
@@ -99,7 +126,11 @@ const Navbar: React.FC = () => {
                     onClick={toggleSearch}
                     className="absolute top-3 right-3 cursor-pointer"
                   >
-                    <Image src={Close} alt="close" className="h-[15px] w-[15px]" />
+                    <Image
+                      src={Close}
+                      alt="close"
+                      className="h-[15px] w-[15px]"
+                    />
                   </div>
                 </div>
               ) : (
@@ -107,29 +138,47 @@ const Navbar: React.FC = () => {
                   className=" p-2 cursor-pointer flex justify-center items-center rounded-full border-transparent focus:outline-none focus:border-white"
                   onClick={toggleSearch}
                 >
-                  <Image src={Search} alt="search" height={17} width={17} className="h-[18px] w-[22px]" />
+                  <Image
+                    src={Search}
+                    alt="search"
+                    height={17}
+                    width={17}
+                    className="h-[18px] w-[22px]"
+                  />
                 </div>
               )}
             </div>
             <div className="relative">
-              
               <div className="p-2 relative cursor-pointer" onClick={toggleCart}>
-                <Image src={cart} alt="Logo" height={22} width={22} className="h-[25px] w-[22px]" />
+                <Image
+                  src={cart}
+                  alt="Logo"
+                  height={22}
+                  width={22}
+                  className="h-[25px] w-[22px]"
+                />
                 <h2 className="absolute top-0 right-0 bg-[#1B2E3C] text-white rounded-[50%] p-1 flex items-center justify-center h-5 w-5 text-sm">
                   {cartCount}
                 </h2>
               </div>
-              
-              
             </div>
             {isCartOpen && (
-                <div className="absolute top-[50px] right-0" ref={cartContainerRef}>
-                  <CartItems />
-                </div>
-              )}
+              <div
+                className="absolute top-[50px] right-0"
+                ref={cartContainerRef}
+              >
+                <CartItems />
+              </div>
+            )}
 
             <div className="p-2 relative cursor-pointer">
-              <Image src={Heart} alt="Heart" height={22} width={22} className="h-[25px] w-[22px]" />
+              <Image
+                src={Heart}
+                alt="Heart"
+                height={22}
+                width={22}
+                className="h-[25px] w-[22px]"
+              />
               <h2 className="absolute top-0 right-0 bg-[#1B2E3C] text-white rounded-[50%] p-1 flex items-center justify-center h-5 w-5 text-sm">
                 0
               </h2>
@@ -138,17 +187,24 @@ const Navbar: React.FC = () => {
               // If user is logged in, display image with user's first name
               <div className="p-2 cursor-pointer">
                 {/* <Image src={user} alt={user.firstName} height={22} width={22} /> */}
-                <span className="bg-[#1B2E3C] text-white p-1 text-sm">
-                  User - {user.user.first_name}
-                </span>
+                <div className="bg-[#1B2E3C] text-white p-1 text-sm relative">
+                  <h2 className="text-sm" onClick={toggleDropdown}>
+                    User - {user.user.first_name}
+                  </h2>
+                </div>
               </div>
             ) : (
               // If user is not logged in, display default user icon
-              <div className="p-2">
+              <div className="p-2 flex items-center justify-start gap-2 bg-[#f1f1f2] rounded-lg">
                 <Image src={User} alt="User" height={22} width={22} />
+                <Link href="/login">Sign in</Link>
               </div>
             )}
-
+            {isDropdownOpen && (
+              <div className="absolute top-[50px] right-0" ref={dropdownRef}>
+                <SignedinItem />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -158,19 +214,20 @@ const Navbar: React.FC = () => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product";
+  const apiUrl =
+    "https://weird-entry-lara-production.up.railway.app/api/product";
 
   try {
     const response = await axios.get(apiUrl);
     const productData = response.data;
 
     // Retrieve the cart count from the localStorage
-    const storedState = localStorage.getItem('cartState');
+    const storedState = localStorage.getItem("cartState");
     const parsedState = storedState ? JSON.parse(storedState) : { cart: {} };
-    console.log({parsedState})
+    console.log({ parsedState });
     const initialCartCount = parsedState.cart.cartCount || 0;
 
-    console.log('Initial Cart Count:', initialCartCount);
+    console.log("Initial Cart Count:", initialCartCount);
 
     return {
       props: {

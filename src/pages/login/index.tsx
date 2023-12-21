@@ -21,7 +21,7 @@ interface HomeProps {
   products: ProductData[];
 }
 
-const Index: React.FC<HomeProps> = ({ products }) => {
+const Index: React.FC<HomeProps> & { title: string }= ({ products }) => {
   const {
     email,
     emailError,
@@ -135,7 +135,7 @@ const Index: React.FC<HomeProps> = ({ products }) => {
             </button>
           </div>
           <div className="flex items-center justify-between text-gray-400 py-8">
-            <Link href="/">Forgot password ?</Link>
+            <Link href="/forgot-password">Forgot password ?</Link>
             <div className="flex">
               <Link href="/signup">Register</Link>
               <Image src={toright} width={20} height={20} alt="to right" />
@@ -146,6 +146,8 @@ const Index: React.FC<HomeProps> = ({ products }) => {
     </div>
   );
 };
+
+Index.title = 'Login - Weird Entry';
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios

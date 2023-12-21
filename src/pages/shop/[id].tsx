@@ -59,7 +59,7 @@ interface HomeProps {
   colors: Color[];
 }
 
-const ProductDescription: React.FC<HomeProps> = ({ products }) => {
+const ProductDescription: React.FC<HomeProps> & {title: string} = ({ products }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [loading, setLoading] = useState(true);
@@ -237,6 +237,8 @@ const ProductDescription: React.FC<HomeProps> = ({ products }) => {
     </div>
   );
 };
+
+ProductDescription.title = 'Product Description';
 
 // export const getStaticProps: GetStaticProps = async () => {
 //   // Fetch data from the API using Axios

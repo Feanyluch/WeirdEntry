@@ -80,7 +80,7 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
                   handleCategoryClick(category);
                 }
               }}
-              className={`list-decimal py-2 pl-2 cursor-pointer capitalize rounded-lg hover:bg-[#f1f1f2] hover:font-bold transition-all ${
+              className={`py-2 pl-2 cursor-pointer capitalize rounded-lg hover:bg-[#f1f1f2] hover:font-bold transition-all ${
                 selectedCategory &&
                 typeof selectedCategory !== "string" &&
                 selectedCategory.id ===

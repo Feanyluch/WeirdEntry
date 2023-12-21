@@ -40,6 +40,10 @@ store.subscribe(() => {
   saveCartToLocalStorage(state);
 });
 
+// Dispatch the fetchCurrentUserCart thunk after the store is created
+// store.dispatch(fetchCurrentUserCart());
+
+
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch;
 
