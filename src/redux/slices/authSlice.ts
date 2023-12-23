@@ -1,10 +1,13 @@
 // authSlice.ts
 import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../store';
 
 interface User {
   email: string;
   password: string;
 }
+
+export const selectUser = (state: RootState) => state.auth.user;
 
 // Declare functions at the top
 const loadUserFromLocalStorage = () => {

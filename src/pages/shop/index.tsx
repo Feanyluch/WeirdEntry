@@ -79,16 +79,16 @@ const Index: React.FC<HomeProps> & {title: string}= ({
   };
 
   const handleCancelCategory = async (category: Category) => {
-    setSelectedCategories((prevSelectedCategories) =>
-      prevSelectedCategories.filter(
-        (selectedCategory) => selectedCategory.id !== category.id
-      )
+    const updatedSelectedCategories = selectedCategories.filter(
+      (selectedCategory) => selectedCategory.id !== category.id
     );
   
+    setSelectedCategories(updatedSelectedCategories);
+  
     try {
-      if (selectedCategories.length > 0) {
+      if (updatedSelectedCategories.length > 0) {
         // There are other selected categories, update products based on the remaining selected category
-        const remainingCategoryId = selectedCategories[0].id; // Assuming you want to use the first remaining category
+        const remainingCategoryId = updatedSelectedCategories[0].id; // Assuming you want to use the first remaining category
         const response = await axios.get(`https://weird-entry-lara-production.up.railway.app/api/category/${remainingCategoryId}`, {
           headers: {
             Authorization: "Bearer Token",
@@ -120,9 +120,10 @@ const Index: React.FC<HomeProps> & {title: string}= ({
         });
   
         const productData = response.data;
+        console.log({productData})
   
         // Update the component state with the initial list of products
-        setProducts(productData.products);
+        setProducts(productData.data);
         setCurrentPrevPageUrl(productData.prev_page_url || null);
         setCurrentNextPageUrl(productData.next_page_url || null);
   
@@ -138,8 +139,6 @@ const Index: React.FC<HomeProps> & {title: string}= ({
       console.error("Error handling canceled category:", error.message);
     }
   };
-  
-  
 
   const handlePrevPage = async () => {
     if (currentPrevPageUrl) {
@@ -209,7 +208,7 @@ const Index: React.FC<HomeProps> & {title: string}= ({
       <Breadcrumb products={products} />
       <div className="w-[1200px] mx-auto flex gap-8 my-12">
         <div className="w-1/4 flex-shrink-0">
-          <div className="sticky top-28">
+          <div className="sticky top-28 ">
             <ProductCategory onSelectCategory={handleSelectCategory} />
           </div>
         </div>

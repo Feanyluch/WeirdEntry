@@ -7,21 +7,30 @@ interface MiniProductProps {
   cartItems: { id: number; quantity: number }[];
 }
 
-const CheckoutProducts: React.FC<MiniProductProps> = ({ product, cartItems }) => {
+const CheckoutProducts: React.FC<MiniProductProps> = ({
+  product,
+  cartItems,
+}) => {
   // Find the corresponding item in cartItems based on the product id
   const cartItem = cartItems.find((item) => item.id === product.id);
 
   return (
     <div className="flex items-start justify-start gap-8 px-2 py-[10px]">
-      <div className="w-[150px]">
-        <Image src={product.product_image} width={200} height={20} alt="shirt" />
-      </div>
+      <Image
+        src={product.product_image}
+        width={200}
+        height={20}
+        alt="shirt"
+        className="w-[120px]"
+      />
       <div className="flex flex-col gap-[10px]">
         <h2 className="text-sm uppercase">{product.title}</h2>
         <p className="text-sm font-light">Size: Medium</p>
         <p className="text-sm font-light">Color: Black</p>
         <p className="text-sm font-light">QTY: {cartItem?.quantity || 0}</p>
-        <h2 className="font-bold text-sm">₦ {(product.price * (cartItem?.quantity || 0)).toLocaleString()}</h2>
+        <h2 className="font-bold text-sm">
+          ₦ {(product.price * (cartItem?.quantity || 0)).toLocaleString()}
+        </h2>
       </div>
     </div>
   );

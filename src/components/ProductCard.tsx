@@ -15,7 +15,7 @@ import {
 } from "@/redux/slices/cartSlice";
 import store, { RootState } from "@/redux/store";
 import axios from "axios";
-import { saveCartToLocalStorage } from "@/utils/localStorageHelper";
+import { clearCartLocalStorage, saveCartToLocalStorage, sendItemsToEndpoint } from "@/utils/localStorageHelper";
 interface ProductCardProps {
   product: ProductData;
 }
@@ -32,84 +32,50 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const user = useSelector((state: RootState) => state.auth.user);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     const existingProduct = cartItems.find((item) => item.id === product.id);
-  
-    if (existingProduct) {
-      // If the product is already in the cart, increment its quantity
-      dispatch(incrementItem(existingProduct.id));
-    } else {
-      // If the product is not in the cart, add it with a quantity of 1
-      const cartItem = { id: product.id, quantity: 1 };
-      dispatch(addToCart(cartItem));
-      dispatch(incrementCartCount());
-    }
-  
-    // dispatch(addSelectedProduct(product));
-  
-    // Make the POST request to the server
-    if (typeof window !== 'undefined') {
-      // Execute only on the client side
-      const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/cart/create";
-      const token = `${user.token}`;
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      };
-  
-      const requestData = {
-        user_email: `${user.user.email}`,
-        items: {
-          [product.id]: {
-            title: product.title,
-            price: product.price,
-            id: product.id,
+
+    try {
+      let userCart = [];
+
+      // If the user is logged in, fetch the user's cart from the endpoint
+      if (user && user.token) {
+        const response = await axios.get('https://weird-entry-lara-production.up.railway.app/api/cart', {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            Accept: 'application/json',
           },
-        },
-      };
-  
-      axios
-  .post(apiUrl, requestData, { headers })
-  .then((response) => {
-    console.log("POST request successful", response.data);
+        });
 
-    // Create an updated state with the received data
-    const updatedCartState: {
-      items: CartItem[];
-      cartCount: number;
-      itemQuantity: number;
-      selectedProduct: ProductData[];
-    } = {
-      items: [
-        ...cartItems,
-        {
-          // id: product.id,
-          quantity: 1,
-          // selectedProduct: [],
-          ...requestData.items[product.id],
-        },
-      ],
-      cartCount: cartItems.length + 1,
-      itemQuantity: 0, // Update with the correct value
-      selectedProduct: [], // Update with the correct value
-    };
+        if (response.status === 200) {
+          userCart = response.data;
+        } else {
+          console.error('Failed to fetch user cart:', response.statusText);
+        }
+      }
 
+      // If the product is already in the cart, increment its quantity
+      if (existingProduct) {
+        dispatch(incrementItem(existingProduct.id));
+      } else {
+        // If the product is not in the cart, add it with a quantity of 1
+        const cartItem = { id: product.id, quantity: 1, price: product.price, title: product.title };
+        dispatch(addToCart(cartItem));
+        dispatch(incrementCartCount());
+      }
 
-    // Save the updated state to local storage
-    saveCartToLocalStorage(updatedCartState);
+      dispatch(addSelectedProduct(product));
 
-    console.log({updatedCartState})
+      // Combine the fetched cart with the items already in the Redux store
+      const updatedCart = [...userCart, ...cartItems];
+      console.log({updatedCart})
 
-    // Dispatch the action to update the Redux state
-    dispatch(addSelectedProduct(product));
-
-    // You can handle the response as needed
-  })
-  .catch((error) => {
-    console.error("Error making POST request", error);
-    // Handle error appropriately
-  });
-
+      // If the user is logged in, send the updated cart to the endpoint
+      if (user && user.token) {
+        sendItemsToEndpoint(updatedCart);
+      }
+    } catch (error) {
+      console.error('Error handling add to cart:', error);
     }
   };
   

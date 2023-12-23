@@ -1,10 +1,13 @@
 // cartSlice.ts
 import { ProductData } from "@/components/product";
 import { saveCartToLocalStorage } from "@/utils/localStorageHelper";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
 // Define the type for a product in the cart
 export interface CartItem {
+  price: number;
+  title: string;
   id: number;
   quantity: number;
   // selectedProduct: ProductData[]; // Add the selectedProduct property
@@ -26,6 +29,29 @@ export const initialState: CartState = {
   selectedProduct: [],
 };
 
+export const fetchUserCart = createAsyncThunk(
+  "cart/fetchUserCart",
+  async (_, { getState }) => {
+    // Get the current user's token from the state
+    const token = (getState() as RootState).auth.user.token;
+    console.log({token})
+
+    // Fetch the user's cart from the API using the token
+    const response = await fetch("https://weird-entry-lara-production.up.railway.app/api/cart", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user's cart");
+    }
+
+    return response.json();
+  }
+);
 
 const cartSlice = createSlice({
   name: "cart",

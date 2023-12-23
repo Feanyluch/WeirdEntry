@@ -183,7 +183,7 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
                 />
               </div>
             </div>
-            <div className="bg-white rounded-lg p-[40px]">
+            {/* <div className="bg-white rounded-lg p-[40px]">
               <h2 className="uppercase text-sm font-normal">
                 Delivery Details
               </h2>
@@ -204,8 +204,8 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
                 </p>
                 <h2 className="font-bold text-xs">N4,000</h2>
               </div>
-            </div>
-            <div className="bg-white rounded-lg p-[40px]">
+            </div> */}
+            {/* <div className="bg-white rounded-lg p-[40px]">
               <h2 className="uppercase text-sm font-normal">Payment method</h2>
               <div className="w-full h-[1px] bg-[#0C0C1E80] my-[20px]"></div>
 
@@ -225,7 +225,7 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="flex items-center justify-start gap-4 my-2">
               <RoundCheckbox
                 label="By clicking place order, I agree to the Terms and Conditions"
@@ -245,10 +245,10 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
               </Link>
             </div>
           </div>
-          <div className="w-[42%] h-[830px] bg-white rounded-lg p-[40px]">
+          <div className="w-[42%] h-[630px] bg-white rounded-lg p-[40px]">
             <h2 className="uppercase text-sm font-normal">items</h2>
             <div className="w-full h-[1px] bg-[#0C0C1E80] my-[20px]"></div>
-            <div className="h-[530px] overflow-auto">
+            <div className="h-[330px] overflow-auto">
               {uniqueSelectedProducts.map((product) => (
                 <CheckoutProducts
                   key={product.id}

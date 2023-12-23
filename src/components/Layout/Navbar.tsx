@@ -83,17 +83,21 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="bg-[#FFFFFF] text-[#1B2E3C] sticky top-0 bg-opacity-70 backdrop-blur-xl z-[999]">
-      <div className="w-[1200px] mx-auto py-4">
+      <div className="max-w-[1200px] mx-auto py-4">
         <div className="relative flex justify-between items-center">
-          <div className="flex items-center">
-            <div className="w-[200px]">
+          <div className="">
+            <div className="w-[200px] hidden sm:block">
               <Link href="/">
                 <Image src={weirdlogo} alt="logo" />
               </Link>
             </div>
+            <div className="w-[200px] block sm:hidden">
+              <h2>=</h2>
+            </div>
+
           </div>
           <div className={`${isSearchOpen ? "hidden" : "block"} uppercase`}>
-            <ul className="flex space-x-4 text-xl ml-8">
+            <ul className="hidden space-x-4 text-xl ml-8 sm:flex">
               <Link href="/" className={"px-2 nav-link mx-2 text-[14px]"}>
                 Home
               </Link>
@@ -108,6 +112,11 @@ const Navbar: React.FC = () => {
               </Link>
             </ul>
           </div>
+          <div className="w-[200px] block sm:hidden">
+              <Link href="/">
+                <Image src={weirdlogo} alt="logo" />
+              </Link>
+            </div>
 
           <div className="flex items-center space-x-4">
             <div
