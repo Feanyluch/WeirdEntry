@@ -36,7 +36,6 @@ export const sendItemsToEndpoint = async (items: CartItem[]) => {
     }
 
     const { token } = user;
-    console.log({ token });
 
     const apiUrl = 'https://weird-entry-lara-production.up.railway.app/api/cart/create';
 
@@ -66,12 +65,12 @@ export const sendItemsToEndpoint = async (items: CartItem[]) => {
       body: JSON.stringify(requestData),
     });
 
-    console.log({ response });
+    // console.log({ response });
 
     if (!response.ok) {
       console.error('Error:', response.statusText);
     } else {
-      console.log('Items successfully sent to the endpoint.');
+      // console.log('Items successfully sent to the endpoint.');
     }
   } catch (error) {
     console.error('Error parsing user data or sending items to the endpoint:', error);

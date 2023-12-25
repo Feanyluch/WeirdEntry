@@ -59,13 +59,13 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action: PayloadAction<CartItem>) => {
       const newItem = action.payload;
-      console.log("Previous State:", state);
+      // console.log("Previous State:", state);
       const updatedState = {
         ...state,
         items: [...state.items, newItem],
       };
       saveCartToLocalStorage(updatedState);
-      console.log("Updated State:", updatedState);
+      // console.log("Updated State:", updatedState);
       return updatedState;
     },
 
@@ -93,7 +93,7 @@ const cartSlice = createSlice({
 
     addSelectedProduct: (state, action: PayloadAction<ProductData>) => {
       state.selectedProduct.push(action.payload);
-      console.log("Updated selectedProduct:", state.selectedProduct);
+      // console.log("Updated selectedProduct:", state.selectedProduct);
       saveCartToLocalStorage(state);
     },
     
@@ -108,6 +108,15 @@ const cartSlice = createSlice({
     updateSelectedProducts: (state, action: PayloadAction<ProductData[]>) => {
       state.selectedProduct = action.payload;
       saveCartToLocalStorage(state);
+    },
+
+    setUserCart: (state, action: PayloadAction<CartItem[]>) => {
+      // Update the entire items field with the fetched user cart
+      state.items = action.payload;
+    },
+
+    updateCartItems: (state, action: PayloadAction<CartItem[]>) => {
+      state.items = action.payload;
     },
 
     updateItemQuantity: (
@@ -134,5 +143,7 @@ export const {
   addSelectedProduct,
   updateItemQuantity,
   deleteSelectedProduct,
+  setUserCart,
+  updateCartItems
 } = cartSlice.actions;
 export default cartSlice.reducer;

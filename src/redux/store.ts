@@ -46,7 +46,7 @@ store.subscribe(() => {
     // Clear local storage after sending items
     clearCartLocalStorage();
   }
-  console.log({state})
+  // console.log({state})
 });
 
 // Dispatch the fetchCurrentUserCart thunk after the store is created
