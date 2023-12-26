@@ -3,6 +3,7 @@ export interface ProductData {
   id: number;
   title: string;
   description: string;
+  quantity: number;
   price: number;
   product_image: string;
   sizes: { id: number; title: string; description: string }[]; // Update this line

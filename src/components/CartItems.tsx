@@ -1,18 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import MiniProduct from "@/components/MiniProduct";
 import { RootState } from "@/redux/store";
 import { ProductData } from "@/components/product";
 import Link from "next/link";
+import axios from "axios";
+
+interface CartItem {
+  quantity: number;
+  // Add other properties as needed
+  page: number;
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  product_image: string;
+  sizes: { id: number; title: string; description: string }[]; // Update this line
+  colors: { id: number; title: string; description: string }[]; // Update this line
+}
 
 const CartItems: React.FC = () => {
-  const selectedProducts = useSelector(
-    (state: RootState) => state.cart.selectedProduct
-  );
+  const user = useSelector((state: RootState) => state.auth.user);
+  const [cartData, setCartData] = useState<CartItem[]>([]);;
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const cartItems = useSelector((state: RootState) => state.cart.items);
+  useEffect(() => {
+    const fetchCartData = async () => {
+      try {
+        const response = await axios.get("https://weird-entry-lara-production.up.railway.app/api/cart", {
+          headers: {
+            Authorization: `Bearer ${user?.token}`, // Use ${user?.token} to avoid potential null/undefined issues
+            Accept: "application/json",
+          },
+        });
 
-  if (selectedProducts.length === 0) {
+        const itemsArray: CartItem[] = Object.values(response.data.items);
+
+        setCartData(itemsArray);
+        console.log(response.data.items)
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+        setError("Error fetching cart data");
+        setLoading(false);
+      }
+    };
+
+    if (user?.token) {
+      fetchCartData();
+    } else {
+      setLoading(false);
+      setError("User token is missing");
+    }
+  }, [user?.token]); // Dependency on user?.token
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+
+  if (cartData.length === 0) {
     return (
       <div>
         {/* //{" "} */}
@@ -25,7 +77,8 @@ const CartItems: React.FC = () => {
     );
   }
 
-  const uniqueSelectedProducts = Array.from(new Set(selectedProducts)); // Remove duplicates
+  const uniqueSelectedProducts = Array.from(new Set(cartData)); // Remove duplicates
+  // console.log({uniqueSelectedProducts})
 
   if (uniqueSelectedProducts.length > 3) {
     // Display only the first 3 selected products
@@ -44,7 +97,6 @@ const CartItems: React.FC = () => {
           <MiniProduct
             key={product.id}
             product={product}
-            cartItems={cartItems}
           />
         ))}
         <Link
@@ -67,8 +119,8 @@ const CartItems: React.FC = () => {
           <h2 className="uppercase font-bold text-xs ml-8">price</h2>
           {/* <h2 className="uppercase font-bold text-xs"></h2> */}
         </div>
-      {uniqueSelectedProducts.map((product) => (
-        <MiniProduct key={product.id} product={product} cartItems={cartItems} />
+      {cartData.map((product) => (
+        <MiniProduct key={product.id} product={product} />
       ))}
 
       <Link

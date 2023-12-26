@@ -41,9 +41,9 @@ store.subscribe(() => {
 
   // Add this line to send items to the endpoint only if the user is logged in
   if (store.getState().auth.user) {
-    sendItemsToEndpoint(state.items);
+    // sendItemsToEndpoint(state.items);
 
-    // Clear local storage after sending items
+    // // Clear local storage after sending items
     clearCartLocalStorage();
   }
   // console.log({state})

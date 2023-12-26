@@ -19,7 +19,6 @@ import {
 
 interface MiniProductProps {
   product: ProductData;
-  cartItems: { id: number; quantity: number }[];
 }
 
 const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
@@ -86,7 +85,7 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
           >
             -
           </button>
-          <h2 className="text-sm">{quantity}</h2>
+          <h2 className="text-sm">{product.quantity}</h2>
           <button
             className="text-xl px-2 rounded-lg"
             onClick={incrementQuantity}
@@ -97,7 +96,7 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
       </div>
 
       <h1 className="font-bold text-xs flex items-center justify-center">
-        ₦{(product.price * quantity).toLocaleString()}
+        ₦{(product.price * product.quantity).toLocaleString()}
       </h1>
       <div
         className="flex items-center justify-center"

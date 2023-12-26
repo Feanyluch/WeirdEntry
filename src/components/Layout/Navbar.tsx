@@ -23,13 +23,38 @@ import axios from "axios";
 import SignedinItem from "../SignedinItem";
 
 const Navbar: React.FC = () => {
-  const cartCount = useSelector((state: RootState) => state.cart.cartCount);
+  const [cartCount, setCartCount] = useState(0);
   const user = useSelector((state: RootState) => state.auth.user);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const cartContainerRef = useRef<HTMLDivElement | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      try {
+        const response = await axios.get(
+          "https://weird-entry-lara-production.up.railway.app/api/cart",
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`, // Replace with your actual access token
+              Accept: "application/json",
+            },
+          }
+        );
+
+        const itemsObject = response.data.items || {};
+        const cartCountFromAPI = Object.keys(itemsObject).length;
+        console.log(cartCountFromAPI);
+        setCartCount(cartCountFromAPI);
+      } catch (error: any) {
+        console.error("Error fetching cart count from API:", error.message);
+      }
+    };
+
+    fetchCartCount();
+  }, []);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -94,7 +119,6 @@ const Navbar: React.FC = () => {
             <div className="w-[200px] block sm:hidden">
               <h2>=</h2>
             </div>
-
           </div>
           <div className={`${isSearchOpen ? "hidden" : "block"} uppercase`}>
             <ul className="hidden space-x-4 text-xl ml-8 sm:flex">
@@ -113,10 +137,10 @@ const Navbar: React.FC = () => {
             </ul>
           </div>
           <div className="w-[200px] block sm:hidden">
-              <Link href="/">
-                <Image src={weirdlogo} alt="logo" />
-              </Link>
-            </div>
+            <Link href="/">
+              <Image src={weirdlogo} alt="logo" />
+            </Link>
+          </div>
 
           <div className="flex items-center space-x-4">
             <div

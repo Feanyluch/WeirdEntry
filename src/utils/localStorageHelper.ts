@@ -11,11 +11,9 @@ export const clearCartLocalStorage = () => {
   localStorage.removeItem('cartState');
 };
 
-// localStorageHelper.ts
-
-export const sendItemsToEndpoint = async (items: CartItem[]) => {
+export const sendItemsToEndpoint = async (items: Record<number, { title: string; price: number; quantity: number; product_image: string, }>) => {
   // Check if there are items to send
-  if (!Array.isArray(items) || items.length === 0) {
+  if (!items || Object.keys(items).length === 0) {
     console.log('No valid items to send to the endpoint.');
     return;
   }
@@ -41,14 +39,7 @@ export const sendItemsToEndpoint = async (items: CartItem[]) => {
 
     const requestData = {
       user_email: `${user.user.email}`,
-      items: items.reduce((acc: Record<number, { title: string; price: number; quantity: number }>, item) => {
-        acc[item.id] = {
-          title: item.title,
-          price: item.price,
-          quantity: item.quantity,
-        };
-        return acc;
-      }, {})
+      items,
     };
 
     const headers = {

@@ -12,10 +12,15 @@ import {
   decrementItem,
   addSelectedProduct,
   CartItem,
+  fetchUserCart,
 } from "@/redux/slices/cartSlice";
 import store, { RootState } from "@/redux/store";
 import axios from "axios";
-import { clearCartLocalStorage, saveCartToLocalStorage, sendItemsToEndpoint } from "@/utils/localStorageHelper";
+import {
+  clearCartLocalStorage,
+  saveCartToLocalStorage,
+  sendItemsToEndpoint,
+} from "@/utils/localStorageHelper";
 interface ProductCardProps {
   product: ProductData;
 }
@@ -33,52 +38,98 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const user = useSelector((state: RootState) => state.auth.user);
 
   const handleAddToCart = async () => {
-    const existingProduct = cartItems.find((item) => item.id === product.id);
-
     try {
-      let userCart = [];
-
-      // If the user is logged in, fetch the user's cart from the endpoint
-      if (user && user.token) {
-        const response = await axios.get('https://weird-entry-lara-production.up.railway.app/api/cart', {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            Accept: 'application/json',
-          },
-        });
-
-        if (response.status === 200) {
-          userCart = response.data;
-        } else {
-          console.error('Failed to fetch user cart:', response.statusText);
-        }
-      }
+      const existingProduct = cartItems.find((item) => item.id === product.id);
 
       // If the product is already in the cart, increment its quantity
       if (existingProduct) {
         dispatch(incrementItem(existingProduct.id));
       } else {
         // If the product is not in the cart, add it with a quantity of 1
-        const cartItem = { id: product.id, quantity: 1, price: product.price, title: product.title };
+        const cartItem = {
+          id: product.id,
+          quantity: 1,
+          price: product.price,
+          title: product.title,
+          product_image: product.product_image,
+        };
         dispatch(addToCart(cartItem));
         dispatch(incrementCartCount());
       }
 
       dispatch(addSelectedProduct(product));
 
-      // Combine the fetched cart with the items already in the Redux store
-      const updatedCart = [...userCart, ...cartItems];
-      console.log({updatedCart})
+      // Extract the quantity directly from the addToCart action payload
+      const newlyAddedItemQuantity =
+        store.getState().cart.items.find((item) => item.id === product.id)
+          ?.quantity || 0;
 
-      // If the user is logged in, send the updated cart to the endpoint
-      if (user && user.token) {
-        sendItemsToEndpoint(updatedCart);
+      // Fetch the user's cart after updating the local cart
+      try {
+        const response = await axios.get(
+          "https://weird-entry-lara-production.up.railway.app/api/cart",
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          const userCart = response.data.items;
+
+          // Use the extracted quantity for the newly added item
+          if (newlyAddedItemQuantity > 0) {
+            if (userCart[product.id]) {
+              userCart[product.id].quantity += newlyAddedItemQuantity;
+            } else {
+              userCart[product.id] = {
+                title: product.title,
+                price: product.price,
+                product_image: product.product_image,
+                quantity: newlyAddedItemQuantity,
+              };
+            }
+          }
+
+          // Combine the fetched cart with the items already in the Redux store
+          const updatedCart = { ...userCart };
+
+          // If the user is logged in, send the updated cart to the endpoint
+          if (user && user.token) {
+            sendItemsToEndpoint(updatedCart);
+          }
+        } else if (response.status === 400) {
+          // If the user has no cart, send only the newly added item to create the cart
+          sendItemsToEndpoint({
+            [product.id]: {
+              title: product.title,
+              price: product.price,
+              product_image: product.product_image,
+              quantity: newlyAddedItemQuantity,
+            },
+          });
+        } else {
+          console.error("Failed to fetch user cart:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching user cart:", error);
+
+        // If there's an error fetching the user's cart, assume the user has no cart and send only the newly added item
+        sendItemsToEndpoint({
+          [product.id]: {
+            title: product.title,
+            price: product.price,
+            product_image: product.product_image,
+            quantity: newlyAddedItemQuantity,
+          },
+        });
       }
     } catch (error) {
-      console.error('Error handling add to cart:', error);
+      console.error("Error handling add to cart:", error);
     }
   };
-  
 
   return (
     <div>
@@ -116,7 +167,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               />
             ))}
           </div> */}
-          <h2 className="text-lg my-4 font-bold">₦ {product.price.toLocaleString()}</h2>
+          <h2 className="text-lg my-4 font-bold">
+            ₦ {product.price.toLocaleString()}
+          </h2>
         </div>
       </Link>
       <div className="flex gap-4 w-full">

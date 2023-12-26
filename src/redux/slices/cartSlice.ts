@@ -10,8 +10,6 @@ export interface CartItem {
   title: string;
   id: number;
   quantity: number;
-  // selectedProduct: ProductData[]; // Add the selectedProduct property
-  // Other properties of the product
 }
 
 
@@ -19,7 +17,7 @@ export interface CartState {
   items: CartItem[];
   cartCount: number;
   itemQuantity: number;
-  selectedProduct: ProductData[]; // Add the selectedProduct property
+  selectedProduct: ProductData[];
 }
 
 export const initialState: CartState = {
@@ -32,11 +30,8 @@ export const initialState: CartState = {
 export const fetchUserCart = createAsyncThunk(
   "cart/fetchUserCart",
   async (_, { getState }) => {
-    // Get the current user's token from the state
     const token = (getState() as RootState).auth.user.token;
-    console.log({token})
 
-    // Fetch the user's cart from the API using the token
     const response = await fetch("https://weird-entry-lara-production.up.railway.app/api/cart", {
       method: "GET",
       headers: {
@@ -59,15 +54,13 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action: PayloadAction<CartItem>) => {
       const newItem = action.payload;
-      // console.log("Previous State:", state);
       const updatedState = {
         ...state,
-        items: [...state.items, newItem],
+        items: Array.isArray(state.items) ? [...state.items, newItem] : [newItem],
       };
       saveCartToLocalStorage(updatedState);
-      // console.log("Updated State:", updatedState);
       return updatedState;
-    },
+    },   
 
     incrementCartCount: (state) => {
       state.cartCount += 1;
@@ -110,12 +103,7 @@ const cartSlice = createSlice({
       saveCartToLocalStorage(state);
     },
 
-    setUserCart: (state, action: PayloadAction<CartItem[]>) => {
-      // Update the entire items field with the fetched user cart
-      state.items = action.payload;
-    },
-
-    updateCartItems: (state, action: PayloadAction<CartItem[]>) => {
+    updateCart: (state, action: PayloadAction<CartItem[]>) => {
       state.items = action.payload;
     },
 
@@ -143,7 +131,6 @@ export const {
   addSelectedProduct,
   updateItemQuantity,
   deleteSelectedProduct,
-  setUserCart,
-  updateCartItems
+  updateCart
 } = cartSlice.actions;
 export default cartSlice.reducer;
