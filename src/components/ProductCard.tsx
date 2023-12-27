@@ -85,6 +85,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               userCart[product.id].quantity += newlyAddedItemQuantity;
             } else {
               userCart[product.id] = {
+                id: product.id,
                 title: product.title,
                 price: product.price,
                 product_image: product.product_image,
@@ -104,6 +105,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           // If the user has no cart, send only the newly added item to create the cart
           sendItemsToEndpoint({
             [product.id]: {
+              id: product.id,
               title: product.title,
               price: product.price,
               product_image: product.product_image,
@@ -119,6 +121,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         // If there's an error fetching the user's cart, assume the user has no cart and send only the newly added item
         sendItemsToEndpoint({
           [product.id]: {
+            id: product.id,
             title: product.title,
             price: product.price,
             product_image: product.product_image,

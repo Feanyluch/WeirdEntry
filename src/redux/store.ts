@@ -3,6 +3,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import cartReducer, { CartState, fetchUserCart, initialState } from './slices/cartSlice';
 import authReducer from './slices/authSlice';
+import searchReducer from './slices/searchSlice'
 import { clearCartLocalStorage, saveCartToLocalStorage, sendItemsToEndpoint } from '@/utils/localStorageHelper';;
 
 const loadInitialState = () => {
@@ -29,6 +30,7 @@ const store = configureStore({
   reducer: {
     cart: cartReducer,
     auth: authReducer,
+    search: searchReducer,
     // Add more reducers as needed
   },
   preloadedState: loadInitialState(),

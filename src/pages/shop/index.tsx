@@ -5,6 +5,8 @@ import { GetStaticProps } from "next";
 import { ProductData } from "@/components/product";
 import Breadcrumb from "@/components/BreadCrumb";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { selectSearchResults } from "@/redux/slices/searchSlice";
 
 interface HomeProps {
   initialProducts?: ProductData[] | undefined; // Adjusted prop type
@@ -22,6 +24,7 @@ const Index: React.FC<HomeProps> & {title: string}= ({
   nextPageUrl,
   prevPageUrl,
 }) => {
+  const searchResults = useSelector(selectSearchResults);
   const [products, setProducts] = useState(initialProducts || []);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentNextPageUrl, setCurrentNextPageUrl] = useState(nextPageUrl);
@@ -233,7 +236,7 @@ const Index: React.FC<HomeProps> & {title: string}= ({
             )}
           </div>
 
-          <Products products={products} />
+          <Products products={searchResults.length > 0 ? searchResults : products} />
 
           <div className="flex justify-between mt-8">
             <button

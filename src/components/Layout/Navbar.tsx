@@ -1,6 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -10,9 +8,7 @@ import { RootState } from "@/redux/store";
 import cart from "../../../public/Images/cart1.png";
 // import Cart from "../../public/Images/Cart.svg";
 import Heart from "../../../public/Images/Heart.svg";
-import Search from "../../../public/Images/Search.svg";
 import User from "../../../public/Images/User.svg";
-import Close from "../../../public/Images/Close.svg";
 
 import weirdlogo from "../../../public/Images/weirdlogo.png";
 
@@ -21,6 +17,9 @@ import { ProductData } from "@/components/product";
 import { GetServerSideProps, GetStaticProps } from "next";
 import axios from "axios";
 import SignedinItem from "../SignedinItem";
+import SearchComponent from "../SearchComponent";
+
+import { ToastContainer, toast } from 'react-toastify';
 
 const Navbar: React.FC = () => {
   const [cartCount, setCartCount] = useState(0);
@@ -30,23 +29,30 @@ const Navbar: React.FC = () => {
   const cartContainerRef = useRef<HTMLDivElement | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const cartCountFromRedux = useSelector((state: RootState) => state.cart.cartCount);
 
   useEffect(() => {
     const fetchCartCount = async () => {
       try {
-        const response = await axios.get(
-          "https://weird-entry-lara-production.up.railway.app/api/cart",
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`, // Replace with your actual access token
-              Accept: "application/json",
-            },
-          }
-        );
+        let cartCountFromAPI = 0;
 
-        const itemsObject = response.data.items || {};
-        const cartCountFromAPI = Object.keys(itemsObject).length;
-        console.log(cartCountFromAPI);
+        if (user) {
+          const response = await axios.get(
+            "https://weird-entry-lara-production.up.railway.app/api/cart",
+            {
+              headers: {
+                Authorization: `Bearer ${user.token}`, // Replace with your actual access token
+                Accept: "application/json",
+              },
+            }
+          );
+          const itemsObject = response.data.items || {};
+          cartCountFromAPI = Object.keys(itemsObject).length;
+        } else {
+          // If user is not logged in, use the cart count from the Redux store
+          cartCountFromAPI = cartCountFromRedux
+        }
+
         setCartCount(cartCountFromAPI);
       } catch (error: any) {
         console.error("Error fetching cart count from API:", error.message);
@@ -54,7 +60,7 @@ const Navbar: React.FC = () => {
     };
 
     fetchCartCount();
-  }, []);
+  }, [user, cartCountFromRedux]);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -143,44 +149,7 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <div
-              className={`relative ${
-                isSearchOpen ? "w-[33rem]" : "w-10"
-              } transition-all duration-500`}
-            >
-              {isSearchOpen ? (
-                <div className="relative">
-                  <input
-                    type="search"
-                    className="bg-[#fff] text-sm py-2 px-4 rounded-lg border-2 border-[#1B2E3C] focus:outline-none w-full h-[70%]"
-                    placeholder="Search"
-                  />
-                  <div
-                    onClick={toggleSearch}
-                    className="absolute top-3 right-3 cursor-pointer"
-                  >
-                    <Image
-                      src={Close}
-                      alt="close"
-                      className="h-[15px] w-[15px]"
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div
-                  className=" p-2 cursor-pointer flex justify-center items-center rounded-full border-transparent focus:outline-none focus:border-white"
-                  onClick={toggleSearch}
-                >
-                  <Image
-                    src={Search}
-                    alt="search"
-                    height={17}
-                    width={17}
-                    className="h-[18px] w-[22px]"
-                  />
-                </div>
-              )}
-            </div>
+          <SearchComponent onSearchToggle={toggleSearch} />
             <div className="relative">
               <div className="p-2 relative cursor-pointer" onClick={toggleCart}>
                 <Image
@@ -238,6 +207,9 @@ const Navbar: React.FC = () => {
                 <SignedinItem />
               </div>
             )}
+            <div className="absolute top-[100px] right-0">
+            <ToastContainer />
+            </div>
           </div>
         </div>
       </div>

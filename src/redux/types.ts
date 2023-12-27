@@ -8,9 +8,15 @@ export interface User {
 
 // cartTypes.ts
 export interface CartItem {
-  id: number;
   productId: number;
+  page: number;
+  id: number;
+  title: string;
   quantity: number;
+  price: number;
+  product_image: string;
+  sizes: { id: number; title: string; description: string }[]; // Update this line
+  colors: { id: number; title: string; description: string }[]; // Update this line
   // Add more cart item-related fields here
 }
 

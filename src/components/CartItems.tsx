@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import MiniProduct from "@/components/MiniProduct";
 import { RootState } from "@/redux/store";
-import { ProductData } from "@/components/product";
 import Link from "next/link";
 import axios from "axios";
 
@@ -21,24 +20,35 @@ interface CartItem {
 
 const CartItems: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  const [cartData, setCartData] = useState<CartItem[]>([]);;
+  const selectedProducts = useSelector(
+    (state: RootState) => state.cart.selectedProduct
+  );
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+
+  const [cartData, setCartData] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCartData = async () => {
       try {
-        const response = await axios.get("https://weird-entry-lara-production.up.railway.app/api/cart", {
-          headers: {
-            Authorization: `Bearer ${user?.token}`, // Use ${user?.token} to avoid potential null/undefined issues
-            Accept: "application/json",
-          },
-        });
+        if (user?.token) {
+          // Fetch cart data from the database endpoint
+          const response = await axios.get("https://weird-entry-lara-production.up.railway.app/api/cart", {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              Accept: "application/json",
+            },
+          });
 
-        const itemsArray: CartItem[] = Object.values(response.data.items);
+          const itemsArray: CartItem[] = Object.values(response.data.items);
+          console.log({itemsArray})
+          setCartData(itemsArray);
+        } else {
+          // Use cart data from the Redux store for non-logged-in users
+          setCartData(selectedProducts);
+        }
 
-        setCartData(itemsArray);
-        console.log(response.data.items)
         setLoading(false);
       } catch (error) {
         console.error("Error fetching cart data:", error);
@@ -47,80 +57,39 @@ const CartItems: React.FC = () => {
       }
     };
 
-    if (user?.token) {
-      fetchCartData();
-    } else {
-      setLoading(false);
-      setError("User token is missing");
-    }
-  }, [user?.token]); // Dependency on user?.token
+    fetchCartData();
+  }, [user?.token, selectedProducts]); // Dependencies on user?.token and cartItems
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="bg-[#F3E3E2] rounded-lg w-[500px] p-4 text-center">Loading...</div>;
   }
 
   if (error) {
     return <div>Error: {error}</div>;
   }
 
-
   if (cartData.length === 0) {
     return (
       <div>
-        {/* //{" "} */}
-        {/* <div className="bg-[#F3E3E2] h-[100px] rounded-lg w-[300px] p-4 flex items-center justify-center flex-col"> */}
-          {/* // <h2>Cart is empty</h2> */}
-          {/* <Link href="/cart" className="text-xl border-2 border-[#1B2E3C] m-4 flex items-center justify-center py-4 px-8 h-12 rounded-lg bg-[#1B2E3C] text-white transition-all ">Go to Cart</Link> */}
-          {/* //{" "} */}
-        {/* </div> */}
+        {/* Your empty cart message for non-logged-in users */}
       </div>
     );
   }
 
   const uniqueSelectedProducts = Array.from(new Set(cartData)); // Remove duplicates
-  // console.log({uniqueSelectedProducts})
-
-  if (uniqueSelectedProducts.length > 3) {
-    // Display only the first 3 selected products
-    return (
-      <div className="bg-[#F3E3E2] rounded-lg w-[500px] p-4">
-        <h2 className="uppercase text-sm font-bold px-4">cart</h2>
-        <div className="w-full h-[1px] bg-[#1B2E3C0D] my-[10px]"></div>
-        <div className="grid grid-cols-3 p-4">
-          <h2 className="uppercase font-bold text-xs">Items</h2>
-          <h2 className="uppercase font-bold text-xs ml-8">qty</h2>
-          <h2 className="uppercase font-bold text-xs ml-8">price</h2>
-          {/* <h2 className="uppercase font-bold text-xs"></h2> */}
-        </div>
-
-        {uniqueSelectedProducts.slice(0, 3).map((product) => (
-          <MiniProduct
-            key={product.id}
-            product={product}
-          />
-        ))}
-        <Link
-          href="/cart"
-          className="text-xl border-2 border-[#1B2E3C] m-4 flex items-center justify-center py-4 px-8 h-12 rounded-lg bg-[#1B2E3C] text-white transition-all uppercase"
-        >
-          checkout
-        </Link>
-      </div>
-    );
-  }
 
   return (
     <div className="bg-[#F3E3E2] rounded-lg w-[500px] p-4">
       <h2 className="uppercase text-sm font-bold px-4">cart</h2>
-        <div className="w-full h-[1px] bg-[#1B2E3C0D] my-[10px]"></div>
-        <div className="grid grid-cols-3 p-4">
-          <h2 className="uppercase font-bold text-xs">Items</h2>
-          <h2 className="uppercase font-bold text-xs ml-8">qty</h2>
-          <h2 className="uppercase font-bold text-xs ml-8">price</h2>
-          {/* <h2 className="uppercase font-bold text-xs"></h2> */}
-        </div>
-      {cartData.map((product) => (
-        <MiniProduct key={product.id} product={product} />
+      <div className="w-full h-[1px] bg-[#1B2E3C0D] my-[10px]"></div>
+      <div className="grid grid-cols-3 p-4">
+        <h2 className="uppercase font-bold text-xs">Items</h2>
+        <h2 className="uppercase font-bold text-xs ml-8">qty</h2>
+        <h2 className="uppercase font-bold text-xs ml-8">price</h2>
+      </div>
+
+      {uniqueSelectedProducts.slice(0, 3).map((product) => (
+        <MiniProduct key={product.id} product={product} cartItems={[]} />
       ))}
 
       <Link
