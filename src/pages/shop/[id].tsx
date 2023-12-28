@@ -6,6 +6,7 @@ import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 import { RingLoader } from "react-spinners";
 
+import store, { RootState } from "@/redux/store";
 
 import shirt1 from "../../../public/Images/shirt1.png";
 import shirt2 from "../../../public/Images/shirt2.png";
@@ -37,7 +38,7 @@ import {
   decrementItem,
   addSelectedProduct,
 } from "@/redux/slices/cartSlice";
-import { RootState } from "@/redux/store";
+import { sendItemsToEndpoint } from "@/utils/localStorageHelper";
 
 interface Size {
   id: number;
@@ -63,26 +64,102 @@ const ProductDescription: React.FC<HomeProps> & {title: string} = ({ products })
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [loading, setLoading] = useState(true);
+  const user = useSelector((state: RootState) => state.auth.user);  
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     // Check if selectedProduct is defined
-    if (selectedProduct) {
-      const existingProduct = cartItems.find(
-        (item) => item.id === selectedProduct.id
+    try{
+      if (selectedProduct) {
+        const existingProduct = cartItems.find(
+          (item) => item.id === selectedProduct.id
+        );
+  
+        if (existingProduct) {
+          dispatch(incrementItem(existingProduct.id));
+          console.log("Increment Items", incrementItem(existingProduct.id));
+        } else {
+          const cartItem = { id: selectedProduct.id, quantity: 1, product_image: selectedProduct.product_image,  price: selectedProduct.price, title: selectedProduct.title };
+          dispatch(addToCart(cartItem));
+          dispatch(incrementCartCount());
+          console.log("Item added", cartItem);
+        }
+  
+        dispatch(addSelectedProduct(selectedProduct));
+
+        // Extract the quantity directly from the addToCart action payload
+      const newlyAddedItemQuantity =
+      store.getState().cart.items.find((item) => item.id === selectedProduct.id)
+        ?.quantity || 0;
+
+    // Fetch the user's cart after updating the local cart
+    try {
+      const response = await axios.get(
+        "https://weird-entry-lara-production.up.railway.app/api/cart",
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            Accept: "application/json",
+          },
+        }
       );
 
-      if (existingProduct) {
-        dispatch(incrementItem(existingProduct.id));
-        console.log("Increment Items", incrementItem(existingProduct.id));
-      } else {
-        const cartItem = { id: selectedProduct.id, quantity: 1 };
-        dispatch(addToCart(cartItem));
-        dispatch(incrementCartCount());
-        console.log("Item added", cartItem);
-      }
+      if (response.status === 200) {
+        const userCart = response.data.items;
 
-      dispatch(addSelectedProduct(selectedProduct));
+        // Use the extracted quantity for the newly added item
+        if (newlyAddedItemQuantity > 0) {
+          if (userCart[selectedProduct.id]) {
+            userCart[selectedProduct.id].quantity += newlyAddedItemQuantity;
+          } else {
+            userCart[selectedProduct.id] = {
+              id: selectedProduct.id,
+              title: selectedProduct.title,
+              price: selectedProduct.price,
+              product_image: selectedProduct.product_image,
+              quantity: newlyAddedItemQuantity,
+            };
+          }
+        }
+
+        // Combine the fetched cart with the items already in the Redux store
+        const updatedCart = { ...userCart };
+
+        // If the user is logged in, send the updated cart to the endpoint
+        if (user && user.token) {
+          sendItemsToEndpoint(updatedCart);
+        }
+      } else if (response.status === 400) {
+        // If the user has no cart, send only the newly added item to create the cart
+        sendItemsToEndpoint({
+          [selectedProduct.id]: {
+            id: selectedProduct.id,
+            title: selectedProduct.title,
+            price: selectedProduct.price,
+            product_image: selectedProduct.product_image,
+            quantity: newlyAddedItemQuantity,
+          },
+        });
+      } else {
+        console.error("Failed to fetch user cart:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching user cart:", error);
+
+      // If there's an error fetching the user's cart, assume the user has no cart and send only the newly added item
+      sendItemsToEndpoint({
+        [selectedProduct.id]: {
+          id: selectedProduct.id,
+          title: selectedProduct.title,
+          price: selectedProduct.price,
+          product_image: selectedProduct.product_image,
+          quantity: newlyAddedItemQuantity,
+        },
+      });
     }
+      }
+    }catch (error) {
+      console.error("Error handling add to cart:", error);
+    }    
   };
 
   const router = useRouter();
@@ -135,7 +212,7 @@ const ProductDescription: React.FC<HomeProps> & {title: string} = ({ products })
               <div className="col-span-3">
                 <Image
                   src={selectedProduct.product_image}
-                  width={200}
+                  width={100}
                   height={100}
                   className="w-full h-[400px]"
                   alt="shirt"
@@ -195,10 +272,10 @@ const ProductDescription: React.FC<HomeProps> & {title: string} = ({ products })
                 </div>
               </div>
               <div className="flex justify-start items-center gap-4">
-                <button className="h-[50px] w-[40px] border border-[#0C0C1E] rounded-lg ">
+                {/* <button className="h-[50px] w-[40px] border border-[#0C0C1E] rounded-lg ">
                   {cartItems.find((item) => item.id === selectedProduct?.id)
                     ?.quantity || 0}
-                </button>
+                </button> */}
 
                 <button
                   onClick={handleAddToCart}
@@ -312,28 +389,28 @@ ProductDescription.title = 'Product Description';
 // };
 
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { params } = context;
-  const id = params?.id;
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const { params } = context;
+//   const id = params?.id;
 
-  try {
-    // Fetch data for the specific product using the id
-    const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product/${id}`;
-    const response = await axios.get(apiUrl);
-    const productData = response.data;
+//   try {
+//     // Fetch data for the specific product using the id
+//     const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product/${id}`;
+//     const response = await axios.get(apiUrl);
+//     const productData = response.data;
 
-    return {
-      props: {
-        selectedProduct: productData as ProductData,
-      },
-    };
-  } catch (error: any) {
-    console.error("Error fetching data from API:", error.message);
-    return {
-      notFound: true,
-    };
-  }
-};
+//     return {
+//       props: {
+//         selectedProduct: productData as ProductData,
+//       },
+//     };
+//   } catch (error: any) {
+//     console.error("Error fetching data from API:", error.message);
+//     return {
+//       notFound: true,
+//     };
+//   }
+// };
 
 
 export default ProductDescription;

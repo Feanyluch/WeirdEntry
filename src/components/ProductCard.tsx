@@ -149,7 +149,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         <div className="my-5">
-          <h2 className="capitalize">{product.title}</h2>
+          <h2 className="capitalize h-[50px] text-base">{product.title}</h2>
           {/* <div className="flex my-2">
             {[...Array(displayStars)].map((_, index) => (
               <Image

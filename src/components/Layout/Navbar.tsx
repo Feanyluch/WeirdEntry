@@ -19,7 +19,7 @@ import axios from "axios";
 import SignedinItem from "../SignedinItem";
 import SearchComponent from "../SearchComponent";
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 
 const Navbar: React.FC = () => {
   const [cartCount, setCartCount] = useState(0);
@@ -29,7 +29,9 @@ const Navbar: React.FC = () => {
   const cartContainerRef = useRef<HTMLDivElement | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const cartCountFromRedux = useSelector((state: RootState) => state.cart.cartCount);
+  const cartCountFromRedux = useSelector(
+    (state: RootState) => state.cart.cartCount
+  );
 
   useEffect(() => {
     const fetchCartCount = async () => {
@@ -50,7 +52,7 @@ const Navbar: React.FC = () => {
           cartCountFromAPI = Object.keys(itemsObject).length;
         } else {
           // If user is not logged in, use the cart count from the Redux store
-          cartCountFromAPI = cartCountFromRedux
+          cartCountFromAPI = cartCountFromRedux;
         }
 
         setCartCount(cartCountFromAPI);
@@ -149,7 +151,7 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-          <SearchComponent onSearchToggle={toggleSearch} />
+            <SearchComponent onSearchToggle={toggleSearch} />
             <div className="relative">
               <div className="p-2 relative cursor-pointer" onClick={toggleCart}>
                 <Image
@@ -163,6 +165,9 @@ const Navbar: React.FC = () => {
                   {cartCount}
                 </h2>
               </div>
+            </div>
+            <div className="absolute top-[100px] right-0">
+              <ToastContainer />
             </div>
             {isCartOpen && (
               <div
@@ -207,9 +212,6 @@ const Navbar: React.FC = () => {
                 <SignedinItem />
               </div>
             )}
-            <div className="absolute top-[100px] right-0">
-            <ToastContainer />
-            </div>
           </div>
         </div>
       </div>

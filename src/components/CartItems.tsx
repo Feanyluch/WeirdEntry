@@ -46,7 +46,7 @@ const CartItems: React.FC = () => {
           setCartData(itemsArray);
         } else {
           // Use cart data from the Redux store for non-logged-in users
-          setCartData(selectedProducts);
+          setCartData(cartItems as CartItem[]);
         }
 
         setLoading(false);
@@ -58,7 +58,7 @@ const CartItems: React.FC = () => {
     };
 
     fetchCartData();
-  }, [user?.token, selectedProducts]); // Dependencies on user?.token and cartItems
+  }, [user?.token, cartItems]); // Dependencies on user?.token and cartItems
 
   if (loading) {
     return <div className="bg-[#F3E3E2] rounded-lg w-[500px] p-4 text-center">Loading...</div>;
