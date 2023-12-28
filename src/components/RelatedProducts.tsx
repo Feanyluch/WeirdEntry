@@ -11,14 +11,14 @@ interface RelatedProductsProps {
 
 
 const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
-  // console.log("Received Products", products);
+  console.log("Received Products", products);
 
   // If products is an object with a data property, use products.data
   const productArray = Array.isArray(products) ? products : products?.data || [];
 
   const relatedProducts = productArray.slice(0, 4);
 
-  // console.log({ relatedProducts });
+  console.log({ relatedProducts });
 
   return (
     <div className="max-w-[1100px] mx-auto grid grid-cols-4 gap-4">

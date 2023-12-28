@@ -24,7 +24,7 @@ interface MiniProductProps {
 }
 
 const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
-  console.log({product})
+  console.log({ product });
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const user = useSelector((state: RootState) => state.auth.user);
@@ -42,18 +42,20 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
     setQuantity(quantity + 1);
     // If user is logged in, send update to /cart/create endpoint
     if (user) {
-      sendUpdateToEndpoint(product.id, quantity + 1, user.token);
-      console.log(product.id)
-      console.log({product})
+      sendUpdateToEndpoint(product.id, product.quantity + 1, user.token);
+      console.log(product.id);
+      console.log({ product });
     }
   };
 
   const decrementQuantity = () => {
     if (quantity > 0) {
       setQuantity(quantity - 1);
-      // If user is logged in, send update to /cart/create endpoint
-      if (user) {
-        sendUpdateToEndpoint(product.id, quantity - 1, user.token);
+    }
+    // If user is logged in, send update to /cart/create endpoint
+    if (user) {
+      if (product.quantity > 0) {
+        sendUpdateToEndpoint(product.id, product.quantity - 1, user.token);
       }
     }
   };
@@ -76,7 +78,8 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
     newQuantity: number,
     token: any
   ) => {
-    const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/cart";
+    const apiUrl =
+      "https://weird-entry-lara-production.up.railway.app/api/cart";
 
     try {
       // Fetch the user's current cart
@@ -107,16 +110,20 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
         delete userCart.undefined;
 
         // Send the updated cart to the endpoint
-        const updateResponse = await axios.post(apiUrl + '/create', {
-          user_email: `${user.user.email}`,
-          items: userCart,
-        }, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
+        const updateResponse = await axios.post(
+          apiUrl + "/create",
+          {
+            user_email: `${user.user.email}`,
+            items: userCart,
           },
-        });
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (updateResponse.status !== 200) {
           console.error("Error updating cart:", updateResponse.statusText);
@@ -132,7 +139,8 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
   };
 
   const removeProductFromCart = async (productId: number, token: any) => {
-    const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/cart";
+    const apiUrl =
+      "https://weird-entry-lara-production.up.railway.app/api/cart";
 
     try {
       // Fetch the user's current cart
@@ -150,16 +158,20 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
         delete userCart[productId];
 
         // Send the updated cart to the endpoint
-        const updateResponse = await axios.post(apiUrl + '/create', {
-          user_email: `${user.user.email}`,
-          items: userCart,
-        }, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
+        const updateResponse = await axios.post(
+          apiUrl + "/create",
+          {
+            user_email: `${user.user.email}`,
+            items: userCart,
           },
-        });
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (updateResponse.status !== 200) {
           console.error("Error updating cart:", updateResponse.statusText);

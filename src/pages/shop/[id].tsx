@@ -60,108 +60,120 @@ interface HomeProps {
   colors: Color[];
 }
 
-const ProductDescription: React.FC<HomeProps> & {title: string} = ({ products }) => {
+const ProductDescription: React.FC<HomeProps> & { title: string } = ({
+  products,
+}) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [loading, setLoading] = useState(true);
-  const user = useSelector((state: RootState) => state.auth.user);  
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const handleAddToCart = async () => {
     // Check if selectedProduct is defined
-    try{
+    try {
       if (selectedProduct) {
         const existingProduct = cartItems.find(
           (item) => item.id === selectedProduct.id
         );
-  
+
         if (existingProduct) {
           dispatch(incrementItem(existingProduct.id));
           console.log("Increment Items", incrementItem(existingProduct.id));
         } else {
-          const cartItem = { id: selectedProduct.id, quantity: 1, product_image: selectedProduct.product_image,  price: selectedProduct.price, title: selectedProduct.title };
+          const cartItem = {
+            id: selectedProduct.id,
+            quantity: 1,
+            product_image: selectedProduct.product_image,
+            price: selectedProduct.price,
+            title: selectedProduct.title,
+          };
           dispatch(addToCart(cartItem));
           dispatch(incrementCartCount());
           console.log("Item added", cartItem);
         }
-  
+
         dispatch(addSelectedProduct(selectedProduct));
 
         // Extract the quantity directly from the addToCart action payload
-      const newlyAddedItemQuantity =
-      store.getState().cart.items.find((item) => item.id === selectedProduct.id)
-        ?.quantity || 0;
+        const newlyAddedItemQuantity =
+          store
+            .getState()
+            .cart.items.find((item) => item.id === selectedProduct.id)
+            ?.quantity || 0;
 
         // Check if the user is logged in before fetching the user's cart
-    if (user && user.token) {
-    // Fetch the user's cart after updating the local cart
-    try {
-      const response = await axios.get(
-        "https://weird-entry-lara-production.up.railway.app/api/cart",
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            Accept: "application/json",
-          },
-        }
-      );
+        if (user && user.token) {
+          // Fetch the user's cart after updating the local cart
+          try {
+            const response = await axios.get(
+              "https://weird-entry-lara-production.up.railway.app/api/cart",
+              {
+                headers: {
+                  Authorization: `Bearer ${user.token}`,
+                  Accept: "application/json",
+                },
+              }
+            );
 
-      if (response.status === 200) {
-        const userCart = response.data.items;
+            if (response.status === 200) {
+              const userCart = response.data.items;
 
-        // Use the extracted quantity for the newly added item
-        if (newlyAddedItemQuantity > 0) {
-          if (userCart[selectedProduct.id]) {
-            userCart[selectedProduct.id].quantity += newlyAddedItemQuantity;
-          } else {
-            userCart[selectedProduct.id] = {
-              id: selectedProduct.id,
-              title: selectedProduct.title,
-              price: selectedProduct.price,
-              product_image: selectedProduct.product_image,
-              quantity: newlyAddedItemQuantity,
-            };
+              // Use the extracted quantity for the newly added item
+              if (newlyAddedItemQuantity > 0) {
+                if (userCart[selectedProduct.id]) {
+                  userCart[selectedProduct.id].quantity +=
+                    newlyAddedItemQuantity;
+                } else {
+                  userCart[selectedProduct.id] = {
+                    id: selectedProduct.id,
+                    title: selectedProduct.title,
+                    price: selectedProduct.price,
+                    product_image: selectedProduct.product_image,
+                    quantity: newlyAddedItemQuantity,
+                  };
+                }
+              }
+
+              // Combine the fetched cart with the items already in the Redux store
+              const updatedCart = { ...userCart };
+
+              // If the user is logged in, send the updated cart to the endpoint
+              if (user && user.token) {
+                sendItemsToEndpoint(updatedCart);
+              }
+            } else if (response.status === 400) {
+              // If the user has no cart, send only the newly added item to create the cart
+              sendItemsToEndpoint({
+                [selectedProduct.id]: {
+                  id: selectedProduct.id,
+                  title: selectedProduct.title,
+                  price: selectedProduct.price,
+                  product_image: selectedProduct.product_image,
+                  quantity: newlyAddedItemQuantity,
+                },
+              });
+            } else {
+              console.error("Failed to fetch user cart:", response.statusText);
+            }
+          } catch (error) {
+            console.error("Error fetching user cart:", error);
+
+            // If there's an error fetching the user's cart, assume the user has no cart and send only the newly added item
+            sendItemsToEndpoint({
+              [selectedProduct.id]: {
+                id: selectedProduct.id,
+                title: selectedProduct.title,
+                price: selectedProduct.price,
+                product_image: selectedProduct.product_image,
+                quantity: newlyAddedItemQuantity,
+              },
+            });
           }
         }
-
-        // Combine the fetched cart with the items already in the Redux store
-        const updatedCart = { ...userCart };
-
-        // If the user is logged in, send the updated cart to the endpoint
-        if (user && user.token) {
-          sendItemsToEndpoint(updatedCart);
-        }
-      } else if (response.status === 400) {
-        // If the user has no cart, send only the newly added item to create the cart
-        sendItemsToEndpoint({
-          [selectedProduct.id]: {
-            id: selectedProduct.id,
-            title: selectedProduct.title,
-            price: selectedProduct.price,
-            product_image: selectedProduct.product_image,
-            quantity: newlyAddedItemQuantity,
-          },
-        });
-      } else {
-        console.error("Failed to fetch user cart:", response.statusText);
       }
     } catch (error) {
-      console.error("Error fetching user cart:", error);
-
-      // If there's an error fetching the user's cart, assume the user has no cart and send only the newly added item
-      sendItemsToEndpoint({
-        [selectedProduct.id]: {
-          id: selectedProduct.id,
-          title: selectedProduct.title,
-          price: selectedProduct.price,
-          product_image: selectedProduct.product_image,
-          quantity: newlyAddedItemQuantity,
-        },
-      });
-    }
-      }
-    }}catch (error) {
       console.error("Error handling add to cart:", error);
-    }    
+    }
   };
 
   const router = useRouter();
@@ -263,14 +275,19 @@ const ProductDescription: React.FC<HomeProps> & {title: string} = ({ products })
               <div className="my-8">
                 <h4>Colors</h4>
                 <div className="flex gap-4 my-2">
-                  {selectedProduct.sizes.map((color, index) => (
-                    <button
-                      key={index}
-                      className="text-sm border border-[#0C0C1E80] px-2 h-[25px] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300 rounded-md"
-                    >
-                      {color.title}
-                    </button>
-                  ))}
+                  {selectedProduct.colors &&
+                  selectedProduct.colors.length > 0 ? (
+                    selectedProduct.colors.map((color, index) => (
+                      <button
+                        key={index}
+                        className="text-sm border border-[#0C0C1E80] px-2 h-[25px] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300 rounded-md"
+                      >
+                        {color.title}
+                      </button>
+                    ))
+                  ) : (
+                    <span className="text-red-500">No colors available</span>
+                  )}
                 </div>
               </div>
               <div className="flex justify-start items-center gap-4">
@@ -317,79 +334,77 @@ const ProductDescription: React.FC<HomeProps> & {title: string} = ({ products })
   );
 };
 
-ProductDescription.title = 'Product Description';
+ProductDescription.title = "Product Description";
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   // Fetch data from the API using Axios
-//   const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product`;
+export const getStaticProps: GetStaticProps = async () => {
+  // Fetch data from the API using Axios
+  const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product`;
 
-//   try {
-//     const response = await axios.get(apiUrl);
-//     const productData = response.data;
+  try {
+    const response = await axios.get(apiUrl);
+    const productData = response.data;
 
-//     // console.log("Product Data Page 2:", productData);
+    // console.log("Product Data Page 2:", productData);
 
-//     return {
-//       props: {
-//         products: productData as ProductData[],
-//       },
-//     };
-//   } catch (error: any) {
-//     console.error("Error fetching data from API:", error.message);
-//     throw new Error(`Failed to fetch data from API: ${error.message}`);
-//   }
-// };
+    return {
+      props: {
+        products: productData as ProductData[],
+      },
+    };
+  } catch (error: any) {
+    console.error("Error fetching data from API:", error.message);
+    throw new Error(`Failed to fetch data from API: ${error.message}`);
+  }
+};
 
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   const apiUrl =
-//     "https://weird-entry-lara-production.up.railway.app/api/product";
+export const getStaticPaths: GetStaticPaths = async () => {
+  const apiUrl =
+    "https://weird-entry-lara-production.up.railway.app/api/product";
 
-//   try {
-//     const response = await axios.get(apiUrl);
-//     const productData = response.data;
+  try {
+    const response = await axios.get(apiUrl);
+    const productData = response.data;
 
+    console.log("API Response:", productData);
 
-//     console.log("API Response:", productData);
+    if (!Array.isArray(productData.data)) {
+      console.error("Error: Product data is not an array.");
+      return {
+        paths: [],
+        fallback: false,
+      };
+    }
 
-//     if (!Array.isArray(productData.data)) {
-//       console.error("Error: Product data is not an array.");
-//       return {
-//         paths: [],
-//         fallback: false,
-//       };
-//     }
+    const { total, per_page } = productData;
+    const totalPages = Math.ceil(total / per_page);
 
-//     const { total, per_page } = productData;
-//     const totalPages = Math.ceil(total / per_page);
+    const paths = [];
+    for (let page = 1; page <= totalPages; page++) {
+      const pageResponse = await axios.get(`${apiUrl}?page=${page}`);
+      const pageData = pageResponse.data;
 
-//     const paths = [];
-//     for (let page = 1; page <= totalPages; page++) {
-//       const pageResponse = await axios.get(`${apiUrl}?page=${page}`);
-//       const pageData = pageResponse.data;
+      const pagePaths = pageData.data.map((product: { id: number }) => {
+        const path = {
+          params: { page: page.toString(), id: product.id.toString() },
+        };
+        // console.log("Generated Path:", path);
+        return path;
+      });
 
-//       const pagePaths = pageData.data.map((product: { id: number }) => {
-//         const path = {
-//           params: { page: page.toString(), id: product.id.toString() },
-//         };
-//         // console.log("Generated Path:", path);
-//         return path;
-//       });
+      paths.push(...pagePaths);
+    }
 
-//       paths.push(...pagePaths);
-//     }
+    // console.log("All Paths:", paths);
 
-//     // console.log("All Paths:", paths);
-
-//     return {
-//       paths,
-//       fallback: false,
-//     };
-//   } catch (error: any) {
-//     console.error("Error fetching data from API:", error.message);
-//     throw new Error(`Failed to fetch data from API: ${error.message}`);
-//   }
-// };
-
+    return {
+      paths,
+      fallback: false,
+    };
+  } catch (error: any) {
+    console.error("Error fetching data from API:", error.message);
+    throw new Error(`Failed to fetch data from API: ${error.message}`);
+  }
+};
 
 // export const getServerSideProps: GetServerSideProps = async (context) => {
 //   const { params } = context;
@@ -413,6 +428,5 @@ ProductDescription.title = 'Product Description';
 //     };
 //   }
 // };
-
 
 export default ProductDescription;

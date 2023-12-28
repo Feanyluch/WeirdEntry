@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Breadcrumb from "@/components/BreadCrumb";
 import CartProducts from "@/components/CartProducts";
@@ -30,6 +30,19 @@ interface CheckboxStates {
   bankTransfer: boolean;
   terms: boolean;
   // Add more checkboxes as needed
+}
+
+interface CartItem {
+  quantity: number;
+  // Add other properties as needed
+  page: number;
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  product_image: string;
+  sizes: { id: number; title: string; description: string }[]; // Update this line
+  colors: { id: number; title: string; description: string }[]; // Update this line
 }
 
 const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
@@ -68,9 +81,54 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
     (state: RootState) => state.cart.selectedProduct
   );
 
+  const user = useSelector((state: RootState) => state.auth.user);
   const cartItems = useSelector((state: RootState) => state.cart.items);
+  console.log({cartItems})
 
-  if (selectedProducts.length === 0) {
+  const [cartData, setCartData] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCartData = async () => {
+      try {
+        if (user?.token) {
+          // Fetch cart data from the database endpoint
+          const response = await axios.get("https://weird-entry-lara-production.up.railway.app/api/cart", {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              Accept: "application/json",
+            },
+          });
+
+          const itemsArray: CartItem[] = Object.values(response.data.items);
+          console.log({itemsArray})
+          setCartData(itemsArray);
+        } else {
+          // Use cart data from the Redux store for non-logged-in users
+          setCartData(cartItems as CartItem[]);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+        setError("Error fetching cart data");
+        setLoading(false);
+      }
+    };
+
+    fetchCartData();
+  }, [user?.token, cartItems]); // Dependencies on user?.token and cartItems
+
+  if (loading) {
+    return <div className="bg-white rounded-lg w-full p-4 text-center">Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (cartData.length === 0) {
     return (
       <div>
         <Breadcrumb products={products} />
@@ -90,11 +148,11 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
     );
   }
 
-  const uniqueSelectedProducts = Array.from(new Set(selectedProducts));
+  const uniqueSelectedProducts = Array.from(new Set(cartData));
 
   const calculateSubtotal = () => {
     let subtotal = 0;
-    for (const item of cartItems) {
+    for (const item of cartData) {
       if (products && Array.isArray(products.data)) {
         const product = products.data.find((p) => p.id === item.id);
   
@@ -116,8 +174,9 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
 
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
-    const shippingChargePercentage = 10; // Adjust based on your requirement
-    const shippingCharge = (subtotal * shippingChargePercentage) / 100;
+    // const shippingChargePercentage = 0; // Adjust based on your requirement
+    // const shippingCharge = (subtotal * shippingChargePercentage) / 100;
+    const shippingCharge = 4000;
     return subtotal + shippingCharge;
   };
 
@@ -268,9 +327,9 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
                 </h2>
               </div>
               <div className="py-[10px] flex items-center justify-between">
-                <h2 className="text-sm font-normal">Delivery Charge (10%)</h2>
+                <h2 className="text-sm font-normal">Delivery Charge (Fixed)</h2>
                 <h2 className="text-sm font-normal">
-                  N{(subtotal * 0.1).toLocaleString()}
+                  N4,000
                 </h2>
               </div>
               <div className="py-[10px] flex items-center justify-between">

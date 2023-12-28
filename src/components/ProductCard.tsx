@@ -140,7 +140,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <div>
       <Link href={`/shop/${product.id}`} passHref>
         <div className="rounded-lg h-[200px] relative overflow-hidden">
-          <h2 className="absolute z-[9] bg-gray-200 px-4 py-2">-50%</h2>
+          {/* <h2 className="absolute z-[9] bg-gray-200 px-4 py-2">-50%</h2> */}
           <Image
             src={product.product_image}
             width={350}

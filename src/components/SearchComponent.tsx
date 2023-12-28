@@ -29,7 +29,7 @@ const SearchComponent: React.FC<SearchProps> = ({ onSearchToggle }) => {
   const handleSearch = async () => {
     if (searchValue.trim() !== "") {
       try {
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}product?s=${searchValue}`;
+        const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product?s=${searchValue}`;
 
         const response = await fetch(apiUrl, {
           method: 'GET',

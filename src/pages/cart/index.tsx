@@ -1,30 +1,85 @@
 import Breadcrumb from "@/components/BreadCrumb";
 import CartProducts from "@/components/CartProducts";
 import Image from "next/image";
-import React from "react";
-
-import { ProductData } from "@/components/product";
-
+import React, { useEffect, useState } from "react";
 import cartempty from "../../../public/Images/cartempty.png";
 import Link from "next/link";
-import { GetStaticProps } from "next";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import axios from "axios";
 import ProtectedRoute from "@/components/ProtectedRoutes";
-
+import { ProductData } from "@/components/product";
+import axios from "axios";
+import { GetStaticProps } from "next";
 interface HomeProps {
   products?: { data: ProductData[] } | undefined; // Make the prop optional
 }
 
-const Cart: React.FC<HomeProps> & { title: string }= ({ products }) => {
+interface CartItem {
+  quantity: number;
+  // Add other properties as needed
+  page: number;
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  product_image: string;
+  sizes: { id: number; title: string; description: string }[]; // Update this line
+  colors: { id: number; title: string; description: string }[]; // Update this line
+}
+
+const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
   const selectedProducts = useSelector(
     (state: RootState) => state.cart.selectedProduct
   );
-
+  
+  const user = useSelector((state: RootState) => state.auth.user);
   const cartItems = useSelector((state: RootState) => state.cart.items);
+  console.log({cartItems})
 
-  if (selectedProducts.length === 0) {
+  const [cartData, setCartData] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCartData = async () => {
+      try {
+        if (user?.token) {
+          // Fetch cart data from the database endpoint
+          const response = await axios.get("https://weird-entry-lara-production.up.railway.app/api/cart", {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              Accept: "application/json",
+            },
+          });
+
+          const itemsArray: CartItem[] = Object.values(response.data.items);
+          console.log({itemsArray})
+          setCartData(itemsArray);
+        } else {
+          // Use cart data from the Redux store for non-logged-in users
+          setCartData(cartItems as CartItem[]);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+        setError("Error fetching cart data");
+        setLoading(false);
+      }
+    };
+
+    fetchCartData();
+  }, [user?.token, cartItems]); // Dependencies on user?.token and cartItems
+
+  if (loading) {
+    return <div className="bg-[#F3E3E2] rounded-lg w-[500px] p-4 text-center">Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (cartData.length === 0) {
     return (
       <ProtectedRoute>
         <div>
@@ -46,11 +101,11 @@ const Cart: React.FC<HomeProps> & { title: string }= ({ products }) => {
     );
   }
 
-  const uniqueSelectedProducts = Array.from(new Set(selectedProducts));
+  const uniqueSelectedProducts = Array.from(new Set(cartData));
 
   const calculateSubtotal = () => {
     let subtotal = 0;
-    for (const item of cartItems) {
+    for (const item of cartData) {
       if (products && Array.isArray(products.data)) {
         const product = products.data.find((p) => p.id === item.id);
 
