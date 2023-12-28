@@ -64,6 +64,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         store.getState().cart.items.find((item) => item.id === product.id)
           ?.quantity || 0;
 
+          // Check if the user is logged in before fetching the user's cart
+    if (user && user.token) {
       // Fetch the user's cart after updating the local cart
       try {
         const response = await axios.get(
@@ -128,7 +130,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             quantity: newlyAddedItemQuantity,
           },
         });
-      }
+      }}
     } catch (error) {
       console.error("Error handling add to cart:", error);
     }

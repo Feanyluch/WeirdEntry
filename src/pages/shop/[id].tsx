@@ -91,6 +91,8 @@ const ProductDescription: React.FC<HomeProps> & {title: string} = ({ products })
       store.getState().cart.items.find((item) => item.id === selectedProduct.id)
         ?.quantity || 0;
 
+        // Check if the user is logged in before fetching the user's cart
+    if (user && user.token) {
     // Fetch the user's cart after updating the local cart
     try {
       const response = await axios.get(
@@ -157,7 +159,7 @@ const ProductDescription: React.FC<HomeProps> & {title: string} = ({ products })
       });
     }
       }
-    }catch (error) {
+    }}catch (error) {
       console.error("Error handling add to cart:", error);
     }    
   };
