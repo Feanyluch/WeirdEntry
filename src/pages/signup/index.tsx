@@ -100,8 +100,14 @@ const Index: React.FC<HomeProps> & {title: string} = ({ products }) => {
         address,
         password_confirmation,
       });
+      setFirstName("");
+      setLastName("");
+      setAddress("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
       console.log("user details", user);
-      dispatch(setUser(user));
+      // dispatch(setUser(user));
       // Redirect or perform further actions
     } catch (error) {
       console.error("Signup error:", error);
@@ -114,7 +120,7 @@ const Index: React.FC<HomeProps> & {title: string} = ({ products }) => {
       <Breadcrumb products={products} />
       <div className="flex items-center justify-center bg-[#fdf9f9] py-8 w-[1200px] mx-auto my-[3rem]">
         <div className="bg-white w-[500px]  py-2 px-8">
-          <h2 className="text-5xl text-center py-12 uppercase">Login</h2>
+          <h2 className="text-5xl text-center py-12 uppercase">Register</h2>
           <div className="my-2">
             <div className="">
               <div className="py-2">
@@ -284,11 +290,11 @@ const Index: React.FC<HomeProps> & {title: string} = ({ products }) => {
               )}
             </div>
           </div>
-          <RoundCheckbox
+          {/* <RoundCheckbox
             label="Remember me"
             checked={isChecked}
             onChange={handleCheckboxChange}
-          />
+          /> */}
           <div className="my-2">
             <button
               onClick={handleSignup}
@@ -297,10 +303,10 @@ const Index: React.FC<HomeProps> & {title: string} = ({ products }) => {
               Sign up
             </button>
           </div>
-          <div className="flex items-center justify-between text-gray-400 py-8">
-            <Link href="/">Forgot password ?</Link>
-            <div className="flex">
-              <Link href="/">Register</Link>
+          <div className="flex items-center justify-end text-gray-400 py-8">
+            {/* <Link href="/">Forgot password ?</Link> */}
+            <div className="flex flex-end">
+              <Link href="/login">Login</Link>
               <Image src={toright} width={20} height={20} alt="to right" />
             </div>
           </div>

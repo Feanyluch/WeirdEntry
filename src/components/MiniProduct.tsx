@@ -197,8 +197,10 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
             height={100}
           />
         </div>
-        <div className="w-[80px] h-16 overflow-auto">
-          <h2 className="text-sm w-fit h-fit break-all">{product.title}</h2>
+        <div className="w-[80px] h-16 overflow-hidden">
+          <h2 className="text-sm w-fit h-fit break-all overflow-hidden whitespace-nowrap">
+            {product.title}
+          </h2>
         </div>
       </div>
       <div className="flex items-center justify-center">

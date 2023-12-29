@@ -19,7 +19,7 @@ interface Category {
   title: string;
 }
 
-const Index: React.FC<HomeProps> & {title: string}= ({
+const Index: React.FC<HomeProps> & { title: string } = ({
   initialProducts,
   nextPageUrl,
   prevPageUrl,
@@ -30,7 +30,7 @@ const Index: React.FC<HomeProps> & {title: string}= ({
   const [currentNextPageUrl, setCurrentNextPageUrl] = useState(nextPageUrl);
   const [currentPrevPageUrl, setCurrentPrevPageUrl] = useState(prevPageUrl);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (initialProducts) {
@@ -42,32 +42,42 @@ const Index: React.FC<HomeProps> & {title: string}= ({
     console.log("Initial Prev Page URL:", prevPageUrl);
     console.log("Initial Next Page URL:", nextPageUrl);
   }, [initialProducts, prevPageUrl, nextPageUrl]);
-  
 
   const handleSelectCategory = async (category: Category) => {
     // Check if the category is not already in the list
-    if (!selectedCategories.some((selectedCategory) => selectedCategory.id === category.id)) {
+    if (
+      !selectedCategories.some(
+        (selectedCategory) => selectedCategory.id === category.id
+      )
+    ) {
       try {
-        const response = await axios.get(`https://weird-entry-lara-production.up.railway.app/api/category/${category.id}`, {
-          headers: {
-            Authorization: "Bearer Token",
-            Accept: "application/json",
-          },
-        });
+        setLoading(true);
+        const response = await axios.get(
+          `https://weird-entry-lara-production.up.railway.app/api/category/${category.id}`,
+          {
+            headers: {
+              Authorization: "Bearer Token",
+              Accept: "application/json",
+            },
+          }
+        );
 
         const productData = response.data;
 
-      // Update the component state with the new data
-      setProducts(productData.products);
+        // Update the component state with the new data
+        setProducts(productData.products);
 
         // Update the component state with the new data
         // setProducts(productData.products);
         setCurrentPrevPageUrl(productData.prev_page_url);
         setCurrentNextPageUrl(productData.next_page_url);
 
+        setLoading(false);
         // Update the selected categories
-        setSelectedCategories((prevSelectedCategories) => [...prevSelectedCategories, category]);
-
+        setSelectedCategories((prevSelectedCategories) => [
+          ...prevSelectedCategories,
+          category,
+        ]);
         // Reset the current page to 1 when a new category is selected
         setCurrentPage(1);
 
@@ -85,54 +95,64 @@ const Index: React.FC<HomeProps> & {title: string}= ({
     const updatedSelectedCategories = selectedCategories.filter(
       (selectedCategory) => selectedCategory.id !== category.id
     );
-  
+
     setSelectedCategories(updatedSelectedCategories);
-  
+
     try {
+      setLoading(true);
       if (updatedSelectedCategories.length > 0) {
         // There are other selected categories, update products based on the remaining selected category
         const remainingCategoryId = updatedSelectedCategories[0].id; // Assuming you want to use the first remaining category
-        const response = await axios.get(`https://weird-entry-lara-production.up.railway.app/api/category/${remainingCategoryId}`, {
-          headers: {
-            Authorization: "Bearer Token",
-            Accept: "application/json",
-          },
-        });
-  
+        const response = await axios.get(
+          `https://weird-entry-lara-production.up.railway.app/api/category/${remainingCategoryId}`,
+          {
+            headers: {
+              Authorization: "Bearer Token",
+              Accept: "application/json",
+            },
+          }
+        );
+
         const productData = response.data;
-  
+
         // Update the component state with the products for the remaining selected category
         setProducts(productData.products);
         setCurrentPrevPageUrl(productData.prev_page_url || null);
         setCurrentNextPageUrl(productData.next_page_url || null);
-  
+        setLoading(false);
+
         // Reset the current page to 1
         setCurrentPage(1);
-  
+
         // Log the values for debugging
         console.log("Next Page URL:", productData.next_page_url);
         console.log("Previous Page URL:", productData.prev_page_url);
         console.log("Product Data:", productData.products);
       } else {
+        setLoading(true);
         // No other selected categories, fetch and set the initial list of products
-        const response = await axios.get("https://weird-entry-lara-production.up.railway.app/api/product", {
-          headers: {
-            Authorization: "Bearer Token",
-            Accept: "application/json",
-          },
-        });
-  
+        const response = await axios.get(
+          "https://weird-entry-lara-production.up.railway.app/api/product",
+          {
+            headers: {
+              Authorization: "Bearer Token",
+              Accept: "application/json",
+            },
+          }
+        );
+
         const productData = response.data;
-        console.log({productData})
-  
+        console.log({ productData });
+
         // Update the component state with the initial list of products
         setProducts(productData.data);
         setCurrentPrevPageUrl(productData.prev_page_url || null);
         setCurrentNextPageUrl(productData.next_page_url || null);
-  
+
         // Reset the current page to 1
         setCurrentPage(1);
-  
+        setLoading(false);
+
         // Log the values for debugging
         console.log("Next Page URL:", productData.next_page_url);
         console.log("Previous Page URL:", productData.prev_page_url);
@@ -146,6 +166,7 @@ const Index: React.FC<HomeProps> & {title: string}= ({
   const handlePrevPage = async () => {
     if (currentPrevPageUrl) {
       try {
+        setLoading(true);
         const response = await axios.get(currentPrevPageUrl);
         const productData = response.data;
 
@@ -159,6 +180,7 @@ const Index: React.FC<HomeProps> & {title: string}= ({
         setProducts(productData.data);
         setCurrentPrevPageUrl(productData.prev_page_url);
         setCurrentNextPageUrl(productData.next_page_url);
+        setLoading(false);
 
         // Use the callback form of setCurrentPage to ensure the correct current page value
         setCurrentPage((prevPage) => prevPage - 1);
@@ -179,6 +201,7 @@ const Index: React.FC<HomeProps> & {title: string}= ({
   const handleNextPage = async () => {
     if (currentNextPageUrl) {
       try {
+        setLoading(true);
         const response = await axios.get(currentNextPageUrl);
         const productData = response.data;
 
@@ -195,6 +218,7 @@ const Index: React.FC<HomeProps> & {title: string}= ({
 
         // Use the callback form of setCurrentPage to ensure the correct current page value
         setCurrentPage((prevPage) => prevPage + 1);
+        setLoading(false);
 
         // Log the values for debugging
         console.log("Next Page URL:", productData.next_page_url);
@@ -215,17 +239,21 @@ const Index: React.FC<HomeProps> & {title: string}= ({
             <ProductCategory onSelectCategory={handleSelectCategory} />
           </div>
         </div>
-        <div className="overflow-y-auto px-4 product-container">
+        <div className="w-3/4 overflow-y-auto px-4 product-container">
           <div className=" my-2">
             {selectedCategories.length > 0 && (
               <div className="flex items-center justify-start gap-2">
                 <h2>Selected Categories:</h2>
                 <ul className="flex items-center justify-start gap-2">
                   {selectedCategories.map((selectedCategory, index) => (
-                    <li key={index} className="bg-[#f1f1f2] p-1 rounded-lg text-sm">
+                    <li
+                      key={index}
+                      className="bg-[#f1f1f2] p-1 rounded-lg text-sm"
+                    >
                       {selectedCategory.title}{" "}
                       <button
-                        onClick={() => handleCancelCategory(selectedCategory)} className="bg-white px-2 rounded-lg"
+                        onClick={() => handleCancelCategory(selectedCategory)}
+                        className="bg-white px-2 rounded-lg"
                       >
                         x
                       </button>
@@ -236,7 +264,17 @@ const Index: React.FC<HomeProps> & {title: string}= ({
             )}
           </div>
 
-          <Products products={searchResults.length > 0 ? searchResults : products} />
+          {loading ? (
+            <div className="loading-container">
+              <div className="loading-content">
+                <h2 className="text-lg text-white">Weird Entry</h2>
+              </div>
+            </div>
+          ) : (
+            <Products
+              products={searchResults.length > 0 ? searchResults : products}
+            />
+          )}
 
           <div className="flex justify-between mt-8">
             <button
@@ -269,10 +307,11 @@ const Index: React.FC<HomeProps> & {title: string}= ({
   );
 };
 
-Index.title = 'Shop Products- WeirdEntry';
+Index.title = "Shop Products- WeirdEntry";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product";
+  const apiUrl =
+    "https://weird-entry-lara-production.up.railway.app/api/product";
 
   try {
     const response = await axios.get(apiUrl);
@@ -293,6 +332,5 @@ export const getStaticProps: GetStaticProps = async () => {
     throw new Error(`Failed to fetch data from API: ${error.message}`);
   }
 };
-
 
 export default Index;

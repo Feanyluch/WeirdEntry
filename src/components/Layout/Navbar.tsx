@@ -194,7 +194,7 @@ const Navbar: React.FC = () => {
               // If user is logged in, display image with user's first name
               <div className="p-2 cursor-pointer">
                 {/* <Image src={user} alt={user.firstName} height={22} width={22} /> */}
-                <div className="bg-[#1B2E3C] text-white p-1 text-sm relative">
+                <div className="bg-[#1B2E3C] text-white p-1 text-sm relative rounded-lg">
                   <h2 className="text-sm" onClick={toggleDropdown}>
                     User - {user.user.first_name}
                   </h2>

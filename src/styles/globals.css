@@ -55,7 +55,7 @@ body {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background-color: #1B2E3C;
+  background-color: #1b2e3c;
   cursor: grab;
 }
 
@@ -67,22 +67,22 @@ body {
 .nav-link {
   position: relative;
   text-decoration: none;
-  color: #1B2E3C;
+  color: #1b2e3c;
 }
 
 .nav-link::before {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   width: 0;
   height: 2px; /* Adjust the height to your preference */
-  background-color: #1B2E3C; /* Color of the underline */
+  background-color: #1b2e3c; /* Color of the underline */
   transition: width 0.3s ease-in-out;
 }
 
 .nav-link:hover::before {
-  width: 100%; 
+  width: 100%;
 }
 
 /* Style the form label to appear on the border */
@@ -113,4 +113,36 @@ body {
   border: 1px solid #ccc;
   border-radius: 10px;
   width: 100%;
+}
+
+.loading-container {
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  opacity: 1;
+  animation: fadeAndZoomOut 1.5s ease-out;
+}
+
+@keyframes fadeAndZoomOut {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.1) rotate(360deg);
+
+  }
+}
+
+.loading-content {
+  height: 100px;
+  width: 100px;
+  background-color: #1B2E3C;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
