@@ -9,6 +9,7 @@ import cart from "../../../public/Images/cart1.png";
 // import Cart from "../../public/Images/Cart.svg";
 import Heart from "../../../public/Images/Heart.svg";
 import User from "../../../public/Images/User.svg";
+import hamburger from "../../../public/Images/hamburger.svg";
 
 import weirdlogo from "../../../public/Images/weirdlogo.png";
 
@@ -29,6 +30,7 @@ const Navbar: React.FC = () => {
   const cartContainerRef = useRef<HTMLDivElement | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const searchRef = useRef<HTMLDivElement | null>(null);
   const cartCountFromRedux = useSelector(
     (state: RootState) => state.cart.cartCount
   );
@@ -68,25 +70,6 @@ const Navbar: React.FC = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    if (isDropdownOpen) {
-      document.addEventListener("mousedown", handleOutsideClick);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, [isDropdownOpen]);
-
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
   };
@@ -103,20 +86,31 @@ const Navbar: React.FC = () => {
       ) {
         setIsCartOpen(false);
       }
+
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setIsSearchOpen(false);
+      }
     };
 
-    if (isCartOpen) {
+    if (isCartOpen || isDropdownOpen || isSearchOpen) {
       document.addEventListener("mousedown", handleOutsideClick);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [isCartOpen]);
+  }, [isCartOpen, isDropdownOpen, isSearchOpen]);
 
   return (
     <nav className="bg-[#FFFFFF] text-[#1B2E3C] sticky top-0 bg-opacity-70 backdrop-blur-xl z-[999]">
-      <div className="max-w-[1200px] mx-auto py-4">
+      <div className="max-w-[1200px] mx-auto py-4 px-4">
         <div className="relative flex justify-between items-center">
           <div className="">
             <div className="w-[200px] hidden sm:block">
@@ -124,8 +118,8 @@ const Navbar: React.FC = () => {
                 <Image src={weirdlogo} alt="logo" />
               </Link>
             </div>
-            <div className="w-[200px] block sm:hidden">
-              <h2>=</h2>
+            <div className="block sm:hidden">
+              <Image src={hamburger} alt="" />
             </div>
           </div>
           <div className={`${isSearchOpen ? "hidden" : "block"} uppercase`}>
@@ -151,7 +145,9 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <SearchComponent onSearchToggle={toggleSearch} />
+            <div className="hidden sm:block">
+              <SearchComponent onSearchToggle={toggleSearch} ref={searchRef} />
+            </div>
             <div className="relative">
               <div className="p-2 relative cursor-pointer" onClick={toggleCart}>
                 <Image
@@ -178,7 +174,7 @@ const Navbar: React.FC = () => {
               </div>
             )}
 
-            <div className="p-2 relative cursor-pointer">
+            <div className="p-2 relative cursor-pointer hidden sm:block">
               <Image
                 src={Heart}
                 alt="Heart"
@@ -190,28 +186,30 @@ const Navbar: React.FC = () => {
                 0
               </h2>
             </div>
-            {user ? (
-              // If user is logged in, display image with user's first name
-              <div className="p-2 cursor-pointer">
-                {/* <Image src={user} alt={user.firstName} height={22} width={22} /> */}
-                <div className="bg-[#1B2E3C] text-white p-1 text-sm relative rounded-lg">
-                  <h2 className="text-sm" onClick={toggleDropdown}>
-                    User - {user.user.first_name}
-                  </h2>
+            <div className="hidden sm:block">
+              {user ? (
+                // If user is logged in, display image with user's first name
+                <div className="p-2 cursor-pointer">
+                  {/* <Image src={user} alt={user.firstName} height={22} width={22} /> */}
+                  <div className="bg-[#1B2E3C] text-white p-1 text-sm relative rounded-lg">
+                    <h2 className="text-sm px-2" onClick={toggleDropdown}>
+                      {user.user.first_name}
+                    </h2>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              // If user is not logged in, display default user icon
-              <div className="p-2 flex items-center justify-start gap-2 bg-[#f1f1f2] rounded-lg">
-                <Image src={User} alt="User" height={22} width={22} />
-                <Link href="/login">Sign in</Link>
-              </div>
-            )}
-            {isDropdownOpen && (
-              <div className="absolute top-[50px] right-0" ref={dropdownRef}>
-                <SignedinItem />
-              </div>
-            )}
+              ) : (
+                // If user is not logged in, display default user icon
+                <div className="p-2 flex items-center justify-start gap-2 bg-[#f1f1f2] rounded-lg">
+                  <Image src={User} alt="User" height={22} width={22} />
+                  <Link href="/login">Sign in</Link>
+                </div>
+              )}
+              {isDropdownOpen && (
+                <div className="absolute top-[50px] right-0" ref={dropdownRef}>
+                  <SignedinItem />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -40,46 +40,46 @@ const Home: React.FC<HomeProps> & { title: string } = ({ products }) => {
       <Banner />
       {/* <Image src={banner1} alt="banner" /> */}
 
-      <div className="py-16">
+      <div className="py-8 sm:py-16">
         <h2 className="text-center text-xl tracking-[3.6px]">
           What makes us different
         </h2>
-        <div className="w-[1200px] mx-auto">
-          <div className="grid grid-cols-4 gap-[40px] mt-[50px]">
-            <div className="">
+        <div className="max-w-[1200px] mx-auto px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-[30px] sm:gap-[40px] mt-[50px]">
+            <div className="flex items-center justify-center flex-col text-center sm:items-start sm:justify-start sm:flex-row sm:text-start gap-2">
               <Image src={Energy} alt="energy" className="mb-[16px]" />
               <div>
                 <h2 className="text-lg mb-[8px]">Super Fast Delivery</h2>
-                <p className="text-sm">
+                <p className="text-sm w-[250px] sm:w-full">
                   Order before 3pm and get your order the next hour as standard
                 </p>
               </div>
             </div>
-            <div className="">
+            <div className="flex items-center justify-center flex-col text-center sm:items-start sm:justify-start sm:flex-row sm:text-start gap-2">
               <Image src={Dollar} alt="dollar" className="mb-[16px]" />
               <div>
                 <h2 className="text-lg mb-[8px]">Affordable Prices</h2>
-                <p className="text-sm">
+                <p className="text-sm w-[250px] sm:w-full">
                   For our material and quality you won’t find better prices
                   anywhere else
                 </p>
               </div>
             </div>
-            <div className="">
+            <div className="flex items-center justify-center flex-col text-center sm:items-start sm:justify-start sm:flex-row sm:text-start gap-2">
               <Image src={Star} alt="Star" className="mb-[16px]" />
               <div>
                 <h2 className="text-lg mb-[8px]">Trend Masters</h2>
-                <p className="text-sm">
+                <p className="text-sm w-[250px] sm:w-full">
                   Trend is not an issue, we set standards that can’t be met by
                   others
                 </p>
               </div>
             </div>
-            <div className="">
+            <div className="flex items-center justify-center flex-col text-center sm:items-start sm:justify-start sm:flex-row sm:text-start gap-2">
               <Image src={Star} alt="Star" className="mb-[16px]" />
               <div>
                 <h2 className="text-lg mb-[8px]">Trend Masters</h2>
-                <p className="text-sm">
+                <p className="text-sm w-[250px] sm:w-full">
                   Trend is not an issue, we set standards that can’t be met by
                   others
                 </p>
@@ -89,7 +89,7 @@ const Home: React.FC<HomeProps> & { title: string } = ({ products }) => {
         </div>
       </div>
       <div className="px-8 py-[60px] bg-[#1B2E3C] ">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-3 gap-8">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8">
           <div>
             <Image src={shirt} alt="shirt" />
           </div>
@@ -102,16 +102,16 @@ const Home: React.FC<HomeProps> & { title: string } = ({ products }) => {
           </div>
         </div>
       </div>
-      <div className="text-center py-[60px]">
+      <div className="text-center py-8 sm:py-[60px]">
         <h2 className="text-lg tracking-[3.6px] font-light">Latest Release</h2>
         <h2 className="my-2">+</h2>
         <h2 className="text-4xl font-normal">TRENDING</h2>
       </div>
-      <div className="w-[1200px] mx-auto my-[50px]">
+      <div className="max-w-[1200px] mx-auto my-4 sm:my-[50px]">
         <RelatedProducts products={products} />
       </div>
-      <div className="w-[1200px] mx-auto my-10">
-        <div className="grid grid-cols-2">
+      <div className="max-w-[1200px] mx-auto my-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2">
           <div className="flex items-start justify-center bg-[#1B2E3C] text-[#F3E3E2] px-12 ">
             <div className="">
               <h2 className="text-center text-3xl my-8">ABOUT</h2>

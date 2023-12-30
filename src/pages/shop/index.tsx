@@ -5,8 +5,9 @@ import { GetStaticProps } from "next";
 import { ProductData } from "@/components/product";
 import Breadcrumb from "@/components/BreadCrumb";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { selectSearchResults } from "@/redux/slices/searchSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectSearchResults, setSearchResults } from "@/redux/slices/searchSlice";
+import { useRouter } from "next/router";
 
 interface HomeProps {
   initialProducts?: ProductData[] | undefined; // Adjusted prop type
@@ -31,6 +32,19 @@ const Index: React.FC<HomeProps> & { title: string } = ({
   const [currentPrevPageUrl, setCurrentPrevPageUrl] = useState(prevPageUrl);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string | null>(null);
+  const router = useRouter()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    // Fetch products if it's not a search query
+    if (router.query.s) {
+      dispatch(setSearchResults(searchResults)); 
+      setSearchQuery(router.query.s as string);
+    } else {
+      setSearchQuery(null);
+    }
+  }, [dispatch, router.query.s, searchResults]);
 
   useEffect(() => {
     if (initialProducts) {
@@ -230,6 +244,46 @@ const Index: React.FC<HomeProps> & { title: string } = ({
     }
   };
 
+
+  const handleCancelSearch = async () => {
+    try {
+      setLoading(true);
+
+      // Fetch and set the initial list of products
+      const response = await axios.get(
+        "https://weird-entry-lara-production.up.railway.app/api/product",
+        {
+          headers: {
+            Authorization: "Bearer Token",
+            Accept: "application/json",
+          },
+        }
+      );
+
+      const productData = response.data;
+      console.log({ productData });
+      router.push('/shop')
+
+      // Update the component state with the initial list of products
+      setProducts(productData.data);
+      setCurrentPrevPageUrl(productData.prev_page_url || null);
+      setCurrentNextPageUrl(productData.next_page_url || null);
+
+      // Reset the current page to 1
+      setCurrentPage(1);
+      setSearchQuery(null); // Reset the search query state
+
+      setLoading(false);
+
+      // Log the values for debugging
+      console.log("Next Page URL:", productData.next_page_url);
+      console.log("Previous Page URL:", productData.prev_page_url);
+      console.log("Product Data:", productData.products);
+    } catch (error: any) {
+      console.error("Error canceling search:", error.message);
+    }
+  };
+
   return (
     <div>
       <Breadcrumb products={products} />
@@ -241,6 +295,20 @@ const Index: React.FC<HomeProps> & { title: string } = ({
         </div>
         <div className="w-3/4 overflow-y-auto px-4 product-container">
           <div className=" my-2">
+          {searchQuery && (
+              <div className="flex items-center justify-start gap-2">
+                <h2>Showing results for: </h2>
+                <div className="p-1 rounded-lg text-sm flex items-center justify-start bg-[#f1f1f2]">
+                  <h2>{searchQuery}</h2>
+                  <button
+                        onClick={handleCancelSearch}
+                        className="bg-white px-2 rounded-lg"
+                      >
+                        x
+                      </button>
+                </div>
+              </div>
+            )}
             {selectedCategories.length > 0 && (
               <div className="flex items-center justify-start gap-2">
                 <h2>Selected Categories:</h2>

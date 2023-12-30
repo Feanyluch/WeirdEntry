@@ -208,7 +208,7 @@ const CartProducts: React.FC<MiniProductProps> = ({ product }) => {
         <div className="flex items-center justify-between gap-6">
           <div className="flex gap-1">
             <h2 className="text-sm">Size: </h2>
-            <p className="text-sm"> M</p>
+            <p className="text-sm"> {product.size}</p>
           </div>
           <div className="flex items-center justify-start gap-[12px] text-sm my-1">
             <h2 className="text-sm">Qty:</h2>

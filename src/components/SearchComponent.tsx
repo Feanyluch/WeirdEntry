@@ -7,17 +7,21 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import { setSearchResults } from '@/redux/slices/searchSlice';
+import { useRouter } from "next/router";
 
 interface SearchProps {
   onSearchToggle: () => void;
 }
 
-const SearchComponent: React.FC<SearchProps> = ({ onSearchToggle }) => {
+const SearchComponent = React.forwardRef<HTMLDivElement | null, SearchProps>(({ onSearchToggle }, ref) => {
   const dispatch = useDispatch();
+  const router = useRouter()
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
   const toggleSearch = () => {
+    
+    console.log("Toggling search");
     setIsSearchOpen(!isSearchOpen);
     onSearchToggle();
   };
@@ -46,6 +50,9 @@ const SearchComponent: React.FC<SearchProps> = ({ onSearchToggle }) => {
           } else {
             // Dispatch the action to update Redux state with search results
             dispatch(setSearchResults(data));
+
+            // Use the router to navigate to the shop page with the search query
+            router.push(`/shop?s=${searchValue}`);
           }
         } else {
           console.error("Failed to fetch search results");
@@ -104,6 +111,9 @@ const SearchComponent: React.FC<SearchProps> = ({ onSearchToggle }) => {
       )}
     </div>
   );
-};
+});
+
+// Add a displayName property to the functional component
+SearchComponent.displayName = 'SearchComponent';
 
 export default SearchComponent;

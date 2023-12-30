@@ -15,7 +15,7 @@ export const clearCartLocalStorage = () => {
   localStorage.removeItem('cartState');
 };
 
-export const sendItemsToEndpoint = async (items: Record<number, { id: number; title: string; price: number; quantity: number; product_image: string, }>) => {
+export const sendItemsToEndpoint = async (items: Record<number, { id: number; title: string; price: number; quantity: number; product_image: string; size: string | null; color: string | null; }>) => {
   // Check if there are items to send
   if (!items || Object.keys(items).length === 0) {
     console.log('No valid items to send to the endpoint.');

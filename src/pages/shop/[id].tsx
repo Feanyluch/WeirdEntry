@@ -56,7 +56,7 @@ interface Color {
 
 interface HomeProps {
   products?: { data: ProductData[] } | undefined; // Make the prop optional
-  sizes: Size[];
+  sizes: string[];
   colors: Color[];
 }
 
@@ -67,6 +67,16 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [loading, setLoading] = useState(true);
   const user = useSelector((state: RootState) => state.auth.user);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+
+  const handleSizeSelect = (size: string) => {
+    setSelectedSize(size);
+  };
+
+  const handleColorSelect = (color: string) => {
+    setSelectedColor(color);
+  }
 
   const handleAddToCart = async () => {
     // Check if selectedProduct is defined
@@ -86,6 +96,8 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
             product_image: selectedProduct.product_image,
             price: selectedProduct.price,
             title: selectedProduct.title,
+            size: selectedSize,
+            color: selectedColor,
           };
           dispatch(addToCart(cartItem));
           dispatch(incrementCartCount());
@@ -130,6 +142,8 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                     price: selectedProduct.price,
                     product_image: selectedProduct.product_image,
                     quantity: newlyAddedItemQuantity,
+                    size: selectedSize,
+                    color: selectedColor,
                   };
                 }
               }
@@ -150,6 +164,8 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                   price: selectedProduct.price,
                   product_image: selectedProduct.product_image,
                   quantity: newlyAddedItemQuantity,
+                  size: selectedSize,
+                  color: selectedColor,
                 },
               });
             } else {
@@ -166,6 +182,8 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                 price: selectedProduct.price,
                 product_image: selectedProduct.product_image,
                 quantity: newlyAddedItemQuantity,
+                size: selectedSize,
+                color: selectedColor,
               },
             });
           }
@@ -259,12 +277,12 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                 {selectedProduct.description}
               </p>
               <div className="">
-                <h4>Polo Sizes</h4>
+                <h4>Available Sizes</h4>
                 <div className="flex gap-4 my-2">
                   {selectedProduct.sizes.map((size, index) => (
                     <button
                       key={index}
-                      className="text-sm border border-[#0C0C1E80] px-2 h-[25px] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300 rounded-md"
+                      className={`text-sm border border-[#0C0C1E80] px-2 h-[25px] ${selectedSize === size.title ? "bg-[#1B2E3C] text-[#F3E3E2]" : ""} transition ease-in-out duration-300 rounded-md`}
                     >
                       {size.title}
                     </button>
@@ -273,7 +291,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
               </div>
 
               <div className="my-8">
-                <h4>Colors</h4>
+                <h4>Available Colors</h4>
                 <div className="flex gap-4 my-2">
                   {selectedProduct.colors &&
                   selectedProduct.colors.length > 0 ? (

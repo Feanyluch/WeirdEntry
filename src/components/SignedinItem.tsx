@@ -1,12 +1,14 @@
 import { clearUser } from '@/redux/slices/authSlice';
 import Link from 'next/link';
 import React from 'react';
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from "@/redux/store";
 
 const LogoutButton = () => {
   const dispatch = useDispatch();
+  const router = useRouter()
   const user = useSelector((state: RootState) => state.auth.user); // Assuming your token is stored in the user object
 
   const handleLogout = async () => {
@@ -15,7 +17,7 @@ const LogoutButton = () => {
       const response = await fetch('https://weird-entry-lara-production.up.railway.app/api/logout', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${user}`,
+          'Authorization': `Bearer ${user.token}`,
           'Accept': 'application/json',
         },
       });
@@ -26,6 +28,7 @@ const LogoutButton = () => {
 
       // Clear user from local storage
       dispatch(clearUser());
+      router.push('/login')
       console.log('User logged out successfully');
     } catch (error: any) {
       console.error('Error logging out:', error.message);

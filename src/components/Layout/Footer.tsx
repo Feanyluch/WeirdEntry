@@ -12,8 +12,8 @@ import Logo from "../../../public/Images/weirdlogo.png";
 const Footer = () => {
   return (
     <div className="bg-[#F3E3E2]">
-      <div className="w-[1000px] mx-auto py-16">
-        <div className="grid grid-cols-4 gap-20">
+      <div className="max-w-[1000px] mx-auto py-16">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-20 px-4">
           <div className="">
             <Image src={Logo} alt="logo" />
             <h2 className="text-[14px] my-2">
@@ -50,7 +50,7 @@ const Footer = () => {
           <div className="flex flex-col">
             <h2 className="text-sm font-bold mb-2">Quick Links</h2>
             <Link href="/" className="text-[14px] my-2">
-              email: weirdentry@gmail.com
+              {/* email: weirdentry@gmail.com */}
             </Link>
             <p className="text-[14px] my-2">
               Address: 44 Way, Weird Entry Street,
@@ -58,12 +58,12 @@ const Footer = () => {
             </p>
           </div>
         </div>
-        <div className="mt-24 flex items-center justify-between">
+        <div className="mt-24 flex items-center justify-between flex-col px-4 text-center">
           <h2 className="text-bold text-[12px]">
             &copy 2021 WEIRD ENTRY. | All rights reserved. | Designed and
             Developed by 44’’ Squad.
           </h2>
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center my-4 sm:my-0">
             <Link href="twitter.com">T</Link>
             <Link href="twitter.com">T</Link>
             <Link href="twitter.com">T</Link>
