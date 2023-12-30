@@ -20,7 +20,7 @@ import axios from "axios";
 
 interface MiniProductProps {
   product: ProductData;
-  cartItems: { id: number; quantity: number }[];
+  cartItems: { id: number; quantity: number; size: string; color: string }[];
 }
 
 const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
