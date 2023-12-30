@@ -40,6 +40,8 @@ interface CartItem {
   title: string;
   description: string;
   price: number;
+  size: string;
+  color: string;
   product_image: string;
   sizes: { id: number; title: string; description: string }[]; // Update this line
   colors: { id: number; title: string; description: string }[]; // Update this line
