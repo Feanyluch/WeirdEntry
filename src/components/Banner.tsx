@@ -41,7 +41,7 @@ const Banner = () => {
   }, []);
 
   return (
-    <div className="relative h-[90dvh]">
+    <div className="relative h-[90vh]">
       {bannerData.map((data, index) => (
         <div
           key={index}
