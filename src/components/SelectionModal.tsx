@@ -13,8 +13,12 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductData } from "./product";
 
+import Image from "next/image";
+import cancel from "../../public/Images/cancel.svg";
+
 interface SizeSelectionModalProps {
   sizes: string[];
+  product_image: any;
   colors: string[];
   title: string;
   product: ProductData;
@@ -26,6 +30,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
   sizes,
   colors,
   title,
+  product_image,
   onClose,
   product,
   onSizeSelect,
@@ -44,16 +49,18 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
     console.log(product.id);
 
     try {
-      const existingProduct = cartItems.find((item) => item.id === product.id);
+      // Check if the selected color and size combination already exists in the cart
+      const existingProductIndex = cartItems.findIndex(
+        (item) => item.size === selectedSize && item.color === selectedColor
+      );
 
       // If the product is already in the cart, increment its quantity
-      if (existingProduct) {
-        dispatch(incrementItem(existingProduct.id));
+      if (existingProductIndex !== -1) {
+        dispatch(incrementItem(cartItems[existingProductIndex].id));
       } else {
         // If the product is not in the cart, add it with a quantity of 1
-        console.log("CartItem", selectedSize);
         const cartItem = {
-          id: product.id,
+          id: `${product.id}_${selectedSize}_${selectedColor}`, // Use a unique identifier for each product variant
           quantity: 1,
           price: product.price,
           title: product.title,
@@ -65,12 +72,19 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
         dispatch(incrementCartCount());
       }
 
+      // Add the selected product to some global state or perform other relevant actions
       dispatch(addSelectedProduct(product));
 
       // Extract the quantity directly from the addToCart action payload
       const newlyAddedItemQuantity =
-        store.getState().cart.items.find((item) => item.id === product.id)
-          ?.quantity || 0;
+        store
+          .getState()
+          .cart.items.find(
+            (item) =>
+              item.id === product.id &&
+              item.size === selectedSize &&
+              item.color === selectedColor
+          )?.quantity || 0;
 
       // Check if the user is logged in before fetching the user's cart
       if (user && user.token) {
@@ -89,13 +103,39 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           if (response.status === 200) {
             const userCart = response.data.items;
 
+            // ... (existing code)
+
             // Use the extracted quantity for the newly added item
             if (newlyAddedItemQuantity > 0) {
-              if (userCart[product.id]) {
-                userCart[product.id].quantity += newlyAddedItemQuantity;
+              const existingCartItemKey = `${product.id}_${selectedSize}_${selectedColor}`;
+              const existingCartItem = userCart[existingCartItemKey];
+
+              if (existingCartItem) {
+                // Check if the existing item has the same size and color
+                if (
+                  existingCartItem.size === selectedSize &&
+                  existingCartItem.color === selectedColor
+                ) {
+                  console.log("This line is triggered");
+                  existingCartItem.quantity += newlyAddedItemQuantity;
+                } else {
+                  console.log("newly added", selectedSize);
+                  // Create a new item with the same ID but different size and color
+                  const newCartItem = {
+                    id: product.id,
+                    title: product.title,
+                    price: product.price,
+                    product_image: product.product_image,
+                    quantity: newlyAddedItemQuantity,
+                    size: selectedSize,
+                    color: selectedColor,
+                  };
+                  userCart[existingCartItemKey] = newCartItem;
+                }
               } else {
+                // If there's no existing item, create a new one
                 console.log("newly added", selectedSize);
-                userCart[product.id] = {
+                const newCartItem = {
                   id: product.id,
                   title: product.title,
                   price: product.price,
@@ -104,20 +144,24 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
                   size: selectedSize,
                   color: selectedColor,
                 };
+                userCart[existingCartItemKey] = newCartItem;
+              }
+
+              // Combine the fetched cart with the items already in the Redux store
+              const updatedCart = { ...userCart };
+
+              // If the user is logged in, send the updated cart to the endpoint
+              if (user && user.token) {
+                sendItemsToEndpoint(updatedCart);
               }
             }
 
-            // Combine the fetched cart with the items already in the Redux store
-            const updatedCart = { ...userCart };
-
-            // If the user is logged in, send the updated cart to the endpoint
-            if (user && user.token) {
-              sendItemsToEndpoint(updatedCart);
-            }
+            // ... (remaining code)
           } else if (response.status === 400) {
             // If the user has no cart, send only the newly added item to create the cart
+            const newCartItemKey = `${product.id}_${selectedSize}_${selectedColor}`;
             sendItemsToEndpoint({
-              [product.id]: {
+              [newCartItemKey]: {
                 id: product.id,
                 title: product.title,
                 price: product.price,
@@ -134,8 +178,9 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           console.error("Error fetching user cart:", error);
 
           // If there's an error fetching the user's cart, assume the user has no cart and send only the newly added item
+          const newCartItemKey = `${product.id}_${selectedSize}_${selectedColor}`;
           sendItemsToEndpoint({
-            [product.id]: {
+            [newCartItemKey]: {
               id: product.id,
               title: product.title,
               price: product.price,
@@ -172,49 +217,61 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-[999px]">
-      <div className="relative bg-white p-8 rounded-lg w-[400px]">
-        <div className="flex items-center justify-center absolute right-[10px] top-[5px] cursor-pointer text-white bg-[#1B2E3C] rounded-full px-3 pb-[5px]" onClick={onClose}>
-          <h2 className="text-2xl">
-            x
-          </h2>
-        </div>
-        <h2 className="text-lg font-bold my-2">{title}</h2>
-
-        <div className="flex flex-col gap-4">
-          <div className="py-2">
-            <h2 className="text-sm mb-2">Select a size:</h2>
-            <div className="flex flex-wrap gap-2">
-              {sizes.map((size) => (
-                <button
-                  key={size}
-                  onClick={() => handleSizeSelect(size)}
-                  className={`border border-gray-300 rounded-md p-2 ${
-                    selectedSize === size ? "bg-[#1B2E3C] text-white" : ""
-                  }`}
-                >
-                  {size}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="py-2">
-            <h2 className="text-sm mb-2">Select a color:</h2>
-            <div className="flex flex-wrap gap-2">
-              {colors.map((color) => (
-                <button
-                  key={color}
-                  onClick={() => handleColorSelect(color)}
-                  className={`border border-gray-300 rounded-md p-2 ${
-                    selectedColor === color ? "bg-[#1B2E3C] text-white" : ""
-                  }`}
-                >
-                  {color}
-                </button>
-              ))}
-            </div>
+      <div className="bg-white p-8 rounded-lg w-[500px]">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold my-2 text-[#0C0C1E]">{title}</h2>
+          <div className="cursor-pointer" onClick={onClose}>
+            <Image src={cancel} alt="" height={20} width={20} />
           </div>
         </div>
+
+        <div className="flex items-start justify-start gap-6 my-8">
+          <div className="rounded-lg h-full flex items-center justify-center overflow-hidden">
+            <Image
+              src={product.product_image}
+              alt="item1"
+              width={150}
+              height={50}
+              className="object-cover transform hover:scale-110 transition-transform duration-300"
+            />
+          </div>
+          <div className="flex flex-col gap-4 h-full py-1">
+            <div className="py-2">
+              <h2 className="text-sm mb-2 text-[#0C0C1E] font-light">Select a size</h2>
+              <div className="flex flex-wrap gap-2">
+                {sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => handleSizeSelect(size)}
+                    className={`border border-gray-300 rounded-full p-2 text-sm ${
+                      selectedSize === size ? "bg-[#1B2E3C] text-white" : ""
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="py-2">
+              <h2 className="text-sm mb-2 text-[#0C0C1E] font-light">Select a color</h2>
+              <div className="flex flex-wrap gap-2">
+                {colors.map((color) => (
+                  <button
+                    key={color}
+                    onClick={() => handleColorSelect(color)}
+                    className={`border border-gray-300 rounded-full text-sm p-2 ${
+                      selectedColor === color ? "bg-[#1B2E3C] text-white" : ""
+                    }`}
+                  >
+                    {color}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="mt-4 flex justify-end">
           <button
             onClick={handleAddToCart}

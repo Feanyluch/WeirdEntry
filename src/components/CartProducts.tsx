@@ -192,13 +192,16 @@ const CartProducts: React.FC<MiniProductProps> = ({ product }) => {
 
   return (
     <div className="grid grid-cols-2 gap-4">
-      <Image
-        src={product.product_image}
-        alt="item1"
-        width={200}
-        height={50}
-        className="rounded-lg h-[150px]"
-      />
+      <div className="rounded-lg h-[150px] flex items-center justify-center overflow-hidden">
+        <Image
+          src={product.product_image}
+          alt="item1"
+          width={200}
+          height={50}
+          className="object-cover transform hover:scale-110 transition-transform duration-300"
+        />
+      </div>
+
       <div className="flex flex-col gap-[5px]">
         <h2 className="text-sm font-normal uppercase">{product.title}</h2>
         <h1 className="font-bold text-sm my-1">

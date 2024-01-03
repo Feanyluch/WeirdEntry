@@ -27,7 +27,6 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
-
   // console.log("Product Card Prop", product);
   // const [showAllStars, setShowAllStars] = useState(false);
 
@@ -38,11 +37,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const user = useSelector((state: RootState) => state.auth.user);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const handleAddToCart = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       // Make an API request to get the full details of the selected product
       const response = await axios.get(
         `https://weird-entry-lara-production.up.railway.app/api/product/${product.id}`
@@ -52,7 +51,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
 
       // Call the onAddToCart callback with the detailed product information
       onAddToCart(detailedProduct);
-      setLoading(false)
+      setLoading(false);
     } catch (error: any) {
       console.error("Error fetching product details:", error.message);
     }
@@ -159,15 +158,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   return (
     <div>
       <Link href={`/shop/${product.id}`} passHref>
-        <div className="rounded-lg h-[200px] relative overflow-hidden">
-          {/* <h2 className="absolute z-[9] bg-gray-200 px-4 py-2">-50%</h2> */}
-          <Image
-            src={product.product_image}
-            width={350}
-            height={500}
-            alt={product.title}
-            className=" object-cover transform hover:scale-110 transition-transform duration-300"
-          />
+        <div className="rounded-lg h-[200px] relative overflow-hidden flex items-center justify-center">
+          <div
+            style={{
+              backgroundImage: `url('${product.product_image}')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              width: "90%",
+              height: "100%",
+            }}
+            className="rounded-lg transform hover:scale-110 transition-transform duration-300"
+          ></div>
         </div>
 
         <div className="my-5">
@@ -213,7 +214,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
           />
         </button>
       </div>
-      
     </div>
   );
 };

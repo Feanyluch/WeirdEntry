@@ -6,9 +6,11 @@ import { RootState } from "../store";
 
 // Define the type for a product in the cart
 export interface CartItem {
+  color: string | null;
+  size: string | null;
   price: number;
   title: string;
-  id: number;
+  id: number ;
   quantity: number;
 }
 

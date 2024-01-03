@@ -49,6 +49,7 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
             selectedProductForSize.colors.map((color) => color.title) || []
           }
           title={selectedProductForSize.title}
+          product_image={selectedProductForSize.product_image}
           onClose={() => setIsSizeModalOpen(false)}
           onSizeSelect={(selectedSize) => {
             // Handle the selected size and product
