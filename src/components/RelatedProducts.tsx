@@ -48,6 +48,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
           colors={
             selectedProductForSize.colors.map((color) => color.title) || []
           }
+          product_image={selectedProductForSize.product_image}
           title={selectedProductForSize.title}
           onClose={() => setIsSizeModalOpen(false)}
           onSizeSelect={(selectedSize) => {

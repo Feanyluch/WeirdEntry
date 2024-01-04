@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
@@ -25,17 +25,42 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ products }) => {
     return withoutQueryParams;
   };
 
-  const selectedProduct = Array.isArray(products)
-    ? products.find(
-        (product) =>
-          product.id === parseInt(pathnames[pathnames.length - 1], 10)
-      )
-    : products && products.data
-    ? products.data.find(
-        (product) =>
-          product.id === parseInt(pathnames[pathnames.length - 1], 10)
-      )
-    : undefined;
+  // const selectedProduct = Array.isArray(products)
+  //   ? products.find(
+  //       (product) => product.id.toString() === pathnames[pathnames.length - 1]
+  //     )
+  //   : products && products.data
+  //   ? products.data.find(
+  //       (product) => product.id.toString() === pathnames[pathnames.length - 1]
+  //     )
+  //   : undefined;
+
+  const { id } = router.query;
+
+  // Use state to store the selected product
+  const [selectedProduct, setSelectedProduct] = useState<
+    ProductData | undefined
+  >(undefined);
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product/${id}`;
+
+      try {
+        const response = await axios.get(apiUrl);
+        const productData = response.data;
+        setSelectedProduct(productData);
+      } catch (error: any) {
+        console.error("Error fetching product data from API:", error.message);
+      } finally {
+        // setLoading(false); // Set loading to false regardless of success or failure
+      }
+    };
+
+    if (id) {
+      fetchProductData();
+    }
+  }, [id]);
 
   console.log({ selectedProduct });
 

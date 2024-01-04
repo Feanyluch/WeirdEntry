@@ -79,9 +79,9 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
     }
   };  
 
-  const selectedProducts = useSelector(
-    (state: RootState) => state.cart.selectedProduct
-  );
+  // const selectedProducts = useSelector(
+  //   (state: RootState) => state.cart.selectedProduct
+  // );
 
   const user = useSelector((state: RootState) => state.auth.user);
   const cartItems = useSelector((state: RootState) => state.cart.items);

@@ -71,27 +71,33 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
 
   const handleSizeSelect = (size: string) => {
-    setSelectedSize(size);
+    // Toggle the selection of size
+    setSelectedSize((prevSize) => (prevSize === size ? null : size));
   };
 
   const handleColorSelect = (color: string) => {
-    setSelectedColor(color);
-  }
+    // Toggle the selection of color
+    setSelectedColor((prevColor) => (prevColor === color ? null : color));
+  };
+
+
+  const isAddToCartDisabled = !selectedSize || !selectedColor;
 
   const handleAddToCart = async () => {
     // Check if selectedProduct is defined
     try {
       if (selectedProduct) {
-        const existingProduct = cartItems.find(
-          (item) => item.id === selectedProduct.id
+        // Check if the selected color and size combination already exists in the cart
+        const existingProductIndex = cartItems.findIndex(
+          (item) => item.size === selectedSize && item.color === selectedColor
         );
 
-        if (existingProduct) {
-          dispatch(incrementItem(existingProduct.id));
-          console.log("Increment Items", incrementItem(existingProduct.id));
+        // If the product is already in the cart, increment its quantity
+        if (existingProductIndex !== -1) {
+          dispatch(incrementItem(cartItems[existingProductIndex].id));
         } else {
           const cartItem = {
-            id: selectedProduct.id,
+            id: `${selectedProduct.id}_${selectedSize}_${selectedColor}`,
             quantity: 1,
             product_image: selectedProduct.product_image,
             price: selectedProduct.price,
@@ -110,8 +116,12 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
         const newlyAddedItemQuantity =
           store
             .getState()
-            .cart.items.find((item) => item.id === selectedProduct.id)
-            ?.quantity || 0;
+            .cart.items.find(
+              (item) =>
+                item.id === selectedProduct.id &&
+                item.size === selectedSize &&
+                item.color === selectedColor
+            )?.quantity || 0;
 
         // Check if the user is logged in before fetching the user's cart
         if (user && user.token) {
@@ -132,11 +142,35 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
 
               // Use the extracted quantity for the newly added item
               if (newlyAddedItemQuantity > 0) {
-                if (userCart[selectedProduct.id]) {
-                  userCart[selectedProduct.id].quantity +=
-                    newlyAddedItemQuantity;
+                const existingCartItemKey = `${selectedProduct.id}_${selectedSize}_${selectedColor}`;
+                const existingCartItem = userCart[existingCartItemKey];
+
+                if (existingCartItem) {
+                  // Check if the existing item has the same size and color
+                  if (
+                    existingCartItem.size === selectedSize &&
+                    existingCartItem.color === selectedColor
+                  ) {
+                    console.log("This line is triggered");
+                    existingCartItem.quantity += newlyAddedItemQuantity;
+                  } else {
+                    console.log("newly added", selectedSize);
+                    // Create a new item with the same ID but different size and color
+                    const newCartItem = {
+                      id: selectedProduct.id,
+                      title: selectedProduct.title,
+                      price: selectedProduct.price,
+                      product_image: selectedProduct.product_image,
+                      quantity: newlyAddedItemQuantity,
+                      size: selectedSize,
+                      color: selectedColor,
+                    };
+                    userCart[existingCartItemKey] = newCartItem;
+                  }
                 } else {
-                  userCart[selectedProduct.id] = {
+                  // If there's no existing item, create a new one
+                  console.log("newly added", selectedSize);
+                  const newCartItem = {
                     id: selectedProduct.id,
                     title: selectedProduct.title,
                     price: selectedProduct.price,
@@ -145,20 +179,22 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                     size: selectedSize,
                     color: selectedColor,
                   };
+                  userCart[existingCartItemKey] = newCartItem;
                 }
-              }
 
-              // Combine the fetched cart with the items already in the Redux store
-              const updatedCart = { ...userCart };
+                // Combine the fetched cart with the items already in the Redux store
+                const updatedCart = { ...userCart };
 
-              // If the user is logged in, send the updated cart to the endpoint
-              if (user && user.token) {
-                sendItemsToEndpoint(updatedCart);
+                // If the user is logged in, send the updated cart to the endpoint
+                if (user && user.token) {
+                  sendItemsToEndpoint(updatedCart);
+                }
               }
             } else if (response.status === 400) {
               // If the user has no cart, send only the newly added item to create the cart
+              const newCartItemKey = `${selectedProduct.id}_${selectedSize}_${selectedColor}`;
               sendItemsToEndpoint({
-                [selectedProduct.id]: {
+                [newCartItemKey]: {
                   id: selectedProduct.id,
                   title: selectedProduct.title,
                   price: selectedProduct.price,
@@ -175,8 +211,9 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
             console.error("Error fetching user cart:", error);
 
             // If there's an error fetching the user's cart, assume the user has no cart and send only the newly added item
+            const newCartItemKey = `${selectedProduct.id}_${selectedSize}_${selectedColor}`;
             sendItemsToEndpoint({
-              [selectedProduct.id]: {
+              [newCartItemKey]: {
                 id: selectedProduct.id,
                 title: selectedProduct.title,
                 price: selectedProduct.price,
@@ -241,15 +278,18 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
         <div className="grid grid-cols-2 gap-8">
           <div className="">
             <div className="grid grid-cols-3 gap-4">
-              <div className="col-span-3">
-                <Image
-                  src={selectedProduct.product_image}
-                  width={100}
-                  height={100}
-                  className="w-full h-[400px]"
-                  alt="shirt"
-                />
+              <div className="col-span-3 flex items-center justify-center">
+                <div
+                  style={{
+                    backgroundImage: `url('${selectedProduct.product_image}')`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    width: "100%",
+                    height: "400px",
+                  }}
+                ></div>
               </div>
+
               <div className="col-span-1">
                 <Image src={shirt2} alt="shirt2" />
               </div>
@@ -282,7 +322,12 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                   {selectedProduct.sizes.map((size, index) => (
                     <button
                       key={index}
-                      className={`text-sm border border-[#0C0C1E80] px-2 h-[25px] ${selectedSize === size.title ? "bg-[#1B2E3C] text-[#F3E3E2]" : ""} transition ease-in-out duration-300 rounded-md`}
+                      className={`text-sm border border-[#0C0C1E80] px-2 h-[25px] ${
+                        selectedSize === size.title
+                          ? "bg-[#1B2E3C] text-white"
+                          : ""
+                      } transition ease-in-out duration-300 rounded-md`}
+                      onClick={() => handleSizeSelect(size.title)}
                     >
                       {size.title}
                     </button>
@@ -298,7 +343,12 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                     selectedProduct.colors.map((color, index) => (
                       <button
                         key={index}
-                        className="text-sm border border-[#0C0C1E80] px-2 h-[25px] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300 rounded-md"
+                        className={`text-sm border border-[#0C0C1E80] px-2 h-[25px] ${
+                          selectedColor === color.title
+                            ? "bg-[#1B2E3C] text-white"
+                            : ""
+                        } transition ease-in-out duration-300 rounded-md`}
+                        onClick={() => handleColorSelect(color.title)}
                       >
                         {color.title}
                       </button>
@@ -316,6 +366,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
 
                 <button
                   onClick={handleAddToCart}
+                  disabled={isAddToCartDisabled}
                   className="px-[80px] h-[50px] uppercase border border-[#0C0C1E] rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300"
                 >
                   Add to cart

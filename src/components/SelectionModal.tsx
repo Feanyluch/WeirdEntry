@@ -50,29 +50,36 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
 
     try {
       // Check if the selected color and size combination already exists in the cart
-      const existingProductIndex = cartItems.findIndex(
-        (item) => item.size === selectedSize && item.color === selectedColor
-      );
+      const existingProductKey = `${product.id}_${selectedSize}_${selectedColor}`;
+      const existingProduct = cartItems[existingProductKey];
+      // const existingProduct = cartItems.find(
+      //   (item) =>
+      //     item.id === product.id &&
+      //     item.size === selectedSize &&
+      //     item.color === selectedColor
+      // );
 
       // If the product is already in the cart, increment its quantity
-      if (existingProductIndex !== -1) {
-        dispatch(incrementItem(cartItems[existingProductIndex].id));
+      if (existingProduct) {
+        dispatch(incrementItem(existingProduct.id));
       } else {
         // If the product is not in the cart, add it with a quantity of 1
+        console.log("CartItem", selectedSize);
         const cartItem = {
-          id: `${product.id}_${selectedSize}_${selectedColor}`, // Use a unique identifier for each product variant
-          quantity: 1,
-          price: product.price,
-          title: product.title,
-          product_image: product.product_image,
-          size: selectedSize,
-          color: selectedColor,
+          [existingProductKey]: {
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            product_image: product.product_image,
+            quantity: 1,
+            size: selectedSize,
+            color: selectedColor,
+          },
         };
         dispatch(addToCart(cartItem));
         dispatch(incrementCartCount());
       }
 
-      // Add the selected product to some global state or perform other relevant actions
       dispatch(addSelectedProduct(product));
 
       // Extract the quantity directly from the addToCart action payload
@@ -103,57 +110,53 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           if (response.status === 200) {
             const userCart = response.data.items;
 
-            // ... (existing code)
-
             // Use the extracted quantity for the newly added item
-            if (newlyAddedItemQuantity > 0) {
-              const existingCartItemKey = `${product.id}_${selectedSize}_${selectedColor}`;
-              const existingCartItem = userCart[existingCartItemKey];
+            const existingCartItemKey = `${product.id}_${selectedSize}_${selectedColor}`;
+            const existingCartItem = userCart[existingCartItemKey];
 
-              if (existingCartItem) {
-                // Check if the existing item has the same size and color
-                if (
-                  existingCartItem.size === selectedSize &&
-                  existingCartItem.color === selectedColor
-                ) {
-                  console.log("This line is triggered");
-                  existingCartItem.quantity += newlyAddedItemQuantity;
-                } else {
-                  console.log("newly added", selectedSize);
-                  // Create a new item with the same ID but different size and color
-                  const newCartItem = {
-                    id: product.id,
-                    title: product.title,
-                    price: product.price,
-                    product_image: product.product_image,
-                    quantity: newlyAddedItemQuantity,
-                    size: selectedSize,
-                    color: selectedColor,
-                  };
-                  userCart[existingCartItemKey] = newCartItem;
-                }
+            if (existingCartItem) {
+              // Check if the existing item has the same size and color
+              if (
+                existingCartItem.size === selectedSize &&
+                existingCartItem.color === selectedColor
+              ) {
+                console.log("This line is triggered");
+                existingCartItem.quantity += 1; // Increment by 1 since it's a new item
               } else {
-                // If there's no existing item, create a new one
                 console.log("newly added", selectedSize);
+                // Create a new item with the same ID but different size and color
                 const newCartItem = {
                   id: product.id,
                   title: product.title,
                   price: product.price,
                   product_image: product.product_image,
-                  quantity: newlyAddedItemQuantity,
+                  quantity: 1, // Quantity is 1 for a newly added item
                   size: selectedSize,
                   color: selectedColor,
                 };
                 userCart[existingCartItemKey] = newCartItem;
               }
+            } else {
+              // If there's no existing item, create a new one
+              console.log("newly added", selectedSize);
+              const newCartItem = {
+                id: product.id,
+                title: product.title,
+                price: product.price,
+                product_image: product.product_image,
+                quantity: 1, // Quantity is 1 for a newly added item
+                size: selectedSize,
+                color: selectedColor,
+              };
+              userCart[existingCartItemKey] = newCartItem;
+            }
 
-              // Combine the fetched cart with the items already in the Redux store
-              const updatedCart = { ...userCart };
+            // Combine the fetched cart with the items already in the Redux store
+            const updatedCart = { ...userCart };
 
-              // If the user is logged in, send the updated cart to the endpoint
-              if (user && user.token) {
-                sendItemsToEndpoint(updatedCart);
-              }
+            // If the user is logged in, send the updated cart to the endpoint
+            if (user && user.token) {
+              sendItemsToEndpoint(updatedCart);
             }
 
             // ... (remaining code)
@@ -166,7 +169,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
                 title: product.title,
                 price: product.price,
                 product_image: product.product_image,
-                quantity: newlyAddedItemQuantity,
+                quantity: 1,
                 size: selectedSize,
                 color: selectedColor,
               },
@@ -185,7 +188,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
               title: product.title,
               price: product.price,
               product_image: product.product_image,
-              quantity: newlyAddedItemQuantity,
+              quantity: 1,
               size: selectedSize,
               color: selectedColor,
             },
@@ -237,7 +240,9 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           </div>
           <div className="flex flex-col gap-4 h-full py-1">
             <div className="py-2">
-              <h2 className="text-sm mb-2 text-[#0C0C1E] font-light">Select a size</h2>
+              <h2 className="text-sm mb-2 text-[#0C0C1E] font-light">
+                Select a size
+              </h2>
               <div className="flex flex-wrap gap-2">
                 {sizes.map((size) => (
                   <button
@@ -254,7 +259,9 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
             </div>
 
             <div className="py-2">
-              <h2 className="text-sm mb-2 text-[#0C0C1E] font-light">Select a color</h2>
+              <h2 className="text-sm mb-2 text-[#0C0C1E] font-light">
+                Select a color
+              </h2>
               <div className="flex flex-wrap gap-2">
                 {colors.map((color) => (
                   <button
