@@ -10,7 +10,6 @@ export const saveCartToLocalStorage = (state: CartState) => {
   }
 };
 
-
 export const clearCartLocalStorage = () => {
   localStorage.removeItem('cartState');
 };

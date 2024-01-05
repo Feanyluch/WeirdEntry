@@ -50,31 +50,42 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
 
     try {
       // Check if the selected color and size combination already exists in the cart
+      // const existingProduct = Array.isArray(cartItems)
+      //   ? cartItems.find(
+      //       (item) =>
+      //         item.id === product.id &&
+      //         item.size === selectedSize &&
+      //         item.color === selectedColor
+      //     )
+      //   : null;
+
       const existingProductKey = `${product.id}_${selectedSize}_${selectedColor}`;
       const existingProduct = cartItems[existingProductKey];
-      // const existingProduct = cartItems.find(
-      //   (item) =>
-      //     item.id === product.id &&
-      //     item.size === selectedSize &&
-      //     item.color === selectedColor
-      // );
 
-      // If the product is already in the cart, increment its quantity
+      console.log({existingProductKey})
+      console.log({existingProduct})
+
       if (existingProduct) {
-        dispatch(incrementItem(existingProduct.id));
+        if (
+          existingProduct.size === selectedSize &&
+          existingProduct.color === selectedColor
+        ) {
+          console.log("This line is triggered");
+
+          // Dispatch action to increment the item
+          dispatch(incrementItem(existingProductKey));
+        }
       } else {
         // If the product is not in the cart, add it with a quantity of 1
         console.log("CartItem", selectedSize);
         const cartItem = {
-          [existingProductKey]: {
-            id: product.id,
-            title: product.title,
-            price: product.price,
-            product_image: product.product_image,
-            quantity: 1,
-            size: selectedSize,
-            color: selectedColor,
-          },
+          id: product.id,
+          quantity: 1,
+          price: product.price,
+          title: product.title,
+          product_image: product.product_image,
+          size: selectedSize,
+          color: selectedColor,
         };
         dispatch(addToCart(cartItem));
         dispatch(incrementCartCount());
@@ -83,15 +94,15 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
       dispatch(addSelectedProduct(product));
 
       // Extract the quantity directly from the addToCart action payload
-      const newlyAddedItemQuantity =
-        store
-          .getState()
-          .cart.items.find(
-            (item) =>
-              item.id === product.id &&
-              item.size === selectedSize &&
-              item.color === selectedColor
-          )?.quantity || 0;
+      // const newlyAddedItemQuantity =
+      //   store
+      //     .getState()
+      //     .cart.items.find(
+      //       (item) =>
+      //         item.id === product.id &&
+      //         item.size === selectedSize &&
+      //         item.color === selectedColor
+      //     )?.quantity || 0;
 
       // Check if the user is logged in before fetching the user's cart
       if (user && user.token) {
