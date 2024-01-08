@@ -26,7 +26,7 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
     const fetchCategories = async () => {
       try {
         const response = await axios.get<(string | Category)[]>(
-          "https://weird-entry-lara-production.up.railway.app/api/category",
+          "https://weird-entry-api.onrender.com/api/category",
           {
             headers: {
               Authorization: "Bearer Token",
@@ -109,14 +109,12 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
           <p className="mr-2 ">Price: N{priceRange[0]}</p> -
           <p className="mx-2">N{priceRange[1]}</p>
         </div>
-        
+
         <div className="flex items-center justify-center my-4">
-            <button
-              className="uppercase py-2 text-sm px-8 w-[220px] border border-[#1B2E3C] rounded-lg hover:bg-[#1B2E3C] hover:text-white"
-            >
-              Filter
-            </button>
-          </div>
+          <button className="uppercase py-2 text-sm px-8 w-[220px] border border-[#1B2E3C] rounded-lg hover:bg-[#1B2E3C] hover:text-white">
+            Filter
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ interface HomeProps {
   products: ProductData[];
 }
 
-const Index: React.FC<HomeProps> & {title: string} = ({ products }) => {
+const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
   const {
     first_name,
     setFirstName,
@@ -43,7 +43,6 @@ const Index: React.FC<HomeProps> & {title: string} = ({ products }) => {
     showPassword,
     //
 
-    
     isFirstNameFocused,
     setIsFirstNameFocused,
     isAddressFocused,
@@ -316,11 +315,11 @@ const Index: React.FC<HomeProps> & {title: string} = ({ products }) => {
   );
 };
 
-Index.title = 'Sign up - WeirdEntry';
+Index.title = "Sign up - WeirdEntry";
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+  const apiUrl = "https://weird-entry-api.onrender.com/api/product"; // Replace with your actual API endpoint
 
   try {
     const response = await axios.get(apiUrl);

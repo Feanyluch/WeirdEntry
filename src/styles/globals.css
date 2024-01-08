@@ -31,6 +31,19 @@ body {
 }
 /* Add this CSS to your stylesheet */
 
+::-webkit-scrollbar {
+  width: 10px; /* You can adjust the width of the scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #1B2E3C; /* Color of the scrollbar thumb */
+  border-radius: 5px; /* Border radius of the scrollbar thumb */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Color of the scrollbar track */
+}
+
 /* Custom CSS to hide the scrollbars */
 .product-container::-webkit-scrollbar {
   width: 0.4rem; /* Set a width for the scrollbar (adjust as needed) */

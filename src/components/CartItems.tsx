@@ -36,15 +36,18 @@ const CartItems: React.FC = () => {
       try {
         if (user?.token) {
           // Fetch cart data from the database endpoint
-          const response = await axios.get("https://weird-entry-lara-production.up.railway.app/api/cart", {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-              Accept: "application/json",
-            },
-          });
+          const response = await axios.get(
+            "https://weird-entry-api.onrender.com/api/cart",
+            {
+              headers: {
+                Authorization: `Bearer ${user.token}`,
+                Accept: "application/json",
+              },
+            }
+          );
 
           const itemsArray: CartItem[] = Object.values(response.data.items);
-          console.log({itemsArray})
+          console.log({ itemsArray });
           setCartData(itemsArray);
         } else {
           // Use cart data from the Redux store for non-logged-in users
@@ -63,7 +66,11 @@ const CartItems: React.FC = () => {
   }, [user?.token, cartItems]); // Dependencies on user?.token and cartItems
 
   if (loading) {
-    return <div className="bg-[#F3E3E2] rounded-lg w-[500px] p-4 text-center">Loading...</div>;
+    return (
+      <div className="bg-[#F3E3E2] rounded-lg w-[500px] p-4 text-center">
+        Loading...
+      </div>
+    );
   }
 
   if (error) {
@@ -71,11 +78,7 @@ const CartItems: React.FC = () => {
   }
 
   if (cartData.length === 0) {
-    return (
-      <div>
-        {/* Your empty cart message for non-logged-in users */}
-      </div>
-    );
+    return <div>{/* Your empty cart message for non-logged-in users */}</div>;
   }
 
   const uniqueSelectedProducts = Array.from(new Set(cartData)); // Remove duplicates

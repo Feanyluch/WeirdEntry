@@ -14,7 +14,7 @@ interface HomeProps {
   products: ProductData[]; // Make sure the interface matches the expected prop
 }
 
-const MyAccount: React.FC<HomeProps> & {title: string } = ({ products }) => {
+const MyAccount: React.FC<HomeProps> & { title: string } = ({ products }) => {
   return (
     <div className="" style={{ fontFamily: "'Nokora', sans-serif" }}>
       <Breadcrumb products={products} />
@@ -25,7 +25,7 @@ const MyAccount: React.FC<HomeProps> & {title: string } = ({ products }) => {
         <div className="flex items-start justify-center gap-12 mt-4 p-6">
           <div className="flex flex-col gap-6 border w-[250px]">
             <div className="border flex items-center justify-start gap-2 p-2">
-                <Image src={useraccount} width={20} height={20} alt="" />
+              <Image src={useraccount} width={20} height={20} alt="" />
               <h2 className="text-sm font-light">Account Details</h2>
             </div>
             <h2 className="font-light text-sm px-3 py-2">Edit Basic Details</h2>
@@ -33,12 +33,14 @@ const MyAccount: React.FC<HomeProps> & {title: string } = ({ products }) => {
           </div>
           <div className="flex flex-col gap-6 border w-[250px]">
             <div className="border flex items-center justify-start gap-2 p-2">
-                <Image src={useraccount} width={20} height={20} alt="" />
+              <Image src={useraccount} width={20} height={20} alt="" />
               <h2 className="text-sm font-light">Account Details</h2>
             </div>
             <h2 className="font-light text-sm px-3 py-2">Edit Basic Details</h2>
             <h2 className="font-light text-sm px-3 py-2">Edit Phone Number</h2>
-            <h2 className="font-light text-sm px-3 py-2 text-[#FF3737]">Delete Account</h2>
+            <h2 className="font-light text-sm px-3 py-2 text-[#FF3737]">
+              Delete Account
+            </h2>
           </div>
         </div>
       </AccountLayout>
@@ -46,12 +48,11 @@ const MyAccount: React.FC<HomeProps> & {title: string } = ({ products }) => {
   );
 };
 
-MyAccount.title = 'Account Management - Weird Entry';
-
+MyAccount.title = "Account Management - Weird Entry";
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+  const apiUrl = "https://weird-entry-api.onrender.com/api/product"; // Replace with your actual API endpoint
 
   try {
     const response = await axios.get(apiUrl);
@@ -69,6 +70,4 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 };
 
-
 export default MyAccount;
-

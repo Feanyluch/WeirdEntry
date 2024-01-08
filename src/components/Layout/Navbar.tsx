@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
 
         if (user) {
           const response = await axios.get(
-            "https://weird-entry-lara-production.up.railway.app/api/cart",
+            "https://weird-entry-api.onrender.com/api/cart",
             {
               headers: {
                 Authorization: `Bearer ${user.token}`, // Replace with your actual access token
@@ -149,30 +149,35 @@ const Navbar: React.FC = () => {
               <SearchComponent onSearchToggle={toggleSearch} ref={searchRef} />
             </div>
             <div className="relative">
-              <div className="p-2 relative cursor-pointer" onClick={toggleCart}>
-                <Image
-                  src={cart}
-                  alt="Logo"
-                  height={22}
-                  width={22}
-                  className="h-[25px] w-[22px]"
-                />
-                <h2 className="absolute top-0 right-0 bg-[#1B2E3C] text-white rounded-[50%] p-1 flex items-center justify-center h-5 w-5 text-sm">
-                  {cartCount}
-                </h2>
-              </div>
+              <Link href="/cart">
+                <div
+                  className="p-2 relative cursor-pointer"
+                  //  onClick={toggleCart}
+                >
+                  <Image
+                    src={cart}
+                    alt="Logo"
+                    height={22}
+                    width={22}
+                    className="h-[25px] w-[22px]"
+                  />
+                  <h2 className="absolute top-0 right-0 bg-[#1B2E3C] text-white rounded-[50%] p-1 flex items-center justify-center h-5 w-5 text-sm">
+                    {cartCount}
+                  </h2>
+                </div>
+              </Link>
             </div>
             <div className="absolute top-[100px] right-0">
               <ToastContainer />
             </div>
-            {isCartOpen && (
+            {/* {isCartOpen && (
               <div
                 className="absolute top-[50px] right-0"
                 ref={cartContainerRef}
               >
                 <CartItems />
               </div>
-            )}
+            )} */}
 
             <div className="p-2 relative cursor-pointer hidden sm:block">
               <Image
@@ -199,10 +204,12 @@ const Navbar: React.FC = () => {
                 </div>
               ) : (
                 // If user is not logged in, display default user icon
-                <div className="p-2 flex items-center justify-start gap-2 bg-[#f1f1f2] rounded-lg">
-                  <Image src={User} alt="User" height={22} width={22} />
-                  <Link href="/login">Sign in</Link>
-                </div>
+                <Link href="/login">
+                  <div className="p-2 flex items-center justify-start gap-2 bg-[#f1f1f2] rounded-lg">
+                    <Image src={User} alt="User" height={22} width={22} />
+                    <Link href="/login">Sign in</Link>
+                  </div>
+                </Link>
               )}
               {isDropdownOpen && (
                 <div className="absolute top-[50px] right-0" ref={dropdownRef}>
@@ -219,8 +226,7 @@ const Navbar: React.FC = () => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl =
-    "https://weird-entry-lara-production.up.railway.app/api/product";
+  const apiUrl = "https://weird-entry-api.onrender.com/api/product";
 
   try {
     const response = await axios.get(apiUrl);

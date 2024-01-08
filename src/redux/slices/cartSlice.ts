@@ -35,7 +35,7 @@ export const fetchUserCart = createAsyncThunk(
     const token = (getState() as RootState).auth.user.token;
 
     const response = await fetch(
-      "https://weird-entry-lara-production.up.railway.app/api/cart",
+      "https://weird-entry-api.onrender.com/api/cart",
       {
         method: "GET",
         headers: {
@@ -116,9 +116,27 @@ const cartSlice = createSlice({
     decrementCartCount: (state) => {
       state.cartCount -= 1;
     },
-    removeFromCart: (state, action: PayloadAction<{ id: number }>) => {
-      state.items = state.items.filter((item) => item.id !== action.payload.id);
+    removeFromCart: (state, action: PayloadAction<{ productKey: string }>) => {
+      const { productKey } = action.payload;
+      const updatedItems = { ...state.items };
+    
+      // Remove the item with the specified productKey
+      if (updatedItems[productKey as keyof typeof updatedItems]) {
+        delete updatedItems[productKey as keyof typeof updatedItems];
+      }      
+    
+      // Update local storage
+      saveCartToLocalStorage({
+        ...state,
+        items: updatedItems,
+      });
+    
+      return {
+        ...state,
+        items: updatedItems,
+      };
     },
+    
     incrementItem: (state, action: PayloadAction<string>) => {
       // Ensure that state.items is an object
       if (typeof state.items !== "object") {
@@ -126,8 +144,10 @@ const cartSlice = createSlice({
         return state;
       }
 
+      console.log(action.payload)
       const existingProductKey = action.payload;
       const updatedItems = { ...state.items };
+      // console.log(updatedItems[existingProductKey].quantity)
 
       if (updatedItems[existingProductKey]) {
         updatedItems[existingProductKey] = {
@@ -142,11 +162,30 @@ const cartSlice = createSlice({
       };
     },
 
-    decrementItem: (state, action: PayloadAction<number>) => {
-      const product = state.items.find((item) => item.id === action.payload);
-      if (product && product.quantity > 1) {
-        product.quantity -= 1;
+    decrementItem: (state, action: PayloadAction<string>) => {
+      // Ensure that state.items is an object
+      if (typeof state.items !== "object") {
+        console.error("state.items is not an object:", state.items);
+        return state;
       }
+
+      const existingProductKey = action.payload;
+      const updatedItems = { ...state.items };
+
+      if (updatedItems[existingProductKey]) {
+        const updatedQuantity = updatedItems[existingProductKey].quantity - 1;
+
+        // Ensure the quantity doesn't go below 0
+        updatedItems[existingProductKey] = {
+          ...updatedItems[existingProductKey],
+          quantity: Math.max(updatedQuantity, 0),
+        };
+      }
+
+      return {
+        ...state,
+        items: updatedItems,
+      };
     },
 
     addSelectedProduct: (state, action: PayloadAction<ProductData>) => {
@@ -173,15 +212,31 @@ const cartSlice = createSlice({
 
     updateItemQuantity: (
       state,
-      action: PayloadAction<{ productId: number; quantity: number }>
+      action: PayloadAction<{ productKey: any; quantity: number }>
     ) => {
-      const { productId, quantity } = action.payload;
-      const product = state.items.find((item) => item.id === productId);
-      if (product) {
-        product.quantity = quantity;
-        saveCartToLocalStorage(state);
+      const { productKey, quantity } = action.payload;
+      const updatedItems = { ...state.items };
+    
+      if (updatedItems[productKey]) {
+        // Ensure the quantity doesn't go below 0
+        updatedItems[productKey] = {
+          ...updatedItems[productKey],
+          quantity: Math.max(quantity, 0),
+        };
+    
+        // Update local storage
+        saveCartToLocalStorage({
+          ...state,
+          items: updatedItems,
+        });
       }
+    
+      return {
+        ...state,
+        items: updatedItems,
+      };
     },
+    
   },
 });
 

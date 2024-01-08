@@ -15,75 +15,88 @@ import {
   addSelectedProduct,
   updateItemQuantity,
   deleteSelectedProduct,
+  CartItem,
 } from "@/redux/slices/cartSlice";
 import axios from "axios";
 
-interface MiniProductProps {
-  product: ProductData;
-  cartItems: { id: number; quantity: number }[];
+interface CartProductProps {
+  cartData: Record<string, CartItem>;
 }
 
-const CartProducts: React.FC<MiniProductProps> = ({ product }) => {
+const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
+  console.log({ cartData });
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const user = useSelector((state: RootState) => state.auth.user);
-  const cartItem = cartItems.find((item) => item.id === product.id);
-  const initialQuantity = cartItem ? cartItem.quantity : 0;
+  // const cartItem = cartItems.find((item) => item.id === product.id);
+  // const initialQuantity = cartItem ? cartItem.quantity : 0;
 
-  const [quantity, setQuantity] = useState(initialQuantity);
+  //   const cartItemKey = `${product.id}_${product.size}_${product.color}`;
+  // const cartItem = cartItems[cartItemKey];
+  // const initialQuantity = cartItem ? cartItem.quantity : 0;
 
-  useEffect(() => {
-    // Set the local state to the updated quantity when it changes in the Redux store
-    setQuantity(initialQuantity);
-  }, [initialQuantity]);
+  //   const [quantity, setQuantity] = useState(initialQuantity);
 
-  const incrementQuantity = () => {
-    dispatch(incrementItem(product.id));
+  //   // const existingProductKey = `${product.id}_${product.size}_${product.color}`;
+  //   //     const existingProduct = cartItems[existingProductKey];
+
+  //   useEffect(() => {
+  //     // Set the local state to the updated quantity when it changes in the Redux store
+  //     setQuantity(initialQuantity);
+  //   }, [initialQuantity]);
+
+  const incrementQuantity = (productKey: string) => {
+    const product = cartData[productKey];
+    console.log("product quantity", product.quantity);
+    dispatch(incrementItem(productKey));
     dispatch(
-      updateItemQuantity({ productId: product.id, quantity: quantity + 1 })
+      updateItemQuantity({ productKey, quantity: product.quantity + 1 })
     );
+
     if (user) {
-      sendUpdateToEndpoint(product.id, product.quantity + 1, user.token);
-      console.log(product.id);
-      console.log({ product });
+      sendUpdateToEndpoint(productKey, product.quantity + 1, user.token);
     }
   };
 
-  const decrementQuantity = () => {
-    if (quantity > 0) {
-      dispatch(incrementItem(product.id));
+  const decrementQuantity = (productKey: string) => {
+    const product = cartData[productKey];
+    if (product.quantity > 0) {
+      dispatch(decrementItem(productKey));
       dispatch(
-        updateItemQuantity({ productId: product.id, quantity: quantity - 1 })
+        updateItemQuantity({ productKey, quantity: product.quantity - 1 })
       );
     }
     // If user is logged in, send update to /cart/create endpoint
     if (user) {
       if (product.quantity > 0) {
-        sendUpdateToEndpoint(product.id, product.quantity - 1, user.token);
+        sendUpdateToEndpoint(productKey, product.quantity - 1, user.token);
       }
     }
   };
 
-  const handleDeleteFromCart = () => {
+  const handleDeleteFromCart = (productKey: string) => {
+    const product = cartData[productKey];
     // If user is logged in, remove the product from the cart
     if (user) {
-      removeProductFromCart(product.id, user.token);
+      removeProductFromCart(productKey, user.token);
     }
 
-    const cartItem = { id: product.id, quantity: 1 };
-    dispatch(removeFromCart({ id: cartItem.id }));
-    dispatch(deleteSelectedProduct({ id: cartItem.id }));
+    // const cartItem = { id: product.id, quantity: 1 };
+    dispatch(removeFromCart({productKey}));
+    // dispatch(deleteSelectedProduct({ id: cartItem.id }));
     dispatch(decrementCartCount());
-    console.log("Item removed", cartItem);
+    // console.log("Item removed", cartItem);
   };
 
   const sendUpdateToEndpoint = async (
-    productId: number,
+    productKey: string,
     newQuantity: number,
     token: any
   ) => {
     const apiUrl =
-      "https://weird-entry-lara-production.up.railway.app/api/cart";
+      "https://weird-entry-api.onrender.com/api/cart";
+      const product = cartData[productKey];
+      console.log({product})
 
     try {
       // Fetch the user's current cart
@@ -96,29 +109,35 @@ const CartProducts: React.FC<MiniProductProps> = ({ product }) => {
 
       if (response.status === 200) {
         const userCart = response.data.items;
+        console.log({userCart})
+        console.log(userCart[productKey])
+        console.log("Product Key", productKey)
 
         // Update the quantity for the specific product in the cart
-        if (userCart[productId]) {
-          userCart[productId].quantity = newQuantity;
+        if (cartData[productKey]) {
+          cartData[productKey].quantity = newQuantity;
         } else {
           // If the product is not in the cart, add it with the new quantity
-          userCart[productId] = {
+          cartData[productKey] = {
+            id: product.id,
             title: product.title,
             price: product.price,
+            color: product.color,
+            size: product.size,
             product_image: product.product_image,
             quantity: newQuantity,
           };
         }
 
         // Remove any undefined products from the cart
-        delete userCart.undefined;
+        delete cartData.undefined;
 
         // Send the updated cart to the endpoint
         const updateResponse = await axios.post(
           apiUrl + "/create",
           {
             user_email: `${user.user.email}`,
-            items: userCart,
+            items: cartData,
           },
           {
             headers: {
@@ -142,9 +161,11 @@ const CartProducts: React.FC<MiniProductProps> = ({ product }) => {
     }
   };
 
-  const removeProductFromCart = async (productId: number, token: any) => {
+  const removeProductFromCart = async (productKey: number, token: any) => {
     const apiUrl =
-      "https://weird-entry-lara-production.up.railway.app/api/cart";
+      "https://weird-entry-api.onrender.com/api/cart";
+
+      const product = cartData[productKey];
 
     try {
       // Fetch the user's current cart
@@ -159,14 +180,15 @@ const CartProducts: React.FC<MiniProductProps> = ({ product }) => {
         const userCart = response.data.items;
 
         // Remove the product from the cart
-        delete userCart[productId];
+        delete cartData[productKey];
+        console.log("deleted product ", productKey, "from cart")
 
         // Send the updated cart to the endpoint
         const updateResponse = await axios.post(
           apiUrl + "/create",
           {
             user_email: `${user.user.email}`,
-            items: userCart,
+            items: cartData,
           },
           {
             headers: {
@@ -191,59 +213,78 @@ const CartProducts: React.FC<MiniProductProps> = ({ product }) => {
   };
 
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <div className="rounded-lg h-[150px] flex items-center justify-center overflow-hidden">
-        <Image
-          src={product.product_image}
-          alt="item1"
-          width={200}
-          height={50}
-          className="object-cover transform hover:scale-110 transition-transform duration-300"
-        />
-      </div>
-
-      <div className="flex flex-col gap-[5px]">
-        <h2 className="text-sm font-normal uppercase">{product.title}</h2>
-        <h1 className="font-bold text-sm my-1">
-          ₦ {product.price.toLocaleString()}
-        </h1>
-
-        <div className="flex items-center justify-between gap-6">
-          <div className="flex gap-1">
-            <h2 className="text-sm">Size: </h2>
-            <p className="text-sm"> {product.size}</p>
+    <div className="flex flex-col gap-6 px-2">
+      {Object.entries(cartData).map(([productKey, product]) => (
+        <div className="grid grid-cols-2 gap-4 bg-[#F3E3E2] rounded-lg px-[40px] py-6" key={productKey}>
+          <div className="h-[150px] flex items-center justify-center overflow-hidden">
+            <Image
+              src={product.product_image}
+              alt="item1"
+              width={200}
+              height={50}
+              className="object-cover transform hover:scale-110 transition-transform duration-300 rounded-lg"
+            />
           </div>
-          <div className="flex items-center justify-start gap-[12px] text-sm my-1">
-            <h2 className="text-sm">Qty:</h2>
-            <button
-              className="text-lg px-2 rounded-lg"
-              onClick={decrementQuantity}
-            >
-              -
-            </button>
-            <h2>{user ? product.quantity : quantity}</h2>
-            <button
-              className="text-lg px-2 rounded-lg"
-              onClick={incrementQuantity}
-            >
-              +
-            </button>
+
+          <div className="flex flex-col gap-[5px]">
+            <h2 className="text-sm font-normal uppercase">{product.title}</h2>
+            <h1 className="font-bold text-sm my-1">
+              ₦ {product.price.toLocaleString()}
+            </h1>
+
+            <div className="flex items-center justify-between gap-6">
+              <div className="flex gap-1">
+                <h2 className="text-sm">Size: </h2>
+                <p className="text-sm"> {product.size}</p>
+              </div>
+              <div className="flex gap-1">
+                <h2 className="text-sm">Color: </h2>
+                <p className="text-sm"> {product.color}</p>
+              </div>
+            </div>
+            <div className="flex items-center justify-start gap-[12px] text-sm my-1">
+                <h2 className="text-sm">Qty:</h2>
+                <button
+                  className="text-lg px-2 rounded-lg"
+                  onClick={() => decrementQuantity(productKey)}
+                >
+                  -
+                </button>
+                <h2>{product.quantity}</h2>
+                <button
+                  className="text-lg px-2 rounded-lg"
+                  onClick={() => incrementQuantity(productKey)}
+                >
+                  +
+                </button>
+              </div>
+            <div className="py-1 flex justify-between items-center">
+              <div className="flex items-center gap-2 cursor-pointer">
+                <Image
+                  src={Favorite}
+                  width={20}
+                  height={20}
+                  alt="delete icon"
+                />
+                <h2 className="text-xs uppercase">Add to wishlist</h2>
+              </div>
+              <div
+                className="flex items-center gap-2 cursor-pointer"
+                // onClick={handleDeleteFromCart}
+                onClick={() => handleDeleteFromCart(productKey)}
+              >
+                <Image
+                  src={DeleteSvg}
+                  width={20}
+                  height={20}
+                  alt="delete icon"
+                />
+                <h2 className="text-xs uppercase">Delete</h2>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="py-2 flex justify-between items-center">
-          <div className="flex items-center gap-2 cursor-pointer">
-            <Image src={Favorite} width={20} height={20} alt="delete icon" />
-            <h2 className="text-xs uppercase">Add to wishlist</h2>
-          </div>
-          <div
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={handleDeleteFromCart}
-          >
-            <Image src={DeleteSvg} width={20} height={20} alt="delete icon" />
-            <h2 className="text-xs uppercase">Delete</h2>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   );
 };

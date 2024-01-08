@@ -5,7 +5,6 @@ import Navbar from "@/components/Layout/Navbar";
 import Banner from "@/components/Banner";
 import axios from "axios";
 
-
 import banner1 from "../../public/Images/banner1.png";
 import Energy from "../../public/Images/Energy.svg";
 import Dollar from "../../public/Images/Dollar.svg";
@@ -136,11 +135,11 @@ const Home: React.FC<HomeProps> & { title: string } = ({ products }) => {
   );
 };
 
-Home.title = 'Weird Entry - A brand collection for clothing';
+Home.title = "Weird Entry - A brand collection for clothing";
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+  const apiUrl = "https://weird-entry-api.onrender.com/api/product"; // Replace with your actual API endpoint
 
   try {
     const response = await axios.get(apiUrl);

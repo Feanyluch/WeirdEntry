@@ -14,13 +14,15 @@ interface HomeProps {
   products: ProductData[]; // Make sure the interface matches the expected prop
 }
 
-const MyAccount: React.FC<HomeProps> & {title: string} = ({ products }) => {
+const MyAccount: React.FC<HomeProps> & { title: string } = ({ products }) => {
   return (
     <div className="" style={{ fontFamily: "'Nokora', sans-serif" }}>
       <Breadcrumb products={products} />
       <AccountLayout>
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-normal tracking-[2px]">Open Orders (3)</h2>
+          <h2 className="text-sm font-normal tracking-[2px]">
+            Open Orders (3)
+          </h2>
           <h2 className="text-sm font-normal tracking-[2px]">Closed Orders</h2>
         </div>
         <div className="w-full h-[1px] bg-[#0C0C1E80] my-[20px]"></div>
@@ -63,12 +65,11 @@ const MyAccount: React.FC<HomeProps> & {title: string} = ({ products }) => {
   );
 };
 
-MyAccount.title = 'Orders - Weird Entry';
-
+MyAccount.title = "Orders - Weird Entry";
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+  const apiUrl = "https://weird-entry-api.onrender.com/api/product"; // Replace with your actual API endpoint
 
   try {
     const response = await axios.get(apiUrl);
@@ -85,6 +86,5 @@ export const getStaticProps: GetStaticProps = async () => {
     throw new Error(`Failed to fetch data from API: ${error.message}`);
   }
 };
-
 
 export default MyAccount;

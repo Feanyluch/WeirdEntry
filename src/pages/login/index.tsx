@@ -7,8 +7,8 @@ import RoundCheckbox from "@/components/Checkbox";
 import Link from "next/link";
 import Image from "next/image";
 
-import { useDispatch } from 'react-redux';
-import { setUser } from '@/redux/slices/authSlice';
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/slices/authSlice";
 
 import { useLogin } from "@/hook/useLogin";
 
@@ -21,7 +21,7 @@ interface HomeProps {
   products: ProductData[];
 }
 
-const Index: React.FC<HomeProps> & { title: string }= ({ products }) => {
+const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
   const {
     email,
     emailError,
@@ -41,7 +41,7 @@ const Index: React.FC<HomeProps> & { title: string }= ({ products }) => {
   } = useLogin();
   const [isChecked, setIsChecked] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const handleCheckboxChange = (newCheckedState: boolean) => {
     console.log(newCheckedState);
@@ -70,59 +70,59 @@ const Index: React.FC<HomeProps> & { title: string }= ({ products }) => {
           <h2 className="text-5xl text-center py-12 uppercase">Login</h2>
           <div className="my-2">
             <div className="py-2">
-              
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={email}
-                  placeholder="Email Address"
-                  className={`h-[60px] w-full px-4 bg-[#f3f4f5] focus:outline-none focus:border-[#1B2E3C] focus:border-2 rounded-lg ${isEmailFocused ? "bg-white" : "bg-[#f3f4f5]"}`}
-                  onFocus={() => setIsEmailFocused(true)}
-                  onChange={handleEmailChange}
-                  onBlur={handleEmailBlur}
-                />
-              </div>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                placeholder="Email Address"
+                className={`h-[60px] w-full px-4 bg-[#f3f4f5] focus:outline-none focus:border-[#1B2E3C] focus:border-2 rounded-lg ${
+                  isEmailFocused ? "bg-white" : "bg-[#f3f4f5]"
+                }`}
+                onFocus={() => setIsEmailFocused(true)}
+                onChange={handleEmailChange}
+                onBlur={handleEmailBlur}
+              />
+            </div>
 
-              {emailError && (
-                <span className="text-[#1B2E3C] text-sm py-1">
-                  {emailError}
-                </span>
-              )}
+            {emailError && (
+              <span className="text-[#1B2E3C] text-sm py-1">{emailError}</span>
+            )}
 
             <div className="py-2">
-              
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    name="password"
-                    value={password}
-                    placeholder="Password"
-                    className={`h-[60px] w-full bg-[#f3f4f5] px-4 rounded-lg focus:outline-none focus:border-[#1B2E3C] focus:border-2 ${isEmailFocused ? "bg-white" : "bg-[#f3f4f5]"}`}
-                    onChange={handlePasswordChange}
-                    onFocus={() => setIsPasswordFocused(true)}
-                    onBlur={handlePasswordBlur}
-                  />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  value={password}
+                  placeholder="Password"
+                  className={`h-[60px] w-full bg-[#f3f4f5] px-4 rounded-lg focus:outline-none focus:border-[#1B2E3C] focus:border-2 ${
+                    isEmailFocused ? "bg-white" : "bg-[#f3f4f5]"
+                  }`}
+                  onChange={handlePasswordChange}
+                  onFocus={() => setIsPasswordFocused(true)}
+                  onBlur={handlePasswordBlur}
+                />
+                <div
+                  className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                  onClick={handleShowPasswordClick}
+                >
                   <div
-                    className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
-                    onClick={handleShowPasswordClick}
+                    className={`w-6 h-6 ${
+                      showPassword ? "text-[#1B2E3C]" : "text-green-600"
+                    }`}
                   >
-                    <div
-                      className={`w-6 h-6 ${
-                        showPassword ? "text-[#1B2E3C]" : "text-green-600"
-                      }`}
-                    >
-                      <Image src={toright} alt="eye" />
-                    </div>
+                    <Image src={toright} alt="eye" />
                   </div>
                 </div>
               </div>
-              {passwordError && (
-                <span className="text-[#1B2E3C] text-sm py-1">
-                  {passwordError}
-                </span>
-              )}
+            </div>
+            {passwordError && (
+              <span className="text-[#1B2E3C] text-sm py-1">
+                {passwordError}
+              </span>
+            )}
           </div>
           <RoundCheckbox
             label="Remember me"
@@ -130,7 +130,10 @@ const Index: React.FC<HomeProps> & { title: string }= ({ products }) => {
             onChange={handleCheckboxChange}
           />
           <div className="my-2">
-            <button onClick={handleLogin} className="py-3 px-8 my-4 w-full border-2 transition-all border-[#1B2E3C] hover:bg-[#1B2E3C] hover:text-white rounded-lg uppercase text-xl">
+            <button
+              onClick={handleLogin}
+              className="py-3 px-8 my-4 w-full border-2 transition-all border-[#1B2E3C] hover:bg-[#1B2E3C] hover:text-white rounded-lg uppercase text-xl"
+            >
               Login
             </button>
           </div>
@@ -147,11 +150,11 @@ const Index: React.FC<HomeProps> & { title: string }= ({ products }) => {
   );
 };
 
-Index.title = 'Login - Weird Entry';
+Index.title = "Login - Weird Entry";
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+  const apiUrl = "https://weird-entry-api.onrender.com/api/product"; // Replace with your actual API endpoint
 
   try {
     const response = await axios.get(apiUrl);

@@ -6,7 +6,10 @@ import { ProductData } from "@/components/product";
 import Breadcrumb from "@/components/BreadCrumb";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSearchResults, setSearchResults } from "@/redux/slices/searchSlice";
+import {
+  selectSearchResults,
+  setSearchResults,
+} from "@/redux/slices/searchSlice";
 import { useRouter } from "next/router";
 
 interface HomeProps {
@@ -33,13 +36,13 @@ const Index: React.FC<HomeProps> & { title: string } = ({
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
-  const router = useRouter()
-  const dispatch = useDispatch()
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // Fetch products if it's not a search query
     if (router.query.s) {
-      dispatch(setSearchResults(searchResults)); 
+      dispatch(setSearchResults(searchResults));
       setSearchQuery(router.query.s as string);
     } else {
       setSearchQuery(null);
@@ -67,7 +70,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
       try {
         setLoading(true);
         const response = await axios.get(
-          `https://weird-entry-lara-production.up.railway.app/api/category/${category.id}`,
+          `https://weird-entry-api.onrender.com/api/category/${category.id}`,
           {
             headers: {
               Authorization: "Bearer Token",
@@ -118,7 +121,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
         // There are other selected categories, update products based on the remaining selected category
         const remainingCategoryId = updatedSelectedCategories[0].id; // Assuming you want to use the first remaining category
         const response = await axios.get(
-          `https://weird-entry-lara-production.up.railway.app/api/category/${remainingCategoryId}`,
+          `https://weird-entry-api.onrender.com/api/category/${remainingCategoryId}`,
           {
             headers: {
               Authorization: "Bearer Token",
@@ -146,7 +149,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
         setLoading(true);
         // No other selected categories, fetch and set the initial list of products
         const response = await axios.get(
-          "https://weird-entry-lara-production.up.railway.app/api/product",
+          "https://weird-entry-api.onrender.com/api/product",
           {
             headers: {
               Authorization: "Bearer Token",
@@ -244,14 +247,13 @@ const Index: React.FC<HomeProps> & { title: string } = ({
     }
   };
 
-
   const handleCancelSearch = async () => {
     try {
       setLoading(true);
 
       // Fetch and set the initial list of products
       const response = await axios.get(
-        "https://weird-entry-lara-production.up.railway.app/api/product",
+        "https://weird-entry-api.onrender.com/api/product",
         {
           headers: {
             Authorization: "Bearer Token",
@@ -262,7 +264,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
 
       const productData = response.data;
       console.log({ productData });
-      router.push('/shop')
+      router.push("/shop");
 
       // Update the component state with the initial list of products
       setProducts(productData.data);
@@ -295,17 +297,17 @@ const Index: React.FC<HomeProps> & { title: string } = ({
         </div>
         <div className="w-3/4 overflow-y-auto px-4 product-container">
           <div className=" my-2">
-          {searchQuery && (
+            {searchQuery && (
               <div className="flex items-center justify-start gap-2">
                 <h2>Showing results for: </h2>
                 <div className="p-1 rounded-lg text-sm flex items-center justify-start bg-[#f1f1f2]">
                   <h2>{searchQuery}</h2>
                   <button
-                        onClick={handleCancelSearch}
-                        className="bg-white px-2 rounded-lg"
-                      >
-                        x
-                      </button>
+                    onClick={handleCancelSearch}
+                    className="bg-white px-2 rounded-lg"
+                  >
+                    x
+                  </button>
                 </div>
               </div>
             )}
@@ -378,8 +380,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
 Index.title = "Shop Products- WeirdEntry";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const apiUrl =
-    "https://weird-entry-lara-production.up.railway.app/api/product";
+  const apiUrl = "https://weird-entry-api.onrender.com/api/product";
 
   try {
     const response = await axios.get(apiUrl);

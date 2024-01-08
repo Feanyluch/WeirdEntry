@@ -14,12 +14,14 @@ interface HomeProps {
   products: ProductData[]; // Make sure the interface matches the expected prop
 }
 
-const MyAccount: React.FC<HomeProps> & {title: string} = ({ products }) => {
+const MyAccount: React.FC<HomeProps> & { title: string } = ({ products }) => {
   return (
     <div className="" style={{ fontFamily: "'Nokora', sans-serif" }}>
       <Breadcrumb products={products} />
       <AccountLayout>
-        <h2 className="text-sm font-normal uppercase tracking-[2px]">Payment Methods</h2>
+        <h2 className="text-sm font-normal uppercase tracking-[2px]">
+          Payment Methods
+        </h2>
         <div className="w-full h-[1px] bg-[#0C0C1E80] my-[20px]"></div>
         <h2 className="text-xs text-[#1B2E3C80] font-light">
           You currently do not have any payment method
@@ -34,10 +36,10 @@ const MyAccount: React.FC<HomeProps> & {title: string} = ({ products }) => {
   );
 };
 
-MyAccount.title = 'Payment Method - Weird Entry';
+MyAccount.title = "Payment Method - Weird Entry";
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+  const apiUrl = "https://weird-entry-api.onrender.com/api/product"; // Replace with your actual API endpoint
 
   try {
     const response = await axios.get(apiUrl);

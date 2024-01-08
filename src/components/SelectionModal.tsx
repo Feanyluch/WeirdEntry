@@ -62,8 +62,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
       const existingProductKey = `${product.id}_${selectedSize}_${selectedColor}`;
       const existingProduct = cartItems[existingProductKey];
 
-      console.log({existingProductKey})
-      console.log({existingProduct})
+      console.log({ existingProductKey });
+      console.log({ existingProduct });
 
       if (existingProduct) {
         if (
@@ -91,7 +91,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
         dispatch(incrementCartCount());
       }
 
-      dispatch(addSelectedProduct(product));
+      // dispatch(addSelectedProduct(product));
 
       // Extract the quantity directly from the addToCart action payload
       // const newlyAddedItemQuantity =
@@ -109,7 +109,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
         // Fetch the user's cart after updating the local cart
         try {
           const response = await axios.get(
-            "https://weird-entry-lara-production.up.railway.app/api/cart",
+            "https://weird-entry-api.onrender.com/api/cart",
             {
               headers: {
                 Authorization: `Bearer ${user.token}`,

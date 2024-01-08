@@ -47,16 +47,14 @@ interface CartItem {
   colors: { id: number; title: string; description: string }[]; // Update this line
 }
 
-const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
+const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
   // Create an array of checkbox states
   const [checkboxStates, setCheckboxStates] = useState<CheckboxStates>({
     addCard: false,
     bankTransfer: false,
-    terms: false
+    terms: false,
     // Initialize more checkboxes as needed
   });
-
-  
 
   // Function to handle checkbox changes
   const handleCheckboxChange = (checkboxName: keyof CheckboxStates) => {
@@ -66,18 +64,18 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
     }));
 
     // Uncheck the other checkbox
-    if (checkboxName === 'addCard') {
+    if (checkboxName === "addCard") {
       setCheckboxStates((prevStates) => ({
         ...prevStates,
         bankTransfer: false,
       }));
-    } else if (checkboxName === 'bankTransfer') {
+    } else if (checkboxName === "bankTransfer") {
       setCheckboxStates((prevStates) => ({
         ...prevStates,
         addCard: false,
       }));
     }
-  };  
+  };
 
   // const selectedProducts = useSelector(
   //   (state: RootState) => state.cart.selectedProduct
@@ -85,7 +83,7 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
 
   const user = useSelector((state: RootState) => state.auth.user);
   const cartItems = useSelector((state: RootState) => state.cart.items);
-  console.log({cartItems})
+  console.log({ cartItems });
 
   const [cartData, setCartData] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -96,15 +94,19 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
       try {
         if (user?.token) {
           // Fetch cart data from the database endpoint
-          const response = await axios.get("https://weird-entry-lara-production.up.railway.app/api/cart", {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-              Accept: "application/json",
-            },
-          });
+          const response = await axios.get(
+            "https://weird-entry-api.onrender.com/api/cart",
+            {
+              headers: {
+                Authorization: `Bearer ${user.token}`,
+                Accept: "application/json",
+              },
+            }
+          );
 
-          const itemsArray: CartItem[] = Object.values(response.data.items);
-          console.log({itemsArray})
+          // const itemsArray: CartItem[] = Object.values(response.data.items);
+          const itemsArray = response.data.items
+          console.log({ itemsArray });
           setCartData(itemsArray);
         } else {
           // Use cart data from the Redux store for non-logged-in users
@@ -123,14 +125,18 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
   }, [user?.token, cartItems]); // Dependencies on user?.token and cartItems
 
   if (loading) {
-    return <div className="bg-white rounded-lg w-full p-4 text-center">Loading...</div>;
+    return (
+      <div className="bg-white rounded-lg w-full p-4 text-center">
+        Loading...
+      </div>
+    );
   }
 
   if (error) {
     return <div>Error: {error}</div>;
   }
 
-  if (cartData.length === 0) {
+  if (Object.keys(cartData).length === 0) {
     return (
       <div>
         <Breadcrumb products={products} />
@@ -150,20 +156,20 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
     );
   }
 
-  const uniqueSelectedProducts = Array.from(new Set(cartData));
+  const uniqueSelectedProducts = Object.values(cartData).map((item) => item);
 
   const calculateSubtotal = () => {
     let subtotal = 0;
-    for (const item of cartData) {
+    for (const item of uniqueSelectedProducts) {
       if (products && Array.isArray(products.data)) {
         const product = products.data.find((p) => p.id === item.id);
-  
+
         if (product) {
           const priceAsNumber = product.price;
           console.log("Product Price:", product.price);
           console.log("Price as Number:", priceAsNumber);
           console.log("Item Quantity:", item.quantity);
-  
+
           if (!isNaN(priceAsNumber)) {
             subtotal += priceAsNumber * item.quantity;
             console.log("Subtotal after this iteration:", subtotal);
@@ -310,13 +316,7 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
             <h2 className="uppercase text-sm font-normal">items</h2>
             <div className="w-full h-[1px] bg-[#0C0C1E80] my-[20px]"></div>
             <div className="h-[330px] overflow-auto">
-              {uniqueSelectedProducts.map((product) => (
-                <CheckoutProducts
-                  key={product.id}
-                  product={product}
-                  cartItems={cartItems}
-                />
-              ))}
+              <CheckoutProducts cartData={cartData} />
             </div>
 
             <div className="w-full h-[1px] bg-[#0C0C1E80] my-[20px]"></div>
@@ -330,9 +330,7 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
               </div>
               <div className="py-[10px] flex items-center justify-between">
                 <h2 className="text-sm font-normal">Delivery Charge (Fixed)</h2>
-                <h2 className="text-sm font-normal">
-                  N4,000
-                </h2>
+                <h2 className="text-sm font-normal">N4,000</h2>
               </div>
               <div className="py-[10px] flex items-center justify-between">
                 <h2 className="text-sm font-bold">Total</h2>
@@ -346,12 +344,11 @@ const Checkout: React.FC<HomeProps> & { title: string }= ({ products }) => {
   );
 };
 
-Checkout.title = 'Check out - Weird Entry';
-
+Checkout.title = "Check out - Weird Entry";
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl = "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+  const apiUrl = "https://weird-entry-api.onrender.com/api/product"; // Replace with your actual API endpoint
 
   try {
     const response = await axios.get(apiUrl);

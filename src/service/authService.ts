@@ -1,6 +1,6 @@
 // authService.ts
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 
 export const signup = async (userData: {
   first_name: string;
@@ -12,7 +12,7 @@ export const signup = async (userData: {
 }) => {
   try {
     const response = await axios.post(
-      "https://weird-entry-lara-production.up.railway.app/api/register",
+      "https://weird-entry-api.onrender.com/api/register",
       userData
     );
     // Check if the message is present in the response
@@ -21,7 +21,6 @@ export const signup = async (userData: {
       toast.info(response.data.info, { autoClose: 3000 }); // Auto-close after 5 seconds
     }
     return response.data;
-    
   } catch (error: any) {
     // Check if the error messages are present in the response
     if (error.response && error.response.data && error.response.data.errors) {
@@ -29,7 +28,7 @@ export const signup = async (userData: {
       const errorMessages = Object.values(error.response.data.errors)
         .flat()
         .join("\n");
-      
+
       toast.error(errorMessages, { autoClose: 3000 }); // Auto-close after 5 seconds
     } else {
       // If there is no specific error message, show a generic one
@@ -45,7 +44,7 @@ export const login = async (credentials: {
 }) => {
   try {
     const response = await axios.post(
-      "https://weird-entry-lara-production.up.railway.app/api/login",
+      "https://weird-entry-api.onrender.com/api/login",
       credentials
     );
     // Check if the message is present in the response

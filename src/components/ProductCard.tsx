@@ -44,7 +44,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
       setLoading(true);
       // Make an API request to get the full details of the selected product
       const response = await axios.get(
-        `https://weird-entry-lara-production.up.railway.app/api/product/${product.id}`
+        `https://weird-entry-api.onrender.com/api/product/${product.id}`
       );
 
       const detailedProduct = response.data;
@@ -88,7 +88,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   //     // Fetch the user's cart after updating the local cart
   //     try {
   //       const response = await axios.get(
-  //         "https://weird-entry-lara-production.up.railway.app/api/cart",
+  //         "https://weird-entry-api.onrender.com/api/cart",
   //         {
   //           headers: {
   //             Authorization: `Bearer ${user.token}`,
