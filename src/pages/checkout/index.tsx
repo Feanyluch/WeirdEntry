@@ -20,6 +20,8 @@ import CheckoutProducts from "@/components/CheckoutProducts";
 import RoundCheckbox from "@/components/Checkbox";
 import axios from "axios";
 
+import { PaystackButton } from "react-paystack";
+
 interface HomeProps {
   products?: { data: ProductData[] } | undefined; // Make the prop optional
 }
@@ -48,6 +50,21 @@ interface CartItem {
 }
 
 const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
+  const user = useSelector((state: RootState) => state.auth.user);
+  console.log(user)
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  console.log({ cartItems });
+
+  const [cartData, setCartData] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [firstName, setFirstName] = useState(user?.user?.first_name || '');
+  const [lastName, setLastName] = useState(user?.user?.last_name || '');
+  const [state, setState] = useState(user?.user?.state || '');
+  const [city, setCity] = useState(user?.user?.city || '');
+  const [zipCode, setZipCode] = useState(user?.user?.zipCode || '');
+  const [address, setAddress] = useState(user?.user?.address || '');
   // Create an array of checkbox states
   const [checkboxStates, setCheckboxStates] = useState<CheckboxStates>({
     addCard: false,
@@ -81,14 +98,6 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
   //   (state: RootState) => state.cart.selectedProduct
   // );
 
-  const user = useSelector((state: RootState) => state.auth.user);
-  const cartItems = useSelector((state: RootState) => state.cart.items);
-  console.log({ cartItems });
-
-  const [cartData, setCartData] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     const fetchCartData = async () => {
       try {
@@ -105,7 +114,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
           );
 
           // const itemsArray: CartItem[] = Object.values(response.data.items);
-          const itemsArray = response.data.items
+          const itemsArray = response.data.items;
           console.log({ itemsArray });
           setCartData(itemsArray);
         } else {
@@ -123,38 +132,6 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
 
     fetchCartData();
   }, [user?.token, cartItems]); // Dependencies on user?.token and cartItems
-
-  if (loading) {
-    return (
-      <div className="bg-white rounded-lg w-full p-4 text-center">
-        Loading...
-      </div>
-    );
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (Object.keys(cartData).length === 0) {
-    return (
-      <div>
-        <Breadcrumb products={products} />
-        <div className="flex items-center justify-center flex-col">
-          <Image src={cartempty} alt="emptycart" />
-          <h2 className="uppercase text-3xl my-4">
-            YOUR CART IS CURRENTLY EMPTY
-          </h2>
-          <Link
-            href="/shop"
-            className="w-[300px] border border-[#0C0C1E] text-center rounded-lg my-8 py-4 text-base"
-          >
-            Return to shop
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   const uniqueSelectedProducts = Object.values(cartData).map((item) => item);
 
@@ -191,6 +168,82 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
   const subtotal = calculateSubtotal();
   const total = calculateTotal();
 
+  
+  const paystackConfig = {
+    reference: new Date().getTime(),
+    email: "ayebo@yopmail.com", // Assuming you have the user's email in your Redux store
+    amount: total * 100, // Paystack amount is in kobo (multiply by 100)
+    publicKey: "your_public_key",
+    channels: ["card", "bank_transfer"],
+    currency: "NGN",
+  };
+
+  const handlePaymentSuccess = (response: { reference: any; }) => {
+    // Send the order details to your backend API
+    const orderDetails = {
+      user_id: user.id, // Assuming you have the user's ID in your Redux store
+      cart_id: "01hk3zz1a3xxp6er0sxptqb75a", // Replace with the actual cart ID
+      subtotal: subtotal,
+      delivery_fee: 4000, // Replace with the actual delivery fee
+      total: total,
+      shipping_address: "ikotun", // Replace with the actual shipping address
+      payment_ref: response.reference,
+    };
+
+    // Make a POST request to your order create endpoint
+    axios
+      .post(
+        "https://weird-entry-api.onrender.com/api/order/create",
+        orderDetails,
+        {
+          headers: {
+            Authorization: "Bearer Token", // Replace with the actual token
+            Accept: "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log("Order placed successfully:", response.data);
+        // Redirect or perform any necessary actions
+      })
+      .catch((error) => {
+        console.error("Error placing order:", error);
+        // Handle the error appropriately
+      });
+  };
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-lg w-full p-4 text-center">
+        Loading...
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (Object.keys(cartData).length === 0) {
+    return (
+      <div>
+        <Breadcrumb products={products} />
+        <div className="flex items-center justify-center flex-col">
+          <Image src={cartempty} alt="emptycart" />
+          <h2 className="uppercase text-3xl my-4">
+            YOUR CART IS CURRENTLY EMPTY
+          </h2>
+          <Link
+            href="/shop"
+            className="w-[300px] border border-[#0C0C1E] text-center rounded-lg my-8 py-4 text-base"
+          >
+            Return to shop
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="" style={{ fontFamily: "'Nokora', sans-serif" }}>
       <Breadcrumb products={products} />
@@ -208,14 +261,18 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                   <label className="text-[#1B2E3C80] text-xs">First Name</label>
                   <input
                     type="text"
-                    className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
+                    className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none capitalize text-sm"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
                 <div className="flex flex-col">
                   <label className="text-[#1B2E3C80] text-xs">Last Name</label>
                   <input
                     type="text"
-                    className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
+                    className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none capitalize text-sm"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                   />
                 </div>
               </div>
@@ -224,21 +281,27 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                   <label className="text-[#1B2E3C80] text-xs">State</label>
                   <input
                     type="text"
-                    className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
+                    className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none capitalize text-sm"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
                   />
                 </div>
                 <div className="flex flex-col">
                   <label className="text-[#1B2E3C80] text-xs">City</label>
                   <input
                     type="text"
-                    className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
+                    className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none capitalize text-sm"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
                   />
                 </div>
                 <div className="flex flex-col">
                   <label className="text-[#1B2E3C80] text-xs">Zip Code</label>
                   <input
                     type="text"
-                    className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
+                    className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none capitalize text-sm"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
                   />
                 </div>
               </div>
@@ -246,7 +309,9 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                 <label className="text-[#1B2E3C80] text-xs">Address</label>
                 <input
                   type="text"
-                  className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
+                  className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none capitalize text-sm"
+                  value={address}
+                    onChange={(e) => setAddress(e.target.value)}
                 />
               </div>
             </div>
@@ -304,12 +369,15 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
               </p> */}
             </div>
             <div className="flex items-center justify-center">
-              <Link
-                href="/place-order"
-                className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded"
-              >
+              <button className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
                 Place Order
-              </Link>
+              </button>
+              <PaystackButton
+                {...paystackConfig}
+                text="Place Order"
+                onSuccess={(response: any) => handlePaymentSuccess(response)}
+                onClose={() => console.log("Payment closed")}
+              />
             </div>
           </div>
           <div className="w-[42%] h-[630px] bg-white rounded-lg p-[40px]">

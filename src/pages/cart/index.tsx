@@ -10,6 +10,7 @@ import ProtectedRoute from "@/components/ProtectedRoutes";
 import { ProductData } from "@/components/product";
 import axios from "axios";
 import { GetStaticProps } from "next";
+import { useRouter } from "next/router";
 interface HomeProps {
   products?: { data: ProductData[] } | undefined; // Make the prop optional
 }
@@ -42,6 +43,12 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const router = useRouter();
+
+  const handleButtonClick = () => {
+    router.push("/checkout");
+  };
+
   useEffect(() => {
     const fetchCartData = async () => {
       try {
@@ -56,22 +63,22 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
               },
             }
           );
-  
+
           if (response.status === 400) {
             // If response status is 400, show the empty cart content
             setCartData([]);
             setLoading(false);
             return; // Exit the function early to prevent further execution
           }
-  
-          const itemsArray: CartItem[] = Object.values(response.data.items);
+
+          const itemsArray = response.data.items;
           console.log({ itemsArray });
           setCartData(itemsArray);
         } else {
           // Use cart data from the Redux store for non-logged-in users
           setCartData(cartItems as CartItem[]);
         }
-  
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching cart data:", error);
@@ -79,7 +86,7 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
         setLoading(false);
       }
     };
-  
+
     fetchCartData();
     console.log("Raw cartData:", cartData);
   }, [user?.token, cartItems]);
@@ -96,44 +103,43 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
     return <div>Error: {error}</div>;
   }
 
-  
-if (error && error.includes("Request failed with status code 400")) {
-  return (
-    <div>
-      <Breadcrumb products={products} />
-      <div className="flex items-center justify-center flex-col">
-        <Image src={cartempty} alt="emptycart" />
-        <h2 className="uppercase text-3xl my-4">
-          YOUR CART IS CURRENTLY EMPTY
-        </h2>
-        <Link
-          href="/shop"
-          className="w-[300px] border border-[#0C0C1E] text-center rounded-lg my-8 py-4 text-sm"
-        >
-          Return to shop
-        </Link>
+  if (error && error.includes("Request failed with status code 400")) {
+    return (
+      <div>
+        <Breadcrumb products={products} />
+        <div className="flex items-center justify-center flex-col">
+          <Image src={cartempty} alt="emptycart" />
+          <h2 className="uppercase text-3xl my-4">
+            YOUR CART IS CURRENTLY EMPTY
+          </h2>
+          <Link
+            href="/shop"
+            className="w-[300px] border border-[#0C0C1E] text-center rounded-lg my-8 py-4 text-sm"
+          >
+            Return to shop
+          </Link>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   if (Object.keys(cartData).length === 0) {
     return (
-        <div>
-          <Breadcrumb products={products} />
-          <div className="flex items-center justify-center flex-col">
-            <Image src={cartempty} alt="emptycart" />
-            <h2 className="uppercase text-3xl my-4">
-              YOUR CART IS CURRENTLY EMPTY
-            </h2>
-            <Link
-              href="/shop"
-              className="w-[300px] border border-[#0C0C1E] text-center rounded-lg my-8 py-4 text-sm"
-            >
-              Return to shop
-            </Link>
-          </div>
+      <div>
+        <Breadcrumb products={products} />
+        <div className="flex items-center justify-center flex-col">
+          <Image src={cartempty} alt="emptycart" />
+          <h2 className="uppercase text-3xl my-4">
+            YOUR CART IS CURRENTLY EMPTY
+          </h2>
+          <Link
+            href="/shop"
+            className="w-[300px] border border-[#0C0C1E] text-center rounded-lg my-8 py-4 text-sm"
+          >
+            Return to shop
+          </Link>
         </div>
+      </div>
     );
   }
 
@@ -218,12 +224,12 @@ if (error && error.includes("Request failed with status code 400")) {
               </span>
             </div>
             <div className="flex items-center justify-center my-8">
-              <Link
-                href="cart/checkout"
+              <button
+                onClick={handleButtonClick}
                 className="bg-[#1B2E3C] text-[#F3E3E2] py-[17px] px-[80px] text-sm uppercase rounded-lg"
               >
-                Check out
-              </Link>
+                Proceed to checkout
+              </button>
             </div>
           </div>
         </div>
