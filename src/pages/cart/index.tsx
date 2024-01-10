@@ -80,7 +80,7 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
         }
 
         setLoading(false);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error fetching cart data:", error);
         setError(`Error fetching cart data: ${error.message}`);
         setLoading(false);
@@ -97,10 +97,6 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
         Loading...
       </div>
     );
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
   }
 
   if (error && error.includes("Request failed with status code 400")) {
