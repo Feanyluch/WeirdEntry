@@ -161,7 +161,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     }
   };
 
-  const removeProductFromCart = async (productKey: number, token: any) => {
+  const removeProductFromCart = async (productKey: string, token: any) => {
     const apiUrl =
       "https://weird-entry-api.onrender.com/api/cart";
 
