@@ -20,7 +20,7 @@ import {
 import axios from "axios";
 
 interface CartProductProps {
-  cartData: Record<string, CartItem>;
+  cartData: ProductData[];
 }
 
 const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
@@ -45,7 +45,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
   //     setQuantity(initialQuantity);
   //   }, [initialQuantity]);
 
-  const incrementQuantity = (productKey: string) => {
+  const incrementQuantity = (productKey: any) => {
     const product = cartData[productKey];
     console.log("product quantity", product.quantity);
     dispatch(incrementItem(productKey));
@@ -58,7 +58,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     }
   };
 
-  const decrementQuantity = (productKey: string) => {
+  const decrementQuantity = (productKey: any) => {
     const product = cartData[productKey];
     if (product.quantity > 0) {
       dispatch(decrementItem(productKey));
@@ -74,7 +74,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     }
   };
 
-  const handleDeleteFromCart = (productKey: string) => {
+  const handleDeleteFromCart = (productKey: any) => {
     const product = cartData[productKey];
     // If user is logged in, remove the product from the cart
     if (user) {
@@ -89,7 +89,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
   };
 
   const sendUpdateToEndpoint = async (
-    productKey: string,
+    productKey: any,
     newQuantity: number,
     token: any
   ) => {
@@ -161,7 +161,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     }
   };
 
-  const removeProductFromCart = async (productKey: string, token: any) => {
+  const removeProductFromCart = async (productKey: any, token: any) => {
     const apiUrl =
       "https://weird-entry-api.onrender.com/api/cart";
 

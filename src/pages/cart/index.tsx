@@ -39,7 +39,7 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   // console.log({cartItems})
 
-  const [cartData, setCartData] = useState<CartItem[]>([]);
+  const [cartData, setCartData] = useState<ProductData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -76,7 +76,7 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
           setCartData(itemsArray);
         } else {
           // Use cart data from the Redux store for non-logged-in users
-          setCartData(cartItems as CartItem[]);
+          setCartData(cartItems as ProductData[]);
         }
 
         setLoading(false);

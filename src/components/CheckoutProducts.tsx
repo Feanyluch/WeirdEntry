@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { CartItem } from "@/redux/types";
 
 interface CheckoutProductProps {
-  cartData: Record<string, CartItem>;
+  cartData: ProductData[];
 }
 
 const CheckoutProducts: React.FC<CheckoutProductProps> = ({ cartData }) => {

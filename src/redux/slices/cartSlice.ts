@@ -137,7 +137,7 @@ const cartSlice = createSlice({
       };
     },
     
-    incrementItem: (state, action: PayloadAction<string>) => {
+    incrementItem: (state, action: PayloadAction<any>) => {
       // Ensure that state.items is an object
       if (typeof state.items !== "object") {
         console.error("state.items is not an object:", state.items);
@@ -162,7 +162,7 @@ const cartSlice = createSlice({
       };
     },
 
-    decrementItem: (state, action: PayloadAction<string>) => {
+    decrementItem: (state, action: PayloadAction<any>) => {
       // Ensure that state.items is an object
       if (typeof state.items !== "object") {
         console.error("state.items is not an object:", state.items);
