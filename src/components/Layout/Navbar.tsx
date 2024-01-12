@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
 
         if (user) {
           const response = await axios.get(
-            "https://weird-entry-api.onrender.com/api/cart",
+            "https://weird-entry-lara-production.up.railway.app/api/cart",
             {
               headers: {
                 Authorization: `Bearer ${user.token}`, // Replace with your actual access token
@@ -226,7 +226,8 @@ const Navbar: React.FC = () => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl = "https://weird-entry-api.onrender.com/api/product";
+  const apiUrl =
+    "https://weird-entry-lara-production.up.railway.app/api/product";
 
   try {
     const response = await axios.get(apiUrl);

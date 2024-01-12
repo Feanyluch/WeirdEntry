@@ -12,7 +12,7 @@ export const signup = async (userData: {
 }) => {
   try {
     const response = await axios.post(
-      "https://weird-entry-api.onrender.com/api/register",
+      "https://weird-entry-lara-production.up.railway.app/api/register",
       userData
     );
     // Check if the message is present in the response
@@ -44,7 +44,7 @@ export const login = async (credentials: {
 }) => {
   try {
     const response = await axios.post(
-      "https://weird-entry-api.onrender.com/api/login",
+      "https://weird-entry-lara-production.up.railway.app/api/login",
       credentials
     );
     // Check if the message is present in the response

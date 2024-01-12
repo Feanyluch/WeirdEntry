@@ -55,7 +55,7 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
         if (user?.token) {
           // Fetch cart data from the database endpoint
           const response = await axios.get(
-            "https://weird-entry-api.onrender.com/api/cart",
+            "https://weird-entry-lara-production.up.railway.app/api/cart",
             {
               headers: {
                 Authorization: `Bearer ${user.token}`,
@@ -238,7 +238,8 @@ Cart.title = "Cart - Weird Entry";
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl = "https://weird-entry-api.onrender.com/api/product"; // Replace with your actual API endpoint
+  const apiUrl =
+    "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
 
   try {
     const response = await axios.get(apiUrl);

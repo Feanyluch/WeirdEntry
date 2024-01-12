@@ -109,7 +109,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
         // Fetch the user's cart after updating the local cart
         try {
           const response = await axios.get(
-            "https://weird-entry-api.onrender.com/api/cart",
+            "https://weird-entry-lara-production.up.railway.app/api/cart",
             {
               headers: {
                 Authorization: `Bearer ${user.token}`,

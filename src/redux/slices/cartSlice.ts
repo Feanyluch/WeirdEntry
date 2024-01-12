@@ -35,7 +35,7 @@ export const fetchUserCart = createAsyncThunk(
     const token = (getState() as RootState).auth.user.token;
 
     const response = await fetch(
-      "https://weird-entry-api.onrender.com/api/cart",
+      "https://weird-entry-lara-production.up.railway.app/api/cart",
       {
         method: "GET",
         headers: {
@@ -119,24 +119,24 @@ const cartSlice = createSlice({
     removeFromCart: (state, action: PayloadAction<{ productKey: string }>) => {
       const { productKey } = action.payload;
       const updatedItems = { ...state.items };
-    
+
       // Remove the item with the specified productKey
       if (updatedItems[productKey as keyof typeof updatedItems]) {
         delete updatedItems[productKey as keyof typeof updatedItems];
-      }      
-    
+      }
+
       // Update local storage
       saveCartToLocalStorage({
         ...state,
         items: updatedItems,
       });
-    
+
       return {
         ...state,
         items: updatedItems,
       };
     },
-    
+
     incrementItem: (state, action: PayloadAction<any>) => {
       // Ensure that state.items is an object
       if (typeof state.items !== "object") {
@@ -144,7 +144,7 @@ const cartSlice = createSlice({
         return state;
       }
 
-      console.log(action.payload)
+      console.log(action.payload);
       const existingProductKey = action.payload;
       const updatedItems = { ...state.items };
       // console.log(updatedItems[existingProductKey].quantity)
@@ -216,27 +216,26 @@ const cartSlice = createSlice({
     ) => {
       const { productKey, quantity } = action.payload;
       const updatedItems = { ...state.items };
-    
+
       if (updatedItems[productKey]) {
         // Ensure the quantity doesn't go below 0
         updatedItems[productKey] = {
           ...updatedItems[productKey],
           quantity: Math.max(quantity, 0),
         };
-    
+
         // Update local storage
         saveCartToLocalStorage({
           ...state,
           items: updatedItems,
         });
       }
-    
+
       return {
         ...state,
         items: updatedItems,
       };
     },
-    
   },
 });
 

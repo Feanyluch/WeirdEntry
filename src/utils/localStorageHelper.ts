@@ -51,7 +51,8 @@ export const sendItemsToEndpoint = async (
 
     const { token } = user;
 
-    const apiUrl = "https://weird-entry-api.onrender.com/api/cart/create";
+    const apiUrl =
+      "https://weird-entry-lara-production.up.railway.app/api/cart/create";
 
     const requestData = {
       user_email: `${user.user.email}`,

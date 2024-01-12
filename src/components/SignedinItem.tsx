@@ -15,7 +15,7 @@ const LogoutButton = () => {
     try {
       // Make a POST request to the logout endpoint
       const response = await fetch(
-        "https://weird-entry-api.onrender.com/api/logout",
+        "https://weird-entry-lara-production.up.railway.app/api/logout",
         {
           method: "POST",
           headers: {

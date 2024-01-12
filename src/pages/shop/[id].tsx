@@ -127,7 +127,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
           // Fetch the user's cart after updating the local cart
           try {
             const response = await axios.get(
-              "https://weird-entry-api.onrender.com/api/cart",
+              "https://weird-entry-lara-production.up.railway.app/api/cart",
               {
                 headers: {
                   Authorization: `Bearer ${user.token}`,
@@ -240,7 +240,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
 
   useEffect(() => {
     const fetchProductData = async () => {
-      const apiUrl = `https://weird-entry-api.onrender.com/api/product/${id}`;
+      const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product/${id}`;
 
       try {
         const response = await axios.get(apiUrl);
@@ -406,7 +406,7 @@ ProductDescription.title = "Product Description";
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl = `https://weird-entry-api.onrender.com/api/product`;
+  const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product`;
 
   try {
     const response = await axios.get(apiUrl);
@@ -426,7 +426,8 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const apiUrl = "https://weird-entry-api.onrender.com/api/product";
+  const apiUrl =
+    "https://weird-entry-lara-production.up.railway.app/api/product";
 
   try {
     const response = await axios.get(apiUrl);
@@ -479,7 +480,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 //   try {
 //     // Fetch data for the specific product using the id
-//     const apiUrl = `https://weird-entry-api.onrender.com/api/product/${id}`;
+//     const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product/${id}`;
 //     const response = await axios.get(apiUrl);
 //     const productData = response.data;
 

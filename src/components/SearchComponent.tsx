@@ -33,7 +33,7 @@ const SearchComponent = React.forwardRef<HTMLDivElement | null, SearchProps>(
     const handleSearch = async () => {
       if (searchValue.trim() !== "") {
         try {
-          const apiUrl = `https://weird-entry-api.onrender.com/api/product?s=${searchValue}`;
+          const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product?s=${searchValue}`;
 
           const response = await fetch(apiUrl, {
             method: "GET",

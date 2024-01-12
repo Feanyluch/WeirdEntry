@@ -70,7 +70,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
       try {
         setLoading(true);
         const response = await axios.get(
-          `https://weird-entry-api.onrender.com/api/category/${category.id}`,
+          `https://weird-entry-lara-production.up.railway.app/api/category/${category.id}`,
           {
             headers: {
               Authorization: "Bearer Token",
@@ -121,7 +121,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
         // There are other selected categories, update products based on the remaining selected category
         const remainingCategoryId = updatedSelectedCategories[0].id; // Assuming you want to use the first remaining category
         const response = await axios.get(
-          `https://weird-entry-api.onrender.com/api/category/${remainingCategoryId}`,
+          `https://weird-entry-lara-production.up.railway.app/api/category/${remainingCategoryId}`,
           {
             headers: {
               Authorization: "Bearer Token",
@@ -149,7 +149,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
         setLoading(true);
         // No other selected categories, fetch and set the initial list of products
         const response = await axios.get(
-          "https://weird-entry-api.onrender.com/api/product",
+          "https://weird-entry-lara-production.up.railway.app/api/product",
           {
             headers: {
               Authorization: "Bearer Token",
@@ -253,7 +253,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
 
       // Fetch and set the initial list of products
       const response = await axios.get(
-        "https://weird-entry-api.onrender.com/api/product",
+        "https://weird-entry-lara-production.up.railway.app/api/product",
         {
           headers: {
             Authorization: "Bearer Token",
@@ -380,7 +380,8 @@ const Index: React.FC<HomeProps> & { title: string } = ({
 Index.title = "Shop Products- WeirdEntry";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const apiUrl = "https://weird-entry-api.onrender.com/api/product";
+  const apiUrl =
+    "https://weird-entry-lara-production.up.railway.app/api/product";
 
   try {
     const response = await axios.get(apiUrl);

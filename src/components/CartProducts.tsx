@@ -82,7 +82,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     }
 
     // const cartItem = { id: product.id, quantity: 1 };
-    dispatch(removeFromCart({productKey}));
+    dispatch(removeFromCart({ productKey }));
     // dispatch(deleteSelectedProduct({ id: cartItem.id }));
     dispatch(decrementCartCount());
     // console.log("Item removed", cartItem);
@@ -94,9 +94,9 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     token: any
   ) => {
     const apiUrl =
-      "https://weird-entry-api.onrender.com/api/cart";
-      const product = cartData[productKey];
-      console.log({product})
+      "https://weird-entry-lara-production.up.railway.app/api/cart";
+    const product = cartData[productKey];
+    console.log({ product });
 
     try {
       // Fetch the user's current cart
@@ -109,9 +109,9 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
 
       if (response.status === 200) {
         const userCart = response.data.items;
-        console.log({userCart})
-        console.log(userCart[productKey])
-        console.log("Product Key", productKey)
+        console.log({ userCart });
+        console.log(userCart[productKey]);
+        console.log("Product Key", productKey);
 
         // Update the quantity for the specific product in the cart
         if (cartData[productKey]) {
@@ -163,9 +163,9 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
 
   const removeProductFromCart = async (productKey: any, token: any) => {
     const apiUrl =
-      "https://weird-entry-api.onrender.com/api/cart";
+      "https://weird-entry-lara-production.up.railway.app/api/cart";
 
-      const product = cartData[productKey];
+    const product = cartData[productKey];
 
     try {
       // Fetch the user's current cart
@@ -181,7 +181,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
 
         // Remove the product from the cart
         delete cartData[productKey];
-        console.log("deleted product ", productKey, "from cart")
+        console.log("deleted product ", productKey, "from cart");
 
         // Send the updated cart to the endpoint
         const updateResponse = await axios.post(
@@ -215,7 +215,10 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
   return (
     <div className="flex flex-col gap-6 px-2">
       {Object.entries(cartData).map(([productKey, product]) => (
-        <div className="grid grid-cols-2 gap-4 bg-[#F3E3E2] rounded-lg px-[40px] py-6" key={productKey}>
+        <div
+          className="grid grid-cols-2 gap-4 bg-[#F3E3E2] rounded-lg px-[40px] py-6"
+          key={productKey}
+        >
           <div className="h-[150px] flex items-center justify-center overflow-hidden">
             <Image
               src={product.product_image}
@@ -243,21 +246,21 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
               </div>
             </div>
             <div className="flex items-center justify-start gap-[12px] text-sm my-1">
-                <h2 className="text-sm">Qty:</h2>
-                <button
-                  className="text-lg px-2 rounded-lg"
-                  onClick={() => decrementQuantity(productKey)}
-                >
-                  -
-                </button>
-                <h2>{product.quantity}</h2>
-                <button
-                  className="text-lg px-2 rounded-lg"
-                  onClick={() => incrementQuantity(productKey)}
-                >
-                  +
-                </button>
-              </div>
+              <h2 className="text-sm">Qty:</h2>
+              <button
+                className="text-lg px-2 rounded-lg"
+                onClick={() => decrementQuantity(productKey)}
+              >
+                -
+              </button>
+              <h2>{product.quantity}</h2>
+              <button
+                className="text-lg px-2 rounded-lg"
+                onClick={() => incrementQuantity(productKey)}
+              >
+                +
+              </button>
+            </div>
             <div className="py-1 flex justify-between items-center">
               <div className="flex items-center gap-2 cursor-pointer">
                 <Image

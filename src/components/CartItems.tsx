@@ -37,7 +37,7 @@ const CartItems: React.FC = () => {
         if (user?.token) {
           // Fetch cart data from the database endpoint
           const response = await axios.get(
-            "https://weird-entry-api.onrender.com/api/cart",
+            "https://weird-entry-lara-production.up.railway.app/api/cart",
             {
               headers: {
                 Authorization: `Bearer ${user.token}`,

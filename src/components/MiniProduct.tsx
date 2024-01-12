@@ -78,7 +78,8 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
     newQuantity: number,
     token: any
   ) => {
-    const apiUrl = "https://weird-entry-api.onrender.com/api/cart";
+    const apiUrl =
+      "https://weird-entry-lara-production.up.railway.app/api/cart";
 
     try {
       // Fetch the user's current cart
@@ -138,7 +139,8 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
   };
 
   const removeProductFromCart = async (productId: number, token: any) => {
-    const apiUrl = "https://weird-entry-api.onrender.com/api/cart";
+    const apiUrl =
+      "https://weird-entry-lara-production.up.railway.app/api/cart";
 
     try {
       // Fetch the user's current cart

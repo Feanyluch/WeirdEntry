@@ -26,7 +26,7 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
     const fetchCategories = async () => {
       try {
         const response = await axios.get<(string | Category)[]>(
-          "https://weird-entry-api.onrender.com/api/category",
+          "https://weird-entry-lara-production.up.railway.app/api/category",
           {
             headers: {
               Authorization: "Bearer Token",

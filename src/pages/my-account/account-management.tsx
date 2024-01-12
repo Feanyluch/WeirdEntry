@@ -52,7 +52,8 @@ MyAccount.title = "Account Management - Weird Entry";
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl = "https://weird-entry-api.onrender.com/api/product"; // Replace with your actual API endpoint
+  const apiUrl =
+    "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
 
   try {
     const response = await axios.get(apiUrl);
