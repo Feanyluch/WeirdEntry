@@ -130,7 +130,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
         }
 
         // Remove any undefined products from the cart
-        delete cartData.undefined;
+        // delete cartData.undefined;
 
         // Send the updated cart to the endpoint
         const updateResponse = await axios.post(
