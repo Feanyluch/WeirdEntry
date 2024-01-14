@@ -93,7 +93,7 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
 
   if (loading) {
     return (
-      <div className="bg-[#F3E3E2] rounded-lg w-[500px] p-4 text-center">
+      <div className="bg-[#F3E3E2] rounded-lg w-full p-4 text-center">
         Loading...
       </div>
     );
@@ -166,8 +166,7 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
 
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
-    const shippingChargePercentage = 10; // Adjust based on your requirement
-    const shippingCharge = (subtotal * shippingChargePercentage) / 100;
+    const shippingCharge = 4000;
     return subtotal + shippingCharge;
   };
 
@@ -179,11 +178,11 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
     <div className="">
       <Breadcrumb products={products} />
       <div className="bg-[#fdf9f9] max-w-[1200px] px-[70px] pt-[60px] pb-[30px] mx-auto my-[60px]">
-        <div className="flex w-full gap-[30px] h-[480px]">
-          <div className="w-[60%] overflow-auto py-2">
+        <div className="flex flex-col sm:flex-row w-full gap-[30px] h-full sm:h-[480px]">
+          <div className="sm:w-[60%] overflow-auto h-[400px] py-2">
             <CartProducts cartData={cartData} />
           </div>
-          <div className="w-[40%] pt-[10px] px-[20px]">
+          <div className="sm:w-[40%] pt-[10px] px-[20px]">
             <p className="text-sm font-light tracking-[2px]">Coupon Code</p>
             <div className="w-full h-[1px] bg-[#0C0C1E80] my-[30px]"></div>
             <div className="flex justify-between items-center">
@@ -200,10 +199,10 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
             </p>
             <div className="flex justify-between items-center my-[30px]">
               <h2 className="text-sm font-light tracking-[1px] uppercase">
-                Weird Entry (10%)
+                Weird Entry
               </h2>{" "}
               <span className="text-sm font-bold ">
-                ₦{(subtotal * 0.1).toLocaleString()}
+                ₦4, 000
               </span>
             </div>
             <p className="font-light text-xs w-[90%]">

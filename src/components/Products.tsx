@@ -33,7 +33,7 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-8">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
       {productsArray.map((product, index) => (
         <ProductCard
           key={index}
@@ -44,9 +44,9 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
       {isSizeModalOpen && selectedProductForSize && (
         <SizeSelectionModal
           product={selectedProductForSize}
-          sizes={selectedProductForSize.sizes.map((size) => size.title) || []}
+          sizes={selectedProductForSize?.sizes?.map((size) => size.title) || []}
           colors={
-            selectedProductForSize.colors.map((color) => color.title) || []
+            selectedProductForSize?.colors?.map((color) => color.title) || []
           }
           title={selectedProductForSize.title}
           product_image={selectedProductForSize.product_image}

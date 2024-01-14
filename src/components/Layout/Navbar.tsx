@@ -10,8 +10,10 @@ import cart from "../../../public/Images/cart1.png";
 import Heart from "../../../public/Images/Heart.svg";
 import User from "../../../public/Images/User.svg";
 import hamburger from "../../../public/Images/hamburger.svg";
+import close from "../../../public/Images/close.svg";
 
 import weirdlogo from "../../../public/Images/weirdlogo.png";
+import whiteweirdlogo from "../../../public/Images/white-logo.png";
 
 import CartItems from "@/components/CartItems";
 import { ProductData } from "@/components/product";
@@ -34,6 +36,11 @@ const Navbar: React.FC = () => {
   const cartCountFromRedux = useSelector(
     (state: RootState) => state.cart.cartCount
   );
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   useEffect(() => {
     const fetchCartCount = async () => {
@@ -118,9 +125,39 @@ const Navbar: React.FC = () => {
                 <Image src={weirdlogo} alt="logo" />
               </Link>
             </div>
-            <div className="block sm:hidden">
-              <Image src={hamburger} alt="" />
+            <div className="block sm:hidden cursor-pointer">
+              <Image src={hamburger} alt="" onClick={toggleMenu} />
             </div>
+            {isMenuOpen && (
+              <div className="fixed top-0 left-0 h-screen overflow-auto w-4/5 bg-[#1B2E3C] z-50 transform duration-300 ease-in-out py-6">
+                {/* Your navigation links can go here */}
+                <div className="flex items-center justify-between px-6 pb-4">
+                  <div className="w-[100px] block sm:hidden">
+                    <Link href="/">
+                      <Image src={whiteweirdlogo} alt="logo" />
+                    </Link>
+                  </div>
+
+                  <div className="cursor-pointer">
+                    <Image src={close} alt="" onClick={toggleMenu} />
+                  </div>
+                </div>
+                <h2 className="uppercase text-[#F3E3E2] px-8 mt-6 border-b border-[#F3E3E233]">
+                  menu
+                </h2>
+                <div className="flex items-start justify-start flex-col text-[#F3E3E2] px-8 font-normal">
+                  <Link href="/shop" className="uppercase my-4">home</Link>
+                  <Link href="/shop" className="uppercase my-4">shop</Link>
+                  <Link href="/shop" className="uppercase my-4">search</Link>
+                  <Link href="/shop" className="uppercase my-4">wishlist</Link>
+                  <Link href="/shop" className="uppercase my-4">profile</Link>
+                  <Link href="/shop" className="uppercase my-4">about us</Link>
+                </div>
+                <button className="absolute top-4 right-4" onClick={toggleMenu}>
+                  Close
+                </button>
+              </div>
+            )}
           </div>
           <div className={`${isSearchOpen ? "hidden" : "block"} uppercase`}>
             <ul className="hidden space-x-4 text-xl ml-8 sm:flex">
@@ -138,7 +175,7 @@ const Navbar: React.FC = () => {
               </Link>
             </ul>
           </div>
-          <div className="w-[200px] block sm:hidden">
+          <div className="w-[150px] block sm:hidden">
             <Link href="/">
               <Image src={weirdlogo} alt="logo" />
             </Link>

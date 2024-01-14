@@ -25,6 +25,7 @@ interface CartProductProps {
 
 const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
   console.log({ cartData });
+  const [localCartData, setLocalCartData] = useState(cartData);
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const user = useSelector((state: RootState) => state.auth.user);
@@ -216,7 +217,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     <div className="flex flex-col gap-6 px-2">
       {Object.entries(cartData).map(([productKey, product]) => (
         <div
-          className="grid grid-cols-2 gap-4 bg-[#F3E3E2] rounded-lg px-[40px] py-6"
+          className="grid grid-cols-2 gap-4 sm:bg-[#F3E3E2] rounded-lg px-[40px] py-6"
           key={productKey}
         >
           <div className="h-[150px] flex items-center justify-center overflow-hidden">

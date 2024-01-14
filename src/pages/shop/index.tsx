@@ -289,13 +289,13 @@ const Index: React.FC<HomeProps> & { title: string } = ({
   return (
     <div>
       <Breadcrumb products={products} />
-      <div className="w-[1200px] mx-auto flex gap-8 my-12">
-        <div className="w-1/4 flex-shrink-0">
+      <div className="max-w-[1200px] mx-auto flex gap-8 my-12 px-4">
+        <div className="w-1/4 flex-shrink-0 hidden sm:block">
           <div className="sticky top-28 ">
             <ProductCategory onSelectCategory={handleSelectCategory} />
           </div>
         </div>
-        <div className="w-3/4 overflow-y-auto px-4 product-container">
+        <div className="w-full sm:w-3/4 overflow-y-auto px-4 product-container">
           <div className=" my-2">
             {searchQuery && (
               <div className="flex items-center justify-start gap-2">
