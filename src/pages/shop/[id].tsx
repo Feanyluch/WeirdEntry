@@ -318,7 +318,9 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
               <div className="">
                 <h4>Available Sizes</h4>
                 <div className="flex gap-4 my-2">
-                  {selectedProduct.sizes.map((size, index) => (
+                {selectedProduct.sizes &&
+                  selectedProduct.sizes.length > 0 ? (
+                    selectedProduct.sizes.map((size, index) => (
                     <button
                       key={index}
                       className={`text-sm border border-[#0C0C1E80] px-2 h-[25px] ${
@@ -330,7 +332,10 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                     >
                       {size.title}
                     </button>
-                  ))}
+                  ))
+                  ) : (
+                    <span className="text-red-500">No available size</span>
+                  )}
                 </div>
               </div>
 
@@ -353,7 +358,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                       </button>
                     ))
                   ) : (
-                    <span className="text-red-500">No colors available</span>
+                    <span className="text-red-500">No available color</span>
                   )}
                 </div>
               </div>
