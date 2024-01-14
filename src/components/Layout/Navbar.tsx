@@ -10,7 +10,7 @@ import cart from "../../../public/Images/cart1.png";
 import Heart from "../../../public/Images/Heart.svg";
 import User from "../../../public/Images/User.svg";
 import hamburger from "../../../public/Images/hamburger.svg";
-import close from "../../../public/Images/close.svg";
+// import close from "../../../public/Images/close.svg";
 
 import weirdlogo from "../../../public/Images/weirdlogo.png";
 import whiteweirdlogo from "../../../public/Images/white-logo.png";
@@ -139,7 +139,7 @@ const Navbar: React.FC = () => {
                   </div>
 
                   <div className="cursor-pointer">
-                    <Image src={close} alt="" onClick={toggleMenu} />
+                    {/* <Image src={close} alt="" onClick={toggleMenu} /> */}
                   </div>
                 </div>
                 <h2 className="uppercase text-[#F3E3E2] px-8 mt-6 border-b border-[#F3E3E233]">
