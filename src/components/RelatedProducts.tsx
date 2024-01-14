@@ -44,9 +44,9 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
       {isSizeModalOpen && selectedProductForSize && (
         <SizeSelectionModal
           product={selectedProductForSize}
-          sizes={selectedProductForSize.sizes.map((size) => size.title) || []}
+          sizes={selectedProductForSize?.sizes?.map((size) => size.title) || []}
           colors={
-            selectedProductForSize.colors.map((color) => color.title) || []
+            selectedProductForSize?.colors?.map((color) => color.title) || []
           }
           product_image={selectedProductForSize.product_image}
           title={selectedProductForSize.title}
