@@ -37,7 +37,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
 }) => {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [ loading, setLoading ] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -61,7 +61,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
       //   : null;
 
       const existingProductKey = `${product.id}_${selectedSize}_${selectedColor}`;
-      const existingProduct = cartItems[existingProductKey];
+      const existingProduct = cartItems[existingProductKey as any];
+
 
       console.log({ existingProductKey });
       console.log({ existingProduct });
@@ -109,7 +110,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
       if (user && user.token) {
         // Fetch the user's cart after updating the local cart
         try {
-          setLoading(true)
+          setLoading(true);
           const response = await axios.get(
             "https://weird-entry-lara-production.up.railway.app/api/cart",
             {
@@ -172,10 +173,10 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
               sendItemsToEndpoint(updatedCart);
             }
 
-            setLoading(false)
+            setLoading(false);
             // ... (remaining code)
           } else if (response.status === 400) {
-            setLoading(true)
+            setLoading(true);
             // If the user has no cart, send only the newly added item to create the cart
             const newCartItemKey = `${product.id}_${selectedSize}_${selectedColor}`;
             sendItemsToEndpoint({
@@ -189,14 +190,14 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
                 color: selectedColor,
               },
             });
-            setLoading(false)
+            setLoading(false);
           } else {
             console.error("Failed to fetch user cart:", response.statusText);
           }
         } catch (error) {
           console.error("Error fetching user cart:", error);
 
-          setLoading(true)
+          setLoading(true);
           // If there's an error fetching the user's cart, assume the user has no cart and send only the newly added item
           const newCartItemKey = `${product.id}_${selectedSize}_${selectedColor}`;
           sendItemsToEndpoint({
@@ -210,7 +211,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
               color: selectedColor,
             },
           });
-          setLoading(false)
+          setLoading(false);
         }
       }
     } catch (error) {
@@ -302,7 +303,9 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
             onClick={handleAddToCart}
             disabled={loading}
             className={`px-4 py-2 rounded-md hover:bg-[#29465b] ${
-              loading ? "bg-gray-200 cursor-not-allowed" : "bg-[#1B2E3C] text-white"
+              loading
+                ? "bg-gray-200 cursor-not-allowed"
+                : "bg-[#1B2E3C] text-white"
             }`}
           >
             {loading ? "Adding..." : "Add to Cart"}

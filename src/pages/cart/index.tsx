@@ -177,7 +177,7 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
   return (
     <div className="">
       <Breadcrumb products={products} />
-      <div className="bg-[#fdf9f9] max-w-[1200px] px-[70px] pt-[60px] pb-[30px] mx-auto my-[60px]">
+      <div className="bg-[#fdf9f9] max-w-[1200px] sm:px-[70px] sm:pt-[60px] sm:pb-[30px] mx-auto my-[60px]">
         <div className="flex flex-col sm:flex-row w-full gap-[30px] h-full sm:h-[480px]">
           <div className="sm:w-[60%] overflow-auto h-[400px] py-2">
             <CartProducts cartData={cartData} />

@@ -35,7 +35,7 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
 
   useEffect(() => {
     // Update the Redux store when the local state changes
-    dispatch(updateItemQuantity({ productId: product.id, quantity }));
+    // dispatch(updateItemQuantity({ productId: product.id, quantity }));
   }, [quantity, dispatch, product.id]);
 
   const incrementQuantity = () => {
@@ -67,7 +67,7 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
     }
 
     const cartItem = { id: product.id, quantity: 1 };
-    dispatch(removeFromCart({ id: cartItem.id }));
+    // dispatch(removeFromCart({ id: cartItem.id }));
     dispatch(deleteSelectedProduct({ id: cartItem.id }));
     dispatch(decrementCartCount());
     console.log("Item removed", cartItem);

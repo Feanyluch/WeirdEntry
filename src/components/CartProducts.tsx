@@ -236,7 +236,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
               ₦ {product.price.toLocaleString()}
             </h1>
 
-            <div className="flex items-center justify-between gap-6">
+            <div className="flex sm:items-center justify-between flex-col sm:flex-row gap-6">
               <div className="flex gap-1">
                 <h2 className="text-sm">Size: </h2>
                 <p className="text-sm"> {product.size}</p>
