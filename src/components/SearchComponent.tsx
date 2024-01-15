@@ -1,7 +1,7 @@
 // SearchComponent.tsx
 import React, { useState, ChangeEvent, KeyboardEvent } from "react";
 import Image from "next/image";
-import Close from "../../public/Images/Close.svg";
+import Close from "../../public/Images/cancel.svg";
 import Search from "../../public/Images/Search.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
