@@ -13,6 +13,10 @@ import shirt2 from "../../../public/Images/shirt2.png";
 import shirt3 from "../../../public/Images/shirt3.png";
 import shirt4 from "../../../public/Images/shirt4.png";
 
+import instagram from "../../../public/Images/Instagram.png";
+import facebook from "../../../public/Images/Facebook.png";
+import twitter from "../../../public/Images/TwitterX.png";
+
 import bag from "../../../public/Images/bag.svg";
 import todown from "../../../public/Images/To-Down.svg";
 
@@ -273,10 +277,10 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
   return (
     <div>
       <Breadcrumb products={products} />
-      <div className="w-[1100px] mx-auto text-[#1B2E3C] py-8">
-        <div className="grid grid-cols-2 gap-8">
+      <div className="maxx-w-[1100px] mx-auto text-[#1B2E3C] py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <div className="">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-4 mx-4 sm:mx-0">
               <div className="col-span-3 flex items-center justify-center">
                 <div
                   style={{
@@ -300,7 +304,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
               </div>
             </div>
           </div>
-          <div className="">
+          <div className="px-4">
             <div className="">
               <h2 className="uppercase py-2 text-3xl">
                 {selectedProduct.title}
@@ -311,28 +315,27 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
               <h2 className="text-xl py-2 font-bold">
                 ₦ {selectedProduct.price.toLocaleString()}
               </h2>
-              <p className="py-4 break-words w-[80%] text-sm">
+              <p className="py-4 break-words sm:w-[80%] text-sm">
                 <span className="font-bold">Description:</span>{" "}
                 {selectedProduct.description}
               </p>
               <div className="">
                 <h4>Available Sizes</h4>
                 <div className="flex gap-4 my-2">
-                {selectedProduct.sizes &&
-                  selectedProduct.sizes.length > 0 ? (
+                  {selectedProduct.sizes && selectedProduct.sizes.length > 0 ? (
                     selectedProduct.sizes.map((size, index) => (
-                    <button
-                      key={index}
-                      className={`text-sm border border-[#0C0C1E80] px-2 h-[25px] ${
-                        selectedSize === size.title
-                          ? "bg-[#1B2E3C] text-white"
-                          : ""
-                      } transition ease-in-out duration-300 rounded-md`}
-                      onClick={() => handleSizeSelect(size.title)}
-                    >
-                      {size.title}
-                    </button>
-                  ))
+                      <button
+                        key={index}
+                        className={`text-sm border border-[#0C0C1E80] px-2 h-[25px] ${
+                          selectedSize === size.title
+                            ? "bg-[#1B2E3C] text-white"
+                            : ""
+                        } transition ease-in-out duration-300 rounded-md`}
+                        onClick={() => handleSizeSelect(size.title)}
+                      >
+                        {size.title}
+                      </button>
+                    ))
                   ) : (
                     <span className="text-red-500">No available size</span>
                   )}
@@ -392,12 +395,25 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                 <Image src={bag} alt="" />
                 Buy Now
               </button>
-              <h2>Share: </h2>
+              <div className="flex items-center justify-start gap-2">
+                <h2>Share: </h2>
+                <div className="flex gap-2">
+                  <Link href="instagram.com">
+                    <Image src={instagram} alt="" height={20} width={20} />
+                  </Link>
+                  <Link href="facebook.com">
+                    <Image src={facebook} alt="" height={20} width={20} />
+                  </Link>
+                  <Link href="twitter.com">
+                    <Image src={twitter} alt="" height={20} width={20} />
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="w-[1300px] mx-auto my-10">
+      <div className="max-w-[1200px] mx-4 my-10">
         <h2 className="py-4 text-center uppercase text-xl my-4">
           Related Products
         </h2>

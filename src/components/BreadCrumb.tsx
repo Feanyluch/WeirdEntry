@@ -65,9 +65,9 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ products }) => {
   console.log({ selectedProduct });
 
   return (
-    <div className="bg-[#1B2E3C] h-[240px] flex items-end justify-center text-[#F3E3E2] py-[20px]">
+    <div className="bg-[#1B2E3C] h-[200px] sm:h-[240px] flex items-end justify-center text-[#F3E3E2] py-[20px]">
       <div className="flex gap-[72px] justify-center items-center flex-col">
-        <h2 className="uppercase text-4xl">
+        <h2 className="uppercase text-3xl sm:text-4xl text-center">
           {selectedProduct
             ? formatPageName(selectedProduct.title)
             : formatPageName(pathnames[pathnames.length - 1])}

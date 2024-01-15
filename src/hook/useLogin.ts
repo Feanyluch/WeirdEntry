@@ -39,16 +39,17 @@ export const useLogin = () => {
 
   const handleFirstNameBlur = () => {
     if (!first_name) {
-      setFirstNameError("Name is required")
+      setFirstNameError("First Name is required")
     } else{
       setFirstNameError('')
     }
+    setIsFirstNameFocused(false)
   }
 
   const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFirstName(e.target.value)
     if (!first_name) {
-      setFirstNameError("Name is required")
+      setFirstNameError("First Name is required")
     } else{
       setFirstNameError('')
     }
@@ -56,16 +57,17 @@ export const useLogin = () => {
 
   const handleLastNameBlur = () => {
     if (!last_name) {
-      setLastNameError("Name is required")
+      setLastNameError("Last Name is required")
     } else{
       setLastNameError('')
     }
+    setIsLastNameFocused(false)
   }
 
   const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLastName(e.target.value)
     if (!last_name) {
-      setLastNameError("Name is required")
+      setLastNameError("Last Name is required")
     } else{
       setLastNameError('')
     }
@@ -73,16 +75,18 @@ export const useLogin = () => {
 
   const handleAddressBlur = () => {
     if (!address) {
-      setAddressError("Name is required")
+      setAddressError("Address is required")
     } else{
       setAddressError('')
     }
+
+    setIsAddressFocused(false)
   }
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(e.target.value)
     if (!first_name) {
-      setAddressError("Name is required")
+      setAddressError("Address is required")
     } else{
       setAddressError('')
     }
@@ -156,13 +160,13 @@ export const useLogin = () => {
 
   const handleConfirmPasswordBlur = () => {
     if (!password_confirmation) {
-      setConfirmPasswordError("Password required")
+      setConfirmPasswordError("Confirm Password required")
     }
     else if (password_confirmation !== password) {
-      setConfirmPasswordError("Passwords do not match");
+      setConfirmPasswordError("Confirm Passwords do not match");
     }
     else if (password_confirmation.length < 8) {
-      setConfirmPasswordError("Password must be at least 8 characters");
+      setConfirmPasswordError("Confirm Password must be at least 8 characters");
     } else {
       setConfirmPasswordError("");
     }

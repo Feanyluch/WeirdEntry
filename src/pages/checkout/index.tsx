@@ -276,15 +276,15 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
       <div className="" style={{ fontFamily: "'Nokora', sans-serif" }}>
         <Breadcrumb products={products} />
 
-        <div className="bg-[#fdf9f9] max-w-[1200px] px-[70px] pt-[60px] pb-[30px] mx-auto my-[60px]">
-          <div className="flex gap-[40px]">
-            <div className="w-[58%] flex flex-col gap-[30px]">
+        <div className="bg-[#fdf9f9] max-w-[1200px] sm:px-[70px] sm:pt-[60px] sm:pb-[30px] sm:mx-auto my-[20px] sm:my-[60px]">
+          <div className="flex gap-[40px] flex-col sm:flex-row">
+            <div className="sm:w-[58%] flex flex-col sm:gap-[30px]">
               <div className="bg-white rounded-lg p-[40px]">
                 <h2 className="uppercase text-sm font-normal">
                   Delivery Details
                 </h2>
                 <div className="w-full h-[1px] bg-[#0C0C1E80] my-[20px]"></div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col">
                     <label className="text-[#1B2E3C80] text-xs">
                       First Name
@@ -308,7 +308,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4 my-[20px]">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-[20px]">
                   <div className="flex flex-col">
                     <label className="text-[#1B2E3C80] text-xs">State</label>
                     <input
@@ -390,7 +390,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                 </div>
               </div>
             </div> */}
-              <div className="flex items-center justify-start gap-4 my-2">
+              <div className="hidden sm:flex items-center justify-start gap-4 my-2">
                 <RoundCheckbox
                   label="By clicking place order, I agree to the Terms and Conditions"
                   checked={checkboxStates.terms}
@@ -400,7 +400,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                 By clicking place order, I agree to the Terms and Conditions
               </p> */}
               </div>
-              <div className="flex items-center justify-center">
+              <div className="hidden sm:flex items-center justify-center">
                 {/* <button className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
                 Place Order
               </button> */}
@@ -416,10 +416,10 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                 </div>
               </div>
             </div>
-            <div className="w-[42%] h-[630px] bg-white rounded-lg p-[40px]">
+            <div className="sm:w-[42%] h-[630px] bg-white rounded-lg p-[40px]">
               <h2 className="uppercase text-sm font-normal">items</h2>
               <div className="w-full h-[1px] bg-[#0C0C1E80] my-[20px]"></div>
-              <div className="h-[330px] overflow-auto">
+              <div className="max-h-[330px] overflow-auto">
                 <CheckoutProducts cartData={cartData} />
               </div>
 
@@ -427,25 +427,50 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
 
               <div className="px-4 py-4">
                 <div className="py-[10px] flex items-center justify-between">
-                  <h2 className="text-sm font-normal">Subtotal</h2>
-                  <h2 className="text-sm font-normal">
+                  <h2 className="text-xs sm:text-sm font-normal">Subtotal</h2>
+                  <h2 className="text-xs sm:text-sm font-normal">
                     N{subtotal.toLocaleString()}
                   </h2>
                 </div>
                 <div className="py-[10px] flex items-center justify-between">
-                  <h2 className="text-sm font-normal">
+                  <h2 className="text-xs sm:text-sm font-normal">
                     Delivery Charge (Fixed)
                   </h2>
-                  <h2 className="text-sm font-normal">N4,000</h2>
+                  <h2 className="text-xs sm:text-sm font-normal">N4,000</h2>
                 </div>
                 <div className="py-[10px] flex items-center justify-between">
-                  <h2 className="text-sm font-bold">Total</h2>
-                  <h2 className="text-sm font-bold">
+                  <h2 className="text-xs sm:text-sm font-bold">Total</h2>
+                  <h2 className="text-xs sm:text-sm font-bold">
                     N{total.toLocaleString()}
                   </h2>
                 </div>
               </div>
             </div>
+            <div className="flex sm:hidden items-center justify-start gap-4 my-2 mx-4">
+                <RoundCheckbox
+                  label="By clicking place order, I agree to the Terms and Conditions"
+                  checked={checkboxStates.terms}
+                  onChange={() => handleCheckboxChange("terms")}
+                />
+                {/* <p className="text-xs">
+                By clicking place order, I agree to the Terms and Conditions
+              </p> */}
+              </div>
+              <div className="flex sm:hidden items-center justify-center">
+                {/* <button className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
+                Place Order
+              </button> */}
+                <div className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
+                  <PaystackButton
+                    {...paystackConfig}
+                    text="Place Order"
+                    onSuccess={(response: any) =>
+                      handlePaymentSuccess(response)
+                    }
+                    onClose={() => console.log("Payment closed")}
+                  />
+                </div>
+              </div>
           </div>
         </div>
       </div>

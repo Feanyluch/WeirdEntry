@@ -10,7 +10,8 @@ import cart from "../../../public/Images/cart1.png";
 import Heart from "../../../public/Images/Heart.svg";
 import User from "../../../public/Images/User.svg";
 import hamburger from "../../../public/Images/hamburger.svg";
-// import close from "../../../public/Images/close.svg";
+import close from "../../../public/Images/close.svg";
+import cancel from "../../../public/Images/cancel.svg";
 
 import weirdlogo from "../../../public/Images/weirdlogo.png";
 import whiteweirdlogo from "../../../public/Images/white-logo.png";
@@ -36,7 +37,7 @@ const Navbar: React.FC = () => {
   const cartCountFromRedux = useSelector(
     (state: RootState) => state.cart.cartCount
   );
-  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -139,7 +140,7 @@ const Navbar: React.FC = () => {
                   </div>
 
                   <div className="cursor-pointer">
-                    {/* <Image src={close} alt="" onClick={toggleMenu} /> */}
+                    <Image src={close} alt="" onClick={toggleMenu} />
                   </div>
                 </div>
                 <h2 className="uppercase text-[#F3E3E2] px-8 mt-6 border-b border-[#F3E3E233]">
@@ -153,7 +154,7 @@ const Navbar: React.FC = () => {
                   <Link href="/shop" className="uppercase my-4">profile</Link>
                   <Link href="/shop" className="uppercase my-4">about us</Link>
                 </div>
-                <button className="absolute top-4 right-4" onClick={toggleMenu}>
+                <button className="absolute top-4 right-4 text-green" onClick={toggleMenu}>
                   Close
                 </button>
               </div>
@@ -175,7 +176,7 @@ const Navbar: React.FC = () => {
               </Link>
             </ul>
           </div>
-          <div className="w-[150px] block sm:hidden">
+          <div className="w-[100px] block sm:hidden">
             <Link href="/">
               <Image src={weirdlogo} alt="logo" />
             </Link>

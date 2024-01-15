@@ -117,7 +117,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
   return (
     <div className="">
       <Breadcrumb products={products} />
-      <div className="flex items-center justify-center bg-[#fdf9f9] py-8 w-[1200px] mx-auto my-[3rem]">
+      <div className="flex items-center justify-center bg-[#fdf9f9] py-8 max-w-[1200px] mx-auto my-[3rem]">
         <div className="bg-white w-[500px]  py-2 px-8">
           <h2 className="text-5xl text-center py-12 uppercase">Register</h2>
           <div className="my-2">
@@ -184,9 +184,9 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                 />
               </div>
 
-              {lastNameError && (
+              {addressError && (
                 <span className="text-[#1B2E3C] text-sm py-1">
-                  {lastNameError}
+                  {addressError}
                 </span>
               )}
             </div>
@@ -207,9 +207,9 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                 />
               </div>
 
-              {lastNameError && (
+              {emailError && (
                 <span className="text-[#1B2E3C] text-sm py-1">
-                  {lastNameError}
+                  {emailError}
                 </span>
               )}
             </div>
@@ -224,7 +224,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                     value={password}
                     placeholder="Password"
                     className={`h-[60px] w-full bg-[#f3f4f5] px-4 rounded-lg focus:outline-none focus:border-[#1B2E3C] focus:border-2 ${
-                      isEmailFocused ? "bg-white" : "bg-[#f3f4f5]"
+                      isPasswordFocused ? "bg-white" : "bg-[#f3f4f5]"
                     }`}
                     onChange={handlePasswordChange}
                     onFocus={() => setIsPasswordFocused(true)}
@@ -260,7 +260,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                     value={password_confirmation}
                     placeholder="Confirm Password"
                     className={`h-[60px] w-full bg-[#f3f4f5] px-4 rounded-lg focus:outline-none focus:border-[#1B2E3C] focus:border-2 ${
-                      isEmailFocused ? "bg-white" : "bg-[#f3f4f5]"
+                      isConfirmPasswordFocused ? "bg-white" : "bg-[#f3f4f5]"
                     }`}
                     onChange={handleConfirmPasswordChange}
                     onFocus={() => setIsConfirmPasswordFocused(true)}

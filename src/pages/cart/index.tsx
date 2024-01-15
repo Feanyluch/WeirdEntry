@@ -177,9 +177,9 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
   return (
     <div className="">
       <Breadcrumb products={products} />
-      <div className="bg-[#fdf9f9] max-w-[1200px] sm:px-[70px] sm:pt-[60px] sm:pb-[30px] mx-auto my-[60px]">
+      <div className="sm:bg-[#fdf9f9] max-w-[1200px] sm:px-[70px] sm:pt-[60px] sm:pb-[30px] mx-auto my-[20px] sm:my-[60px]">
         <div className="flex flex-col sm:flex-row w-full gap-[30px] h-full sm:h-[480px]">
-          <div className="sm:w-[60%] overflow-auto h-[400px] py-2">
+          <div className="sm:w-[60%] overflow-auto max-h-[400px] my-2">
             <CartProducts cartData={cartData} />
           </div>
           <div className="sm:w-[40%] pt-[10px] px-[20px]">
@@ -221,7 +221,7 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
             <div className="flex items-center justify-center my-8">
               <button
                 onClick={handleButtonClick}
-                className="bg-[#1B2E3C] text-[#F3E3E2] py-[17px] px-[80px] text-sm uppercase rounded-lg"
+                className="bg-[#1B2E3C] text-[#F3E3E2] py-[17px] px-[40px] sm:px-[80px] text-sm uppercase rounded-lg"
               >
                 Proceed to checkout
               </button>

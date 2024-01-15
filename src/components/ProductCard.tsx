@@ -15,6 +15,7 @@ import {
   fetchUserCart,
 } from "@/redux/slices/cartSlice";
 import store, { RootState } from "@/redux/store";
+import pinkFavorite from "../../public/Images/pink-favorite.svg";
 import axios from "axios";
 import {
   clearCartLocalStorage,
@@ -164,15 +165,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
               backgroundImage: `url('${product.product_image}')`,
               backgroundSize: "cover",
               backgroundPosition: "center",
-              width: "90%",
+              width: "100%",
               height: "100%",
             }}
             className="rounded-lg transform hover:scale-110 transition-transform duration-300"
           ></div>
+          <button className="absolute top-3 right-3 z-[9999px] bg-pink-50 p-1 rounded-lg transition ease-in-out duration-300">
+            <Image
+              src={pinkFavorite}
+              height={20}
+              width={20}
+              alt="heart"
+            />
+          </button>
         </div>
 
         <div className="my-5">
-          <h2 className="capitalize h-[50px] text-base">{product.title}</h2>
+          <h2 className="capitalize max-h-[50px] sm:max-h-[50px] sm:h-[50px] text-base">
+            {product.title}
+          </h2>
           {/* <div className="flex my-2">
             {[...Array(displayStars)].map((_, index) => (
               <Image
@@ -201,11 +212,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
       <div className="flex gap-4 w-full">
         <button
           onClick={handleAddToCart}
-          className="text-sm py-3 w-3/4 uppercase border border-[#0C0C1E] rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300"
+          className="text-sm py-3 sm:w-3/4 w-full uppercase border border-[#0C0C1E] rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300"
         >
           {loading ? "processing..." : "Add to cart"}
         </button>
-        <button className="w-1/4 border border-[#0C0C1E] flex items-center justify-center rounded-lg transition ease-in-out duration-300">
+        <button className="hidden sm:w-1/4 border border-[#0C0C1E] sm:flex items-center justify-center rounded-lg transition ease-in-out duration-300">
           <Image
             src="https://res.cloudinary.com/duxy2eomx/image/upload/v1697712759/Heart_kvhvmp.svg"
             height={25}

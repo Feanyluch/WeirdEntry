@@ -59,7 +59,7 @@ const tabs: TabData[] = [
     label: "Logout",
     route: "/",
     content: "null",
-    image: "../../public/Images/Useraccount.svg",
+    image: "../../../public/Images/Useraccount.svg",
   },
 ];
 
@@ -87,7 +87,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ children }) => {
   }, [query]);
 
   return (
-    <div className="bg-[#fdf9f9] max-w-[1200px] px-[50px] py-[50px] mx-auto my-[60px]">
+    <div className="relative sm:bg-[#fdf9f9] max-w-[1200px] sm:px-[50px] sm:py-[50px] mx-auto sm:my-[60px]">
       <div
         className="flex gap-[40px] w-full"
         style={{ fontFamily: "'Nokora', sans-serif" }}
@@ -101,15 +101,14 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ children }) => {
         )}
         <div
           className={`${
-            isMobileNavOpen ? "fixed top-0 left-0 w-[60%] z-50" : "hidden"
+            isMobileNavOpen ? "absolute top-0 left-0 w-[60%] z-50 mt-4" : "hidden"
           } transition-transform duration-300 w-[30%] h-fit bg-white flex flex-col ease-in-out transform translate-x-0 md:translate-x-0 md:block`}
         >
           <button
-            className="flex items-start justify-end  p-2 bg-blue-500 text-white mb-4 md:hidden"
+            className="flex items-start justify-end p-2 bg-[#1B2E3C] text-white mb-4 sm:hidden"
             onClick={() => setIsMobileNavOpen(false)}
           >
             <FontAwesomeIcon icon={faClose} />
-            kkkkkkkkkkkkkkkkkkk
           </button>
           <div className="">
             {tabs.map((tab) => (
@@ -125,12 +124,12 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ children }) => {
         </div>
         <div className="w-full bg-white p-4 overflow-auto">
           <button
-            className="flex items-center justify-center p-2 bg-blue-500 text-white mb-4 md:hidden"
+            className="flex items-center justify-center p-2 rounded-lg bg-[#1B2E3C] text-white mb-4 sm:hidden"
             onClick={() => setIsMobileNavOpen(true)}
           >
             <FontAwesomeIcon icon={faBars} />
           </button>
-          <div className="w-[100%]bg-white rounded-lg p-[40px]">{children}</div>
+          <div className="w-[100%] bg-white rounded-lg p-4 sm:p-[40px]">{children}</div>
         </div>
       </div>
     </div>

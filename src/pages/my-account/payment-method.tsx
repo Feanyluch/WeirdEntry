@@ -27,7 +27,7 @@ const MyAccount: React.FC<HomeProps> & { title: string } = ({ products }) => {
           You currently do not have any payment method
         </h2>
         <div className="flex items-center justify-center my-[50px]">
-          <button className="border-[#0C0C1E] border px-[80px] py-[17px] text-xs hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition-all rounded-lg">
+          <button className="border-[#0C0C1E] border px-8 sm:px-[80px] py-[17px] text-xs hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition-all rounded-lg">
             Add Payment Method
           </button>
         </div>

@@ -5,6 +5,7 @@ import Favorite from "../../public/Images/Heart.svg";
 import { ProductData } from "@/components/product";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import cancel from "../../public/Images/cancel.svg";
 import {
   addToCart,
   incrementCartCount,
@@ -217,10 +218,10 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     <div className="flex flex-col gap-6 px-2">
       {Object.entries(cartData).map(([productKey, product]) => (
         <div
-          className="grid grid-cols-2 gap-4 sm:bg-[#F3E3E2] rounded-lg px-[40px] py-6"
+          className="h-[230PX] relative grid grid-cols-2 gap-4 sm:bg-[#F3E3E2] rounded-lg px-4 sm:px-[40px] py-6 border border-gray-200 mx-4 sm:mx-0"
           key={productKey}
         >
-          <div className="h-[150px] flex items-center justify-center overflow-hidden">
+          <div className="h-full flex items-center justify-center overflow-hidden">
             <Image
               src={product.product_image}
               alt="item1"
@@ -230,31 +231,31 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
             />
           </div>
 
-          <div className="flex flex-col gap-[5px]">
-            <h2 className="text-sm font-normal uppercase">{product.title}</h2>
+          <div className="flex items-start justify-center flex-col gap-[5px] h-full">
+            <h2 className="text-xs sm:text-sm font-normal uppercase max-w-[170px] sm:max-w-full">{product.title}</h2>
             <h1 className="font-bold text-sm my-1">
               ₦ {product.price.toLocaleString()}
             </h1>
 
-            <div className="flex sm:items-center justify-between flex-col sm:flex-row gap-6">
+            <div className="flex sm:items-center justify-between flex-col sm:flex-row gap-3 sm:gap-6">
               <div className="flex gap-1">
-                <h2 className="text-sm">Size: </h2>
-                <p className="text-sm"> {product.size}</p>
+                <h2 className="text-xs sm:text-sm">Size: </h2>
+                <p className="text-xs sm:text-sm"> {product.size}</p>
               </div>
               <div className="flex gap-1">
-                <h2 className="text-sm">Color: </h2>
-                <p className="text-sm"> {product.color}</p>
+                <h2 className="text-xs sm:text-sm">Color: </h2>
+                <p className="text-xs sm:text-sm"> {product.color}</p>
               </div>
             </div>
-            <div className="flex items-center justify-start gap-[12px] text-sm my-1">
-              <h2 className="text-sm">Qty:</h2>
+            <div className="flex items-center justify-start gap-[4px] sm:gap-[12px] text-xs sm:text-sm my-1">
+              <h2 className="text-xs sm:text-sm">Qty:</h2>
               <button
                 className="text-lg px-2 rounded-lg"
                 onClick={() => decrementQuantity(productKey)}
               >
                 -
               </button>
-              <h2>{product.quantity}</h2>
+              <h2 className="text-sm">{product.quantity}</h2>
               <button
                 className="text-lg px-2 rounded-lg"
                 onClick={() => incrementQuantity(productKey)}
@@ -262,7 +263,18 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
                 +
               </button>
             </div>
-            <div className="py-1 flex justify-between items-center">
+            <div className="absolute top-6 right-1 sm:right-3 rounded-full bg-red-500 p-[6px] block sm:hidden">
+              <Image
+                src={cancel}
+                width={10}
+                height={10}
+                alt=""
+                className="cursor-pointer "
+                onClick={() => handleDeleteFromCart(productKey)}
+              />
+            </div>
+
+            <div className="py-1 hidden sm:flex justify-between items-center">
               <div className="flex items-center gap-2 cursor-pointer">
                 <Image
                   src={Favorite}

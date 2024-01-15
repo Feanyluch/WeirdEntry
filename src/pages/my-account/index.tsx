@@ -51,7 +51,7 @@ const MyAccount: React.FC<HomeProps> & { title: string } = ({ products }) => {
             Account Details
           </h2>
           <div className="w-full h-[1px] bg-[#0C0C1E80] my-[20px]"></div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
               <label className="text-[#1B2E3C80] text-xs">First Name</label>
               <input
@@ -67,7 +67,7 @@ const MyAccount: React.FC<HomeProps> & { title: string } = ({ products }) => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4 my-[20px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-[20px]">
             <div className="flex flex-col">
               <label className="text-[#1B2E3C80] text-xs">Username</label>
               <input
@@ -91,7 +91,7 @@ const MyAccount: React.FC<HomeProps> & { title: string } = ({ products }) => {
             />
           </div>
           <div className="flex items-center justify-center mt-[40px]">
-            <button className="px-[80px] py-[17px] text-xs border border-[#0C0C1E] hover:bg-[#0C0C1E] hover:text-[#F3E3E2] transition-all rounded-lg">
+            <button className="px-8 sm:px-[80px] py-[17px] text-xs border border-[#1B2E3C] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition-all rounded-lg">
               Save Changes
             </button>
           </div>

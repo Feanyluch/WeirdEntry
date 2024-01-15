@@ -65,7 +65,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
   return (
     <div className="">
       <Breadcrumb products={products} />
-      <div className="flex items-center justify-center bg-[#fdf9f9] py-8 w-[1200px] mx-auto my-[3rem]">
+      <div className="flex items-center justify-center bg-[#fdf9f9] py-8 max-w-[1200px] mx-auto my-[3rem]">
         <div className="bg-white w-[500px] h-[580px] py-2 px-8">
           <h2 className="text-5xl text-center py-12 uppercase">Login</h2>
           <div className="my-2">
