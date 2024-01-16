@@ -105,12 +105,12 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
         <Breadcrumb products={products} />
         <div className="flex items-center justify-center flex-col">
           <Image src={cartempty} alt="emptycart" />
-          <h2 className="uppercase text-3xl my-4">
+          <h2 className="uppercase text-lg sm:text-3xl text-center my-4">
             YOUR CART IS CURRENTLY EMPTY
           </h2>
           <Link
             href="/shop"
-            className="w-[300px] border border-[#0C0C1E] text-center rounded-lg my-8 py-4 text-sm"
+            className="w-[200px] sm:w-[300px] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] border border-[#0C0C1E] text-center rounded-lg my-8 py-4 text-sm"
           >
             Return to shop
           </Link>
@@ -125,12 +125,12 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
         <Breadcrumb products={products} />
         <div className="flex items-center justify-center flex-col">
           <Image src={cartempty} alt="emptycart" />
-          <h2 className="uppercase text-3xl my-4">
+          <h2 className="uppercase text-lg sm:text-3xl text-center my-4">
             YOUR CART IS CURRENTLY EMPTY
           </h2>
           <Link
             href="/shop"
-            className="w-[300px] border border-[#0C0C1E] text-center rounded-lg my-8 py-4 text-sm"
+            className="w-[200px] sm:w-[300px] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] border border-[#0C0C1E] text-center rounded-lg my-8 py-4 text-sm"
           >
             Return to shop
           </Link>

@@ -24,6 +24,7 @@ import SignedinItem from "../SignedinItem";
 import SearchComponent from "../SearchComponent";
 
 import { ToastContainer, toast } from "react-toastify";
+import { Router, useRouter } from "next/router";
 
 const Navbar: React.FC = () => {
   const [cartCount, setCartCount] = useState(0);
@@ -38,6 +39,7 @@ const Navbar: React.FC = () => {
     (state: RootState) => state.cart.cartCount
   );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter()
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -116,6 +118,10 @@ const Navbar: React.FC = () => {
     };
   }, [isCartOpen, isDropdownOpen, isSearchOpen]);
 
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <nav className="bg-[#FFFFFF] text-[#1B2E3C] sticky top-0 bg-opacity-70 backdrop-blur-xl z-[999]">
       <div className="max-w-[1200px] mx-auto py-4 px-4">
@@ -130,7 +136,7 @@ const Navbar: React.FC = () => {
               <Image src={hamburger} alt="" onClick={toggleMenu} />
             </div>
             {isMenuOpen && (
-              <div className="fixed top-0 left-0 h-screen overflow-auto w-4/5 bg-[#1B2E3C] z-50 transform duration-300 ease-in-out py-6">
+              <div className="fixed top-0 left-0 h-screen overflow-auto w-4/5 bg-[#1B2E3C] z-50 transition-all transform duration-1000 ease-in-out py-6">
                 {/* Your navigation links can go here */}
                 <div className="flex items-center justify-between px-6 pb-4">
                   <div className="w-[100px] block sm:hidden">
@@ -147,12 +153,16 @@ const Navbar: React.FC = () => {
                   menu
                 </h2>
                 <div className="flex items-start justify-start flex-col text-[#F3E3E2] px-8 font-normal">
-                  <Link href="/shop" className="uppercase my-4">home</Link>
-                  <Link href="/shop" className="uppercase my-4">shop</Link>
-                  <Link href="/shop" className="uppercase my-4">search</Link>
+                  {/* <Link href="/shop" className="uppercase my-4">home</Link> */}
+                  <button onClick={() => { closeMenu(); router.push('/shop'); }} className="uppercase my-4">Shop</button>
+                  <button onClick={() => { closeMenu(); router.push('/wishlist'); }} className="uppercase my-4">wishlist</button>
+                  <button onClick={() => { closeMenu(); router.push('/profile'); }} className="uppercase my-4">profile</button>
+                  <button onClick={() => { closeMenu(); router.push('/about-us'); }} className="uppercase my-4">about us</button>
+                  {/* <button onClick={() => { closeMenu(); router.push('/shop'); }} className="uppercase my-4">Shop</button> */}
+                  {/* <Link href="/shop" className="uppercase my-4">search</Link>
                   <Link href="/shop" className="uppercase my-4">wishlist</Link>
                   <Link href="/shop" className="uppercase my-4">profile</Link>
-                  <Link href="/shop" className="uppercase my-4">about us</Link>
+                  <Link href="/shop" className="uppercase my-4">about us</Link> */}
                 </div>
                
               </div>
@@ -193,8 +203,8 @@ const Navbar: React.FC = () => {
                   <Image
                     src={cart}
                     alt="Logo"
-                    height={22}
-                    width={22}
+                    height={25}
+                    width={25}
                     className="h-[25px] w-[22px]"
                   />
                   <h2 className="absolute top-0 right-0 bg-[#1B2E3C] text-white rounded-[50%] p-1 flex items-center justify-center h-5 w-5 text-sm">

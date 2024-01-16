@@ -239,11 +239,11 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-[999px]">
-      <div className="bg-white p-8 rounded-lg w-[500px]">
+      <div className="bg-white p-8 rounded-lg w-[500px] mx-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold my-2 text-[#0C0C1E]">{title}</h2>
+          <h2 className="text-sm sm:text-lg font-bold my-2 text-[#0C0C1E]">{title}</h2>
           <div className="cursor-pointer" onClick={onClose}>
-            <Image src={cancel} alt="" height={20} width={20} />
+            <Image src={cancel} alt="" height={15} width={15} />
           </div>
         </div>
 
@@ -267,8 +267,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
                   <button
                     key={size}
                     onClick={() => handleSizeSelect(size)}
-                    className={`border border-gray-300 rounded-full p-2 text-sm ${
-                      selectedSize === size ? "bg-[#1B2E3C] text-white" : ""
+                    className={`border border-gray-300 rounded-full p-2 text-xs sm:text-sm hover:text-[#F3E3E2] hover:bg-[#1B2E3C] ${
+                      selectedSize === size ? "bg-[#1B2E3C] text-[#F3E3E2]" : ""
                     }`}
                   >
                     {size}
@@ -286,8 +286,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
                   <button
                     key={color}
                     onClick={() => handleColorSelect(color)}
-                    className={`border border-gray-300 rounded-full text-sm p-2 ${
-                      selectedColor === color ? "bg-[#1B2E3C] text-white" : ""
+                    className={`border border-gray-300 rounded-full text-xs sm:text-sm p-2 hover:text-[#F3E3E2] hover:bg-[#1B2E3C] ${
+                      selectedColor === color ? "bg-[#1B2E3C] text-[#F3E3E2]" : ""
                     }`}
                   >
                     {color}
@@ -302,10 +302,10 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           <button
             onClick={handleAddToCart}
             disabled={loading}
-            className={`px-4 py-2 rounded-md hover:bg-[#29465b] ${
+            className={`px-4 py-2 text-xs sm:text-sm rounded-md hover:bg-[#29465b] ${
               loading
                 ? "bg-gray-200 cursor-not-allowed"
-                : "bg-[#1B2E3C] text-white"
+                : "bg-[#1B2E3C] text-[#F3E3E2]"
             }`}
           >
             {loading ? "Adding..." : "Add to Cart"}

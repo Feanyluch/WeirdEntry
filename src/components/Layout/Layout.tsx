@@ -12,6 +12,7 @@ type LayoutProps = {
 
 
 import dynamic from 'next/dynamic';
+import MobileNav from './MobileNav';
 
 const DynamicNavbar = dynamic(() => import('./Navbar'), {
   ssr: false, // Disable server-side rendering for this component
@@ -25,6 +26,7 @@ const Layout = ({ children, title }: LayoutProps) => {
         <title>{title}</title>
       </Head>
       {children}
+      <MobileNav />
       <Footer />
     </div>
   );
