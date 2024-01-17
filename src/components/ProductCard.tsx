@@ -181,7 +181,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         </div>
 
         <div className="my-5">
-          <h2 className="capitalize max-h-[50px] sm:max-h-[50px] sm:h-[50px] text-base">
+          <h2 className="capitalize h-[50px] sm:max-h-[50px] sm:h-[50px] text-base">
             {product.title}
           </h2>
           {/* <div className="flex my-2">

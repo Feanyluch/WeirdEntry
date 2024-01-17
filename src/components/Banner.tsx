@@ -41,7 +41,7 @@ const Banner = () => {
   }, []);
 
   return (
-    <div className="relative h-[90vh]">
+    <div className="relative h-[90vh]" style={{ fontFamily: "'Nokora', sans-serif" }}>
       {bannerData.map((data, index) => (
         <div
           key={index}
@@ -65,12 +65,12 @@ const Banner = () => {
               } transition-transform duration-1000`}
               style={{ whiteSpace: "pre-line" }}
             >
-              <h1 className="text-4xl leading-[50px] sm:leading-[67px] mb-4">{data.text}</h1>
+              <h1 className="text-2xl sm:text-4xl leading-[50px] sm:leading-[67px] mb-4">{data.text}</h1>
               <p className="my-1 sm:my-4 text-sm">{data.paragraph}</p>
               <div className="flex items-center justify-center sm:items-start sm:justify-start mt-4 sm:mt-0">
                 <Link
                   href={data.link}
-                  className="bg-[#1B2E3C] text-sm text-white text-center my-4 py-[17px] transition-all rounded-lg w-[200px] sm:w-[300px] z-[9999px] hover:bg-[#F3E3E2] hover:text-[#1B2E3C] ease-in-out duration-300 delay-100 hover:-translate-y-1 uppercase"
+                  className="bg-[#1B2E3C] text-sm text-white text-center my-4 py-[17px] transition-all rounded-lg w-[200px] sm:w-[300px] z-[9] hover:bg-[#F3E3E2] hover:text-[#1B2E3C] ease-in-out duration-300 delay-100 hover:-translate-y-1 uppercase"
                 >
                   {data.buttonLabel}
                 </Link>

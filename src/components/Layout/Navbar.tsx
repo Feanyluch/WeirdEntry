@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
     (state: RootState) => state.cart.cartCount
   );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -132,7 +132,7 @@ const Navbar: React.FC = () => {
                 <Image src={weirdlogo} alt="logo" />
               </Link>
             </div>
-            <div className="block sm:hidden cursor-pointer">
+            <div className="sm:hidden cursor-pointer">
               <Image src={hamburger} alt="" onClick={toggleMenu} />
             </div>
             {isMenuOpen && (
@@ -154,36 +154,70 @@ const Navbar: React.FC = () => {
                 </h2>
                 <div className="flex items-start justify-start flex-col text-[#F3E3E2] px-8 font-normal">
                   {/* <Link href="/shop" className="uppercase my-4">home</Link> */}
-                  <button onClick={() => { closeMenu(); router.push('/shop'); }} className="uppercase my-4">Shop</button>
-                  <button onClick={() => { closeMenu(); router.push('/wishlist'); }} className="uppercase my-4">wishlist</button>
-                  <button onClick={() => { closeMenu(); router.push('/profile'); }} className="uppercase my-4">profile</button>
-                  <button onClick={() => { closeMenu(); router.push('/about-us'); }} className="uppercase my-4">about us</button>
+                  <button
+                    onClick={() => {
+                      closeMenu();
+                      router.push("/shop");
+                    }}
+                    className="uppercase my-4"
+                  >
+                    Shop
+                  </button>
+                  <button
+                    onClick={() => {
+                      closeMenu();
+                      router.push("/wishlist");
+                    }}
+                    className="uppercase my-4"
+                  >
+                    wishlist
+                  </button>
+                  <button
+                    onClick={() => {
+                      closeMenu();
+                      router.push("/profile");
+                    }}
+                    className="uppercase my-4"
+                  >
+                    profile
+                  </button>
+                  <button
+                    onClick={() => {
+                      closeMenu();
+                      router.push("/about-us");
+                    }}
+                    className="uppercase my-4"
+                  >
+                    about us
+                  </button>
                   {/* <button onClick={() => { closeMenu(); router.push('/shop'); }} className="uppercase my-4">Shop</button> */}
                   {/* <Link href="/shop" className="uppercase my-4">search</Link>
                   <Link href="/shop" className="uppercase my-4">wishlist</Link>
                   <Link href="/shop" className="uppercase my-4">profile</Link>
                   <Link href="/shop" className="uppercase my-4">about us</Link> */}
                 </div>
-               
               </div>
             )}
           </div>
-          <div className={`${isSearchOpen ? "hidden" : "block"} uppercase`}>
-            <ul className="hidden space-x-4 text-xl ml-8 sm:flex">
-              <Link href="/" className={"px-2 nav-link mx-2 text-[14px]"}>
-                Home
-              </Link>
-              <Link href="/shop" className={"px-2 nav-link mx-2 text-[14px]"}>
-                Shop
-              </Link>
-              <Link
-                href="/about-us"
-                className={"px-2 nav-link mx-2 text-[14px]"}
-              >
-                About US
-              </Link>
-            </ul>
+          <div className="hidden sm:block">
+            <div className={`${isSearchOpen ? "hidden" : "block"} uppercase`}>
+              <ul className="hidden space-x-4 text-xl ml-8 sm:flex">
+                <Link href="/" className={"px-2 nav-link mx-2 text-[14px]"}>
+                  Home
+                </Link>
+                <Link href="/shop" className={"px-2 nav-link mx-2 text-[14px]"}>
+                  Shop
+                </Link>
+                <Link
+                  href="/about-us"
+                  className={"px-2 nav-link mx-2 text-[14px]"}
+                >
+                  About US
+                </Link>
+              </ul>
+            </div>
           </div>
+
           <div className="w-[100px] block sm:hidden">
             <Link href="/">
               <Image src={weirdlogo} alt="logo" />
@@ -197,7 +231,7 @@ const Navbar: React.FC = () => {
             <div className="relative">
               <Link href="/cart">
                 <div
-                  className="p-2 relative cursor-pointer"
+                  className="ml-[-25px] sm:ml-0 p-2 relative cursor-pointer"
                   //  onClick={toggleCart}
                 >
                   <Image

@@ -67,13 +67,13 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ products }) => {
   return (
     <div className="bg-[#1B2E3C] h-[200px] sm:h-[240px] flex items-end justify-center text-[#F3E3E2] py-[20px]">
       <div className="flex gap-[72px] justify-center items-center flex-col">
-        <h2 className="uppercase text-3xl sm:text-4xl text-center">
+        <h2 className="uppercase text-2xl sm:text-4xl text-center">
           {selectedProduct
             ? formatPageName(selectedProduct.title)
             : formatPageName(pathnames[pathnames.length - 1])}
         </h2>
-        <div className="flex items-center justify-center text-xs uppercase">
-          <Link href="/">Home</Link>
+        <div className="flex items-center justify-center text-xs uppercase px-1">
+          <Link href="/" className="text-xs">Home</Link>
           {pathnames.map((name, index) => {
             const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
             const isLast = index === pathnames.length - 1;

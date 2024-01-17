@@ -277,7 +277,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
   return (
     <div>
       <Breadcrumb products={products} />
-      <div className="maxx-w-[1100px] mx-auto text-[#1B2E3C] py-8">
+      <div className="maxx-w-[1100px] mx-auto text-[#1B2E3C] py-8" style={{ fontFamily: "'Nokora', sans-serif" }}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <div className="">
             <div className="grid grid-cols-3 gap-4 mx-4 sm:mx-0">
@@ -365,7 +365,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                   )}
                 </div>
               </div>
-              <div className="flex justify-start items-center gap-4">
+              <div className="flex justify-start items-center gap-4 sm:w-[70%]">
                 {/* <button className="h-[50px] w-[40px] border border-[#0C0C1E] rounded-lg ">
                   {cartItems.find((item) => item.id === selectedProduct?.id)
                     ?.quantity || 0}
@@ -374,11 +374,11 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                 <button
                   onClick={handleAddToCart}
                   disabled={isAddToCartDisabled}
-                  className="px-[80px] h-[50px] uppercase border border-[#0C0C1E] rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300"
+                  className="px-8 sm:px-[80px] w-[80%] h-[50px] uppercase border border-[#0C0C1E] rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300"
                 >
                   Add to cart
                 </button>
-                <button className="w-[40px] h-[50px] border border-[#0C0C1E] flex items-center justify-center rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300">
+                <button className="w-[20%] h-[50px] border border-[#0C0C1E] flex items-center justify-center rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300">
                   <Image
                     src="https://res.cloudinary.com/duxy2eomx/image/upload/v1697712759/Heart_kvhvmp.svg"
                     height={20}
@@ -391,7 +391,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                 Estimated delivery time:{" "}
                 <span className="font-bold">xyz minutes or date</span>
               </p>
-              <button className="flex items-center justify-center gap-4 my-6 rounded-lg bg-[#1B2E3C] h-[50px] w-[400px] text-[#F3E3E2]">
+              <button className="flex items-center justify-center gap-4 my-6 rounded-lg bg-[#1B2E3C] h-[50px] w-full sm:w-[400px] text-[#F3E3E2]">
                 <Image src={bag} alt="" />
                 Buy Now
               </button>
@@ -413,7 +413,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
           </div>
         </div>
       </div>
-      <div className="max-w-[1200px] mx-4 my-10">
+      <div className="max-w-[1200px] mx-4 sm:mx-auto my-10">
         <h2 className="py-4 text-center uppercase text-xl my-4">
           Related Products
         </h2>

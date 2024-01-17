@@ -40,7 +40,7 @@ const Home: React.FC<HomeProps> & { title: string } = ({ products }) => {
       {/* <Image src={banner1} alt="banner" /> */}
 
       <div className="py-8 sm:py-16">
-        <h2 className="text-center text-xl tracking-[3.6px]">
+        <h2 className="text-center text-xl tracking-[3.6px] mx-4">
           What makes us different
         </h2>
         <div className="max-w-[1200px] mx-auto px-4">
@@ -106,7 +106,7 @@ const Home: React.FC<HomeProps> & { title: string } = ({ products }) => {
         <h2 className="my-2">+</h2>
         <h2 className="text-4xl font-normal">TRENDING</h2>
       </div>
-      <div className="max-w-[1200px] mx-4 my-4 sm:my-[50px]">
+      <div className="max-w-[1200px] mx-4 sm:mx-auto my-4 sm:my-[50px]">
         <RelatedProducts products={products} />
       </div>
       <div className="max-w-[1200px] mx-auto my-10">

@@ -76,7 +76,7 @@ const SearchComponent = React.forwardRef<HTMLDivElement | null, SearchProps>(
       <div
         className={`relative ${
           isSearchOpen ? "w-[33rem]" : "w-10"
-        } transition-all duration-500`}
+        } transition-all duration-500`} style={{ fontFamily: "'Nokora', sans-serif" }}
       >
         {isSearchOpen ? (
           <div className="relative">
