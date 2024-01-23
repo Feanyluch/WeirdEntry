@@ -52,18 +52,15 @@ const Navbar: React.FC = () => {
 
         if (user) {
           const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-          const productEndpoint = "/cart";
+          const productEndpoint = "cart";
 
           const apiUrl = `${apiBaseUrl}${productEndpoint}`;
-          const response = await axios.get(
-            apiUrl,
-            {
-              headers: {
-                Authorization: `Bearer ${user.token}`, // Replace with your actual access token
-                Accept: "application/json",
-              },
-            }
-          );
+          const response = await axios.get(apiUrl, {
+            headers: {
+              Authorization: `Bearer ${user.token}`, // Replace with your actual access token
+              Accept: "application/json",
+            },
+          });
           const itemsObject = response.data.items || {};
           cartCountFromAPI = Object.keys(itemsObject).length;
         } else {
@@ -311,7 +308,7 @@ const Navbar: React.FC = () => {
 export const getServerSideProps: GetServerSideProps = async () => {
   // Fetch data from the API using Axios
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-  const productEndpoint = "/product";
+  const productEndpoint = "product";
 
   const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 

@@ -14,8 +14,12 @@ const LogoutButton = () => {
   const handleLogout = async () => {
     try {
       // Make a POST request to the logout endpoint
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+      const productEndpoint = "logout";
+
+      const apiUrl = `${apiBaseUrl}${productEndpoint}`;
       const response = await fetch(
-        "https://weird-entry-lara-production.up.railway.app/api/logout",
+        apiUrl,
         {
           method: "POST",
           headers: {

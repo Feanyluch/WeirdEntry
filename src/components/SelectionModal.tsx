@@ -111,7 +111,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
         try {
           setLoading(true);
           const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-          const productEndpoint = "/cart";
+          const productEndpoint = "cart";
 
           const apiUrl = `${apiBaseUrl}${productEndpoint}`;
           const response = await axios.get(

@@ -44,7 +44,10 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ products }) => {
 
   useEffect(() => {
     const fetchProductData = async () => {
-      const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product/${id}`;
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+      const productEndpoint = "product/";
+
+      const apiUrl = `${apiBaseUrl}${productEndpoint}${id}`;
 
       try {
         const response = await axios.get(apiUrl);
@@ -73,7 +76,9 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ products }) => {
             : formatPageName(pathnames[pathnames.length - 1])}
         </h2>
         <div className="flex items-center justify-center text-xs uppercase px-1">
-          <Link href="/" className="text-xs">Home</Link>
+          <Link href="/" className="text-xs">
+            Home
+          </Link>
           {pathnames.map((name, index) => {
             const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
             const isLast = index === pathnames.length - 1;
@@ -104,7 +109,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ products }) => {
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-  const productEndpoint = "/product";
+  const productEndpoint = "product";
 
   const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 

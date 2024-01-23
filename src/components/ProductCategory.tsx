@@ -26,7 +26,7 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
     const fetchCategories = async () => {
       try {
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-        const productEndpoint = "/category";
+        const productEndpoint = "category";
 
         const apiUrl = `${apiBaseUrl}${productEndpoint}`;
         const response = await axios.get<(string | Category)[]>(

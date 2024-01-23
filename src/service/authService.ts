@@ -12,7 +12,7 @@ export const signup = async (userData: {
 }) => {
   try {
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-    const productEndpoint = "/register";
+    const productEndpoint = "register";
 
     const apiUrl = `${apiBaseUrl}${productEndpoint}`;
     const response = await axios.post(apiUrl, userData);
@@ -45,7 +45,7 @@ export const login = async (credentials: {
 }) => {
   try {
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-    const productEndpoint = "/login";
+    const productEndpoint = "login";
 
     const apiUrl = `${apiBaseUrl}${productEndpoint}`;
     const response = await axios.post(apiUrl, credentials);

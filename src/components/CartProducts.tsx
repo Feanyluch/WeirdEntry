@@ -96,7 +96,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     token: any
   ) => {
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-    const productEndpoint = "/cart";
+    const productEndpoint = "cart";
 
     const apiUrl = `${apiBaseUrl}${productEndpoint}`;
     const product = cartData[productKey];
@@ -167,7 +167,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
 
   const removeProductFromCart = async (productKey: any, token: any) => {
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-    const productEndpoint = "/cart";
+    const productEndpoint = "cart";
 
     const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 

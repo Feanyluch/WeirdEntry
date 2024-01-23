@@ -30,7 +30,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
       setLoading(true);
       // Make an API request to get the full details of the selected product
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-      const productEndpoint = "/product";
+      const productEndpoint = "product";
 
       const apiUrl = `${apiBaseUrl}${productEndpoint}/${product.id}`;
       const response = await axios.get(apiUrl);

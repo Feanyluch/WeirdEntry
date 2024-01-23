@@ -55,18 +55,15 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
         if (user?.token) {
           // Fetch cart data from the database endpoint
           const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-          const productEndpoint = "/cart";
+          const productEndpoint = "cart";
 
           const apiUrl = `${apiBaseUrl}${productEndpoint}`;
-          const response = await axios.get(
-            apiUrl,
-            {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-                Accept: "application/json",
-              },
-            }
-          );
+          const response = await axios.get(apiUrl, {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              Accept: "application/json",
+            },
+          });
 
           if (response.status === 400) {
             // If response status is 400, show the empty cart content
@@ -240,7 +237,7 @@ Cart.title = "Cart - Weird Entry";
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-  const productEndpoint = "/product";
+  const productEndpoint = "product";
 
   const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 

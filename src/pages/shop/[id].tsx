@@ -130,8 +130,12 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
         if (user && user.token) {
           // Fetch the user's cart after updating the local cart
           try {
+            const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+            const productEndpoint = "cart";
+
+            const apiUrl = `${apiBaseUrl}${productEndpoint}`;
             const response = await axios.get(
-              "https://weird-entry-lara-production.up.railway.app/api/cart",
+              apiUrl,
               {
                 headers: {
                   Authorization: `Bearer ${user.token}`,
@@ -243,8 +247,12 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
   >(undefined);
 
   useEffect(() => {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+    const productEndpoint = "product";
+
+    const apiUrl = `${apiBaseUrl}${productEndpoint}/${id}`;
     const fetchProductData = async () => {
-      const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product/${id}`;
+      apiUrl;
 
       try {
         const response = await axios.get(apiUrl);
@@ -277,7 +285,10 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
   return (
     <div>
       <Breadcrumb products={products} />
-      <div className="max-w-[1100px] mx-auto text-[#1B2E3C] py-8" style={{ fontFamily: "'Nokora', sans-serif" }}>
+      <div
+        className="max-w-[1100px] mx-auto text-[#1B2E3C] py-8"
+        style={{ fontFamily: "'Nokora', sans-serif" }}
+      >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <div className="">
             <div className="grid grid-cols-3 gap-4 mx-4 sm:mx-0">
@@ -427,7 +438,7 @@ ProductDescription.title = "Product Description";
 
 export const getStaticProps: GetStaticProps = async () => {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-  const productEndpoint = "/product";
+  const productEndpoint = "product";
 
   const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 

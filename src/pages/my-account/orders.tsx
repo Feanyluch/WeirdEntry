@@ -70,7 +70,7 @@ MyAccount.title = "Orders - Weird Entry";
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-  const productEndpoint = "/product";
+  const productEndpoint = "product";
 
   const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 

@@ -319,7 +319,7 @@ Index.title = "Sign up - WeirdEntry";
 
 export const getStaticProps: GetStaticProps = async () => {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-  const productEndpoint = "/product";
+  const productEndpoint = "product";
 
   const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 

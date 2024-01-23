@@ -35,7 +35,7 @@ export const fetchUserCart = createAsyncThunk(
     const token = (getState() as RootState).auth.user.token;
 
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-    const productEndpoint = "/cart";
+    const productEndpoint = "cart";
 
     const apiUrl = `${apiBaseUrl}${productEndpoint}`;
     const response = await fetch(

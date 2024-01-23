@@ -69,8 +69,12 @@ const Index: React.FC<HomeProps> & { title: string } = ({
     ) {
       try {
         setLoading(true);
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+        const productEndpoint = "category";
+
+        const apiUrl = `${apiBaseUrl}${productEndpoint}/${category.id}`;
         const response = await axios.get(
-          `https://weird-entry-lara-production.up.railway.app/api/category/${category.id}`,
+          apiUrl,
           {
             headers: {
               Authorization: "Bearer Token",
@@ -120,15 +124,16 @@ const Index: React.FC<HomeProps> & { title: string } = ({
       if (updatedSelectedCategories.length > 0) {
         // There are other selected categories, update products based on the remaining selected category
         const remainingCategoryId = updatedSelectedCategories[0].id; // Assuming you want to use the first remaining category
-        const response = await axios.get(
-          `https://weird-entry-lara-production.up.railway.app/api/category/${remainingCategoryId}`,
-          {
-            headers: {
-              Authorization: "Bearer Token",
-              Accept: "application/json",
-            },
-          }
-        );
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+        const productEndpoint = "category";
+
+        const apiUrl = `${apiBaseUrl}${productEndpoint}/${remainingCategoryId}`;
+        const response = await axios.get(apiUrl, {
+          headers: {
+            Authorization: "Bearer Token",
+            Accept: "application/json",
+          },
+        });
 
         const productData = response.data;
 
@@ -148,15 +153,16 @@ const Index: React.FC<HomeProps> & { title: string } = ({
       } else {
         setLoading(true);
         // No other selected categories, fetch and set the initial list of products
-        const response = await axios.get(
-          "https://weird-entry-lara-production.up.railway.app/api/product",
-          {
-            headers: {
-              Authorization: "Bearer Token",
-              Accept: "application/json",
-            },
-          }
-        );
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+        const productEndpoint = "product";
+
+        const apiUrl = `${apiBaseUrl}${productEndpoint}`;
+        const response = await axios.get(apiUrl, {
+          headers: {
+            Authorization: "Bearer Token",
+            Accept: "application/json",
+          },
+        });
 
         const productData = response.data;
         console.log({ productData });
@@ -252,15 +258,16 @@ const Index: React.FC<HomeProps> & { title: string } = ({
       setLoading(true);
 
       // Fetch and set the initial list of products
-      const response = await axios.get(
-        "https://weird-entry-lara-production.up.railway.app/api/product",
-        {
-          headers: {
-            Authorization: "Bearer Token",
-            Accept: "application/json",
-          },
-        }
-      );
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+      const productEndpoint = "product";
+
+      const apiUrl = `${apiBaseUrl}${productEndpoint}`;
+      const response = await axios.get(apiUrl, {
+        headers: {
+          Authorization: "Bearer Token",
+          Accept: "application/json",
+        },
+      });
 
       const productData = response.data;
       console.log({ productData });
@@ -381,7 +388,7 @@ Index.title = "Shop Products- WeirdEntry";
 
 export const getStaticProps: GetStaticProps = async () => {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-  const productEndpoint = "/product";
+  const productEndpoint = "product";
 
   const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 

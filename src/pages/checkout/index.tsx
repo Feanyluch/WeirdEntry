@@ -106,7 +106,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
         if (user?.token) {
           // Fetch cart data from the database endpoint
           const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-          const productEndpoint = "/cart";
+          const productEndpoint = "cart";
 
           const apiUrl = `${apiBaseUrl}${productEndpoint}`;
           const response = await axios.get(apiUrl, {
@@ -189,7 +189,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
     };
 
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-    const productEndpoint = "/create";
+    const productEndpoint = "order/create";
 
     const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 
@@ -483,7 +483,7 @@ Checkout.title = "Check out - Weird Entry";
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-  const productEndpoint = "/product";
+  const productEndpoint = "product";
 
   const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 

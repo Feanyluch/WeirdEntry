@@ -37,7 +37,7 @@ const CartItems: React.FC = () => {
         if (user?.token) {
           // Fetch cart data from the database endpoint
           const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-          const productEndpoint = "/cart";
+          const productEndpoint = "cart";
 
           const apiUrl = `${apiBaseUrl}${productEndpoint}`;
           const response = await axios.get(apiUrl, {

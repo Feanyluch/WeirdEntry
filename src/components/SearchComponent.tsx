@@ -34,7 +34,7 @@ const SearchComponent = React.forwardRef<HTMLDivElement | null, SearchProps>(
       if (searchValue.trim() !== "") {
         try {
           const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-          const productEndpoint = "/product?s=";
+          const productEndpoint = "product?s=";
 
           const apiUrl = `${apiBaseUrl}${productEndpoint}${searchValue}`;
           // const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product?s=${searchValue}`;

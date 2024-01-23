@@ -51,8 +51,10 @@ export const sendItemsToEndpoint = async (
 
     const { token } = user;
 
-    const apiUrl =
-      "https://weird-entry-lara-production.up.railway.app/api/cart/create";
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+    const productEndpoint = "cart/create";
+
+    const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 
     const requestData = {
       user_email: `${user.user.email}`,

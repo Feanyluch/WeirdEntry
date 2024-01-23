@@ -39,7 +39,7 @@ const MyAccount: React.FC<HomeProps> & { title: string } = ({ products }) => {
 MyAccount.title = "Payment Method - Weird Entry";
 export const getStaticProps: GetStaticProps = async () => {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-  const productEndpoint = "/product";
+  const productEndpoint = "product";
 
   const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 
