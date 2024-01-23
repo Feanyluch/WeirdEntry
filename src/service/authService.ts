@@ -11,10 +11,11 @@ export const signup = async (userData: {
   password_confirmation: string;
 }) => {
   try {
-    const response = await axios.post(
-      "https://weird-entry-lara-production.up.railway.app/api/register",
-      userData
-    );
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+    const productEndpoint = "/register";
+
+    const apiUrl = `${apiBaseUrl}${productEndpoint}`;
+    const response = await axios.post(apiUrl, userData);
     // Check if the message is present in the response
     if (response.data.message) {
       // Use react-toastify to show a notification
@@ -43,10 +44,11 @@ export const login = async (credentials: {
   password: string;
 }) => {
   try {
-    const response = await axios.post(
-      "https://weird-entry-lara-production.up.railway.app/api/login",
-      credentials
-    );
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+    const productEndpoint = "/login";
+
+    const apiUrl = `${apiBaseUrl}${productEndpoint}`;
+    const response = await axios.post(apiUrl, credentials);
     // Check if the message is present in the response
     if (response.data.message) {
       // Use react-toastify to show a notification

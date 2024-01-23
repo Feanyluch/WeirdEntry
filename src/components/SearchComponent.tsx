@@ -33,7 +33,11 @@ const SearchComponent = React.forwardRef<HTMLDivElement | null, SearchProps>(
     const handleSearch = async () => {
       if (searchValue.trim() !== "") {
         try {
-          const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product?s=${searchValue}`;
+          const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+          const productEndpoint = "/product?s=";
+
+          const apiUrl = `${apiBaseUrl}${productEndpoint}${searchValue}`;
+          // const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product?s=${searchValue}`;
 
           const response = await fetch(apiUrl, {
             method: "GET",
@@ -76,7 +80,8 @@ const SearchComponent = React.forwardRef<HTMLDivElement | null, SearchProps>(
       <div
         className={`relative ${
           isSearchOpen ? "w-[33rem]" : "w-10"
-        } transition-all duration-500`} style={{ fontFamily: "'Nokora', sans-serif" }}
+        } transition-all duration-500`}
+        style={{ fontFamily: "'Nokora', sans-serif" }}
       >
         {isSearchOpen ? (
           <div className="relative">

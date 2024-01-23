@@ -36,15 +36,16 @@ const CartItems: React.FC = () => {
       try {
         if (user?.token) {
           // Fetch cart data from the database endpoint
-          const response = await axios.get(
-            "https://weird-entry-lara-production.up.railway.app/api/cart",
-            {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-                Accept: "application/json",
-              },
-            }
-          );
+          const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+          const productEndpoint = "/cart";
+
+          const apiUrl = `${apiBaseUrl}${productEndpoint}`;
+          const response = await axios.get(apiUrl, {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              Accept: "application/json",
+            },
+          });
 
           const itemsArray: CartItem[] = Object.values(response.data.items);
           console.log({ itemsArray });

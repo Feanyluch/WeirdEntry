@@ -34,8 +34,12 @@ export const fetchUserCart = createAsyncThunk(
   async (_, { getState }) => {
     const token = (getState() as RootState).auth.user.token;
 
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+    const productEndpoint = "/cart";
+
+    const apiUrl = `${apiBaseUrl}${productEndpoint}`;
     const response = await fetch(
-      "https://weird-entry-lara-production.up.railway.app/api/cart",
+      apiUrl,
       {
         method: "GET",
         headers: {

@@ -4,24 +4,9 @@ import { ProductData } from "./product";
 import { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addToCart,
-  incrementCartCount,
-  removeFromCart,
-  incrementItem,
-  decrementItem,
-  addSelectedProduct,
-  CartItem,
-  fetchUserCart,
-} from "@/redux/slices/cartSlice";
 import store, { RootState } from "@/redux/store";
 import pinkFavorite from "../../public/Images/pink-favorite.svg";
 import axios from "axios";
-import {
-  clearCartLocalStorage,
-  saveCartToLocalStorage,
-  sendItemsToEndpoint,
-} from "@/utils/localStorageHelper";
 interface ProductCardProps {
   product: ProductData;
   onAddToCart: (product: ProductData) => void;
@@ -44,9 +29,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
     try {
       setLoading(true);
       // Make an API request to get the full details of the selected product
-      const response = await axios.get(
-        `https://weird-entry-lara-production.up.railway.app/api/product/${product.id}`
-      );
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+      const productEndpoint = "/product";
+
+      const apiUrl = `${apiBaseUrl}${productEndpoint}/${product.id}`;
+      const response = await axios.get(apiUrl);
 
       const detailedProduct = response.data;
 
@@ -170,13 +157,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
             }}
             className="rounded-lg transform hover:scale-110 transition-transform duration-300"
           ></div>
-          <button className="absolute top-3 right-3 z-[9999px] bg-pink-50 p-1 rounded-lg transition ease-in-out duration-300">
-            <Image
-              src={pinkFavorite}
-              height={20}
-              width={20}
-              alt="heart"
-            />
+          <button className="sm:hidden absolute top-3 right-3 z-[9999px] bg-pink-50 p-1 rounded-lg transition ease-in-out duration-300">
+            <Image src={pinkFavorite} height={20} width={20} alt="heart" />
           </button>
         </div>
 

@@ -277,7 +277,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
   return (
     <div>
       <Breadcrumb products={products} />
-      <div className="maxx-w-[1100px] mx-auto text-[#1B2E3C] py-8" style={{ fontFamily: "'Nokora', sans-serif" }}>
+      <div className="max-w-[1100px] mx-auto text-[#1B2E3C] py-8" style={{ fontFamily: "'Nokora', sans-serif" }}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <div className="">
             <div className="grid grid-cols-3 gap-4 mx-4 sm:mx-0">
@@ -426,8 +426,10 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
 ProductDescription.title = "Product Description";
 
 export const getStaticProps: GetStaticProps = async () => {
-  // Fetch data from the API using Axios
-  const apiUrl = `https://weird-entry-lara-production.up.railway.app/api/product`;
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+  const productEndpoint = "/product";
+
+  const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 
   try {
     const response = await axios.get(apiUrl);

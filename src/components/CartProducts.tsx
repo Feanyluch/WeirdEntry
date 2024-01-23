@@ -95,8 +95,10 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     newQuantity: number,
     token: any
   ) => {
-    const apiUrl =
-      "https://weird-entry-lara-production.up.railway.app/api/cart";
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+    const productEndpoint = "/cart";
+
+    const apiUrl = `${apiBaseUrl}${productEndpoint}`;
     const product = cartData[productKey];
     console.log({ product });
 
@@ -164,8 +166,10 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
   };
 
   const removeProductFromCart = async (productKey: any, token: any) => {
-    const apiUrl =
-      "https://weird-entry-lara-production.up.railway.app/api/cart";
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+    const productEndpoint = "/cart";
+
+    const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 
     const product = cartData[productKey];
 
@@ -232,7 +236,9 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
           </div>
 
           <div className="flex items-start justify-center flex-col gap-[5px] h-full">
-            <h2 className="text-xs sm:text-sm font-normal uppercase max-w-[170px] sm:max-w-full">{product.title}</h2>
+            <h2 className="text-xs sm:text-sm font-normal uppercase max-w-[170px] sm:max-w-full">
+              {product.title}
+            </h2>
             <h1 className="font-bold text-sm my-1">
               ₦ {product.price.toLocaleString()}
             </h1>

@@ -35,7 +35,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) => {
 
   return (
     <div className="w-full overflow-auto sm:overflow-hidden">
-      <div className="w-[1100px] sm:mx-auto grid grid-cols-4 gap-4 p-4">
+      <div className="w-[1100px] sm:mx-auto grid grid-cols-4 gap-8 p-4">
         {relatedProducts.map((product, index) => (
           <ProductCard key={index} product={product} 
           onAddToCart={handleAddToCart} />

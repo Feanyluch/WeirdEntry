@@ -139,8 +139,10 @@ Home.title = "Weird Entry - A brand collection for clothing";
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl =
-    "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+  const productEndpoint = "/product";
+
+  const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 
   try {
     const response = await axios.get(apiUrl);

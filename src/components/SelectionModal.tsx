@@ -63,7 +63,6 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
       const existingProductKey = `${product.id}_${selectedSize}_${selectedColor}`;
       const existingProduct = cartItems[existingProductKey as any];
 
-
       console.log({ existingProductKey });
       console.log({ existingProduct });
 
@@ -111,8 +110,12 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
         // Fetch the user's cart after updating the local cart
         try {
           setLoading(true);
+          const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+          const productEndpoint = "/cart";
+
+          const apiUrl = `${apiBaseUrl}${productEndpoint}`;
           const response = await axios.get(
-            "https://weird-entry-lara-production.up.railway.app/api/cart",
+            apiUrl,
             {
               headers: {
                 Authorization: `Bearer ${user.token}`,
@@ -241,7 +244,9 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-[999px]">
       <div className="bg-white p-8 rounded-lg w-[500px] mx-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm sm:text-lg font-bold my-2 text-[#0C0C1E]">{title}</h2>
+          <h2 className="text-sm sm:text-lg font-bold my-2 text-[#0C0C1E]">
+            {title}
+          </h2>
           <div className="cursor-pointer" onClick={onClose}>
             <Image src={cancel} alt="" height={15} width={15} />
           </div>
@@ -287,7 +292,9 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
                     key={color}
                     onClick={() => handleColorSelect(color)}
                     className={`border border-gray-300 rounded-full text-xs sm:text-sm p-2 hover:text-[#F3E3E2] hover:bg-[#1B2E3C] ${
-                      selectedColor === color ? "bg-[#1B2E3C] text-[#F3E3E2]" : ""
+                      selectedColor === color
+                        ? "bg-[#1B2E3C] text-[#F3E3E2]"
+                        : ""
                     }`}
                   >
                     {color}

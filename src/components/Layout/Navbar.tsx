@@ -51,8 +51,12 @@ const Navbar: React.FC = () => {
         let cartCountFromAPI = 0;
 
         if (user) {
+          const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+          const productEndpoint = "/cart";
+
+          const apiUrl = `${apiBaseUrl}${productEndpoint}`;
           const response = await axios.get(
-            "https://weird-entry-lara-production.up.railway.app/api/cart",
+            apiUrl,
             {
               headers: {
                 Authorization: `Bearer ${user.token}`, // Replace with your actual access token
@@ -306,8 +310,10 @@ const Navbar: React.FC = () => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl =
-    "https://weird-entry-lara-production.up.railway.app/api/product";
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+  const productEndpoint = "/product";
+
+  const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 
   try {
     const response = await axios.get(apiUrl);

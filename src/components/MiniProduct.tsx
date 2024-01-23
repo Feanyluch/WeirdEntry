@@ -78,8 +78,10 @@ const MiniProducts: React.FC<MiniProductProps> = ({ product }) => {
     newQuantity: number,
     token: any
   ) => {
-    const apiUrl =
-      "https://weird-entry-lara-production.up.railway.app/api/cart";
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+    const productEndpoint = "/cart";
+
+    const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 
     try {
       // Fetch the user's current cart

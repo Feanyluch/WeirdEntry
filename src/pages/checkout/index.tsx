@@ -105,15 +105,16 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
       try {
         if (user?.token) {
           // Fetch cart data from the database endpoint
-          const response = await axios.get(
-            "https://weird-entry-lara-production.up.railway.app/api/cart",
-            {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-                Accept: "application/json",
-              },
-            }
-          );
+          const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+          const productEndpoint = "/cart";
+
+          const apiUrl = `${apiBaseUrl}${productEndpoint}`;
+          const response = await axios.get(apiUrl, {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              Accept: "application/json",
+            },
+          });
 
           // Get the cart ID from the response
           const cartId = response.data.id;
@@ -187,18 +188,19 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
       payment_ref: payment_reference,
     };
 
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+    const productEndpoint = "/create";
+
+    const apiUrl = `${apiBaseUrl}${productEndpoint}`;
+
     // Make a POST request to your order create endpoint
     axios
-      .post(
-        "https://weird-entry-lara-production.up.railway.app/api/order/create",
-        orderDetails,
-        {
-          headers: {
-            Authorization: "Bearer Token", // Replace with the actual token
-            Accept: "application/json",
-          },
-        }
-      )
+      .post(apiUrl, orderDetails, {
+        headers: {
+          Authorization: "Bearer Token", // Replace with the actual token
+          Accept: "application/json",
+        },
+      })
       .then((response) => {
         console.log("Order placed successfully:", response.data);
         // Redirect or perform any necessary actions
@@ -447,30 +449,28 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
               </div>
             </div>
             <div className="flex sm:hidden items-center justify-start gap-4 my-2 mx-4">
-                <RoundCheckbox
-                  label="By clicking place order, I agree to the Terms and Conditions"
-                  checked={checkboxStates.terms}
-                  onChange={() => handleCheckboxChange("terms")}
-                />
-                {/* <p className="text-xs">
+              <RoundCheckbox
+                label="By clicking place order, I agree to the Terms and Conditions"
+                checked={checkboxStates.terms}
+                onChange={() => handleCheckboxChange("terms")}
+              />
+              {/* <p className="text-xs">
                 By clicking place order, I agree to the Terms and Conditions
               </p> */}
-              </div>
-              <div className="flex sm:hidden items-center justify-center">
-                {/* <button className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
+            </div>
+            <div className="flex sm:hidden items-center justify-center">
+              {/* <button className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
                 Place Order
               </button> */}
-                <div className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
-                  <PaystackButton
-                    {...paystackConfig}
-                    text="Place Order"
-                    onSuccess={(response: any) =>
-                      handlePaymentSuccess(response)
-                    }
-                    onClose={() => console.log("Payment closed")}
-                  />
-                </div>
+              <div className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
+                <PaystackButton
+                  {...paystackConfig}
+                  text="Place Order"
+                  onSuccess={(response: any) => handlePaymentSuccess(response)}
+                  onClose={() => console.log("Payment closed")}
+                />
               </div>
+            </div>
           </div>
         </div>
       </div>
@@ -482,8 +482,10 @@ Checkout.title = "Check out - Weird Entry";
 
 export const getStaticProps: GetStaticProps = async () => {
   // Fetch data from the API using Axios
-  const apiUrl =
-    "https://weird-entry-lara-production.up.railway.app/api/product"; // Replace with your actual API endpoint
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+  const productEndpoint = "/product";
+
+  const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 
   try {
     const response = await axios.get(apiUrl);
