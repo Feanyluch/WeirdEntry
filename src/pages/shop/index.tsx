@@ -11,6 +11,7 @@ import {
   setSearchResults,
 } from "@/redux/slices/searchSlice";
 import { useRouter } from "next/router";
+import ProductFilterSidebar from "@/components/ProductFilterSidebar";
 
 interface HomeProps {
   initialProducts?: ProductData[] | undefined; // Adjusted prop type
@@ -34,15 +35,19 @@ const Index: React.FC<HomeProps> & { title: string } = ({
   const [currentNextPageUrl, setCurrentNextPageUrl] = useState(nextPageUrl);
   const [currentPrevPageUrl, setCurrentPrevPageUrl] = useState(prevPageUrl);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([10000, 70000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    10000, 70000,
+  ]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
     // Fetch products if it's not a search query
-    if (router.query.s) {0
+    if (router.query.s) {
+      0;
       dispatch(setSearchResults(searchResults));
       setSearchQuery(router.query.s as string);
     } else {
@@ -60,7 +65,6 @@ const Index: React.FC<HomeProps> & { title: string } = ({
     console.log("Initial Prev Page URL:", prevPageUrl);
     console.log("Initial Next Page URL:", nextPageUrl);
   }, [initialProducts, prevPageUrl, nextPageUrl]);
-
 
   const handleFilterClick = () => {
     // Assuming you want to filter based on selected categories and price range
@@ -122,20 +126,17 @@ const Index: React.FC<HomeProps> & { title: string } = ({
         const productEndpoint = "category";
 
         const apiUrl = `${apiBaseUrl}${productEndpoint}/${category.id}`;
-        const response = await axios.get(
-          apiUrl,
-          {
-            headers: {
-              Authorization: "Bearer Token",
-              Accept: "application/json",
-            },
-            params: {
-              // Include the price range in the query parameters
-              min_price: priceRange[0],
-              max_price: priceRange[1],
-            },
-          }
-        );
+        const response = await axios.get(apiUrl, {
+          headers: {
+            Authorization: "Bearer Token",
+            Accept: "application/json",
+          },
+          params: {
+            // Include the price range in the query parameters
+            min_price: priceRange[0],
+            max_price: priceRange[1],
+          },
+        });
 
         const productData = response.data;
 
@@ -334,11 +335,12 @@ const Index: React.FC<HomeProps> & { title: string } = ({
       });
 
       const productData = response.data;
-      console.log({ productData });
+      console.log("Search ProductData", productData.data);
       router.push("/shop");
 
       // Update the component state with the initial list of products
       setProducts(productData.data);
+      dispatch(setSearchResults(productData.data));
       setCurrentPrevPageUrl(productData.prev_page_url || null);
       setCurrentNextPageUrl(productData.next_page_url || null);
 
@@ -349,9 +351,9 @@ const Index: React.FC<HomeProps> & { title: string } = ({
       setLoading(false);
 
       // Log the values for debugging
-      console.log("Next Page URL:", productData.next_page_url);
-      console.log("Previous Page URL:", productData.prev_page_url);
-      console.log("Product Data:", productData.products);
+      // console.log("Next Page URL:", productData.next_page_url);
+      // console.log("Previous Page URL:", productData.prev_page_url);
+      // console.log("Product Data:", productData.products);
     } catch (error: any) {
       console.error("Error canceling search:", error.message);
     }
@@ -363,10 +365,15 @@ const Index: React.FC<HomeProps> & { title: string } = ({
       <div className="max-w-[1200px] mx-auto flex gap-8 my-12 px-4">
         <div className="w-1/4 flex-shrink-0 hidden sm:block">
           <div className="sticky top-28 ">
-            <ProductCategory onSelectCategory={handleSelectCategory} onFilterClick={handleFilterClick} />
+            <ProductCategory
+              onSelectCategory={handleSelectCategory}
+              onFilterClick={handleFilterClick}
+            />
           </div>
         </div>
+        
         <div className="w-full sm:w-3/4 overflow-y-auto px-4 product-container">
+        <button className="sm:hidden flex gap-2 my-2 border border-[#1B2E3C] px-4 rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2]" onClick={() => setIsSidebarOpen(true)}>Filter </button>
           <div className=" my-2">
             {searchQuery && (
               <div className="flex items-center justify-start gap-2">
@@ -405,6 +412,15 @@ const Index: React.FC<HomeProps> & { title: string } = ({
             )}
           </div>
 
+          {isSidebarOpen && (
+            <ProductFilterSidebar
+              onSelectCategory={handleSelectCategory}
+              onClose={() => setIsSidebarOpen(false)}
+              onFilterClick={handleFilterClick}
+            />
+          )}
+
+          
           {loading ? (
             <div className="loading-container">
               <div className="loading-content">
@@ -455,7 +471,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const productEndpoint = "product";
 
   const apiUrl = `${apiBaseUrl}${productEndpoint}`;
-  console.log({apiUrl})
+  console.log({ apiUrl });
 
   try {
     const response = await axios.get(apiUrl);

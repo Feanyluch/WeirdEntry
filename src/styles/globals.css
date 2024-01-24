@@ -72,6 +72,12 @@ body {
   cursor: grab;
 }
 
+@media (max-width: 640px) {
+  .slider-thumb {
+    background-color: #F3E3E2; /* Your desired background color for mobile */
+  }
+}
+
 /* Custom styling when the handle is active (being dragged) */
 .slider-thumb:active {
   cursor: grabbing;
