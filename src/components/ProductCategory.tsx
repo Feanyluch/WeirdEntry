@@ -9,12 +9,14 @@ interface Category {
 
 interface ProductCategoryProps {
   onSelectCategory: (category: Category) => void;
+  onFilterClick: () => void;
 }
 
 const ProductCategory: React.FC<ProductCategoryProps> = ({
   onSelectCategory,
+  onFilterClick
 }) => {
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([10000, 70000]);
   const [categories, setCategories] = useState<(string | Category)[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<
     string | Category | null
@@ -29,6 +31,7 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
         const productEndpoint = "category";
 
         const apiUrl = `${apiBaseUrl}${productEndpoint}`;
+        console.log({apiUrl})
         const response = await axios.get<(string | Category)[]>(
           apiUrl,
           {
@@ -46,7 +49,7 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
     };
 
     fetchCategories();
-  }, [API_URL]);
+  }, []);
 
   const handlePriceRangeChange = (newRange: [number, number]) => {
     setPriceRange(newRange);
@@ -57,11 +60,11 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
     setSelectedCategory(category);
   };
 
-  const handleCancelCategory = () => {
-    const emptyCategory: Category = { id: 0, title: "" };
-    onSelectCategory(emptyCategory);
-    setSelectedCategory(null);
-  };
+  // const handleCancelCategory = () => {
+  //   const emptyCategory: Category = { id: 0, title: "" };
+  //   onSelectCategory(emptyCategory);
+  //   setSelectedCategory(null);
+  // };
 
   const displayedCategories = categories.slice(0, 6);
 
@@ -101,9 +104,9 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
       <div className="my-4">
         <h2 className="uppercase text-lg font-normal my-2">Price Range</h2>
         <Slider
-          min={0}
-          max={5000}
-          step={10}
+          min={10000}
+          max={70000}
+          step={1000}
           value={priceRange}
           onChange={handlePriceRangeChange}
           className="bg-[#1B2E3C] h-[1px] my-4 w-full flex items-center justify-center"
@@ -115,7 +118,7 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
         </div>
 
         <div className="flex items-center justify-center my-4">
-          <button className="uppercase py-2 text-sm px-8 w-[220px] border border-[#1B2E3C] rounded-lg hover:bg-[#1B2E3C] hover:text-white">
+          <button className="uppercase py-2 text-sm px-8 w-[220px] border border-[#1B2E3C] rounded-lg hover:bg-[#1B2E3C] hover:text-white" onClick={onFilterClick}>
             Filter
           </button>
         </div>

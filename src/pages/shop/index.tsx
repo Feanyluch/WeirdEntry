@@ -34,6 +34,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
   const [currentNextPageUrl, setCurrentNextPageUrl] = useState(nextPageUrl);
   const [currentPrevPageUrl, setCurrentPrevPageUrl] = useState(prevPageUrl);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([10000, 70000]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const router = useRouter();
@@ -41,7 +42,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
 
   useEffect(() => {
     // Fetch products if it's not a search query
-    if (router.query.s) {
+    if (router.query.s) {0
       dispatch(setSearchResults(searchResults));
       setSearchQuery(router.query.s as string);
     } else {
@@ -59,6 +60,54 @@ const Index: React.FC<HomeProps> & { title: string } = ({
     console.log("Initial Prev Page URL:", prevPageUrl);
     console.log("Initial Next Page URL:", nextPageUrl);
   }, [initialProducts, prevPageUrl, nextPageUrl]);
+
+
+  const handleFilterClick = () => {
+    // Assuming you want to filter based on selected categories and price range
+    // You can customize this logic based on your specific requirements
+    // Here, I'm assuming you have an API endpoint that supports both category and price range filters
+    const selectedCategoryIds = selectedCategories
+      .filter((category) => typeof category !== "string")
+      .map((category) => category.id);
+
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+    const productEndpoint = "product";
+
+    const apiUrl = `${apiBaseUrl}${productEndpoint}`;
+    axios
+      .get(apiUrl, {
+        headers: {
+          Authorization: "Bearer Token",
+          Accept: "application/json",
+        },
+        params: {
+          // Include selected category IDs and price range in the query parameters
+          category_ids: selectedCategoryIds.join(","),
+          min_price: priceRange[0],
+          max_price: priceRange[1],
+        },
+      })
+      .then((response) => {
+        const productData = response.data;
+
+        // Update the component state with the new data
+        // (Assuming your API response structure is similar to previous examples)
+        setProducts(productData.products);
+        setCurrentPrevPageUrl(productData.prev_page_url);
+        setCurrentNextPageUrl(productData.next_page_url);
+
+        // Reset the current page to 1
+        setCurrentPage(1);
+
+        // Log the values for debugging
+        console.log("Next Page URL:", productData.next_page_url);
+        console.log("Previous Page URL:", productData.prev_page_url);
+        console.log("Product Data:", productData.products);
+      })
+      .catch((error) => {
+        console.error("Error fetching data from API:", error.message);
+      });
+  };
 
   const handleSelectCategory = async (category: Category) => {
     // Check if the category is not already in the list
@@ -79,6 +128,11 @@ const Index: React.FC<HomeProps> & { title: string } = ({
             headers: {
               Authorization: "Bearer Token",
               Accept: "application/json",
+            },
+            params: {
+              // Include the price range in the query parameters
+              min_price: priceRange[0],
+              max_price: priceRange[1],
             },
           }
         );
@@ -133,6 +187,11 @@ const Index: React.FC<HomeProps> & { title: string } = ({
             Authorization: "Bearer Token",
             Accept: "application/json",
           },
+          params: {
+            // Include the price range in the query parameters
+            min_price: priceRange[0],
+            max_price: priceRange[1],
+          },
         });
 
         const productData = response.data;
@@ -161,6 +220,11 @@ const Index: React.FC<HomeProps> & { title: string } = ({
           headers: {
             Authorization: "Bearer Token",
             Accept: "application/json",
+          },
+          params: {
+            // Include the price range in the query parameters
+            min_price: priceRange[0],
+            max_price: priceRange[1],
           },
         });
 
@@ -299,7 +363,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
       <div className="max-w-[1200px] mx-auto flex gap-8 my-12 px-4">
         <div className="w-1/4 flex-shrink-0 hidden sm:block">
           <div className="sticky top-28 ">
-            <ProductCategory onSelectCategory={handleSelectCategory} />
+            <ProductCategory onSelectCategory={handleSelectCategory} onFilterClick={handleFilterClick} />
           </div>
         </div>
         <div className="w-full sm:w-3/4 overflow-y-auto px-4 product-container">
@@ -391,6 +455,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const productEndpoint = "product";
 
   const apiUrl = `${apiBaseUrl}${productEndpoint}`;
+  console.log({apiUrl})
 
   try {
     const response = await axios.get(apiUrl);

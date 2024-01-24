@@ -11,6 +11,12 @@ export const useLogin = () => {
    //
    const [address, setAddress] = useState("");
    const [addressError, setAddressError] = useState("")
+   //
+  const [city, setCity] = useState("");
+  const [cityError, setCityError] = useState("");
+  //
+  const [state, setState] = useState("");
+  const [stateError, setStateError] = useState("");
   //
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -27,6 +33,8 @@ export const useLogin = () => {
 
   const [isFirstNameFocused, setIsFirstNameFocused] = useState(false);
   const [isLastNameFocused, setIsLastNameFocused] = useState(false);
+  const [isCityFocused, setIsCityFocused] = useState(false);
+  const [isStateFocused, setIsStateFocused] = useState(false);
   const [isAddressFocused, setIsAddressFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false)
@@ -39,7 +47,7 @@ export const useLogin = () => {
 
   const handleFirstNameBlur = () => {
     if (!first_name) {
-      setFirstNameError("First Name is required")
+      setFirstNameError("First Name field is required")
     } else{
       setFirstNameError('')
     }
@@ -49,7 +57,7 @@ export const useLogin = () => {
   const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFirstName(e.target.value)
     if (!first_name) {
-      setFirstNameError("First Name is required")
+      setFirstNameError("First Name field is required")
     } else{
       setFirstNameError('')
     }
@@ -57,7 +65,7 @@ export const useLogin = () => {
 
   const handleLastNameBlur = () => {
     if (!last_name) {
-      setLastNameError("Last Name is required")
+      setLastNameError("Last Name field is required")
     } else{
       setLastNameError('')
     }
@@ -67,15 +75,53 @@ export const useLogin = () => {
   const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLastName(e.target.value)
     if (!last_name) {
-      setLastNameError("Last Name is required")
+      setLastNameError("Last Name field is required")
     } else{
       setLastNameError('')
     }
   }
 
+  const handleCityBlur = () => {
+    if (!city) {
+      setCityError("City field is required")
+    } else{
+      setCityError('')
+    }
+
+    setIsCityFocused(false);
+  }
+
+  const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCity(e.target.value)
+    if (!city) {
+      setCityError("City field is required")
+    } else{
+      setCityError('')
+    }
+  }
+
+  const handleStateBlur = () => {
+    if (!state) {
+      setStateError("State field is required")
+    } else{
+      setStateError('')
+    }
+
+    setIsStateFocused(false)
+  }
+
+  const handleStateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState(e.target.value)
+    if (!state) {
+      setStateError("State field is required")
+    } else{
+      setStateError('')
+    }
+  }
+
   const handleAddressBlur = () => {
     if (!address) {
-      setAddressError("Address is required")
+      setAddressError("Address field is required")
     } else{
       setAddressError('')
     }
@@ -86,7 +132,7 @@ export const useLogin = () => {
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(e.target.value)
     if (!first_name) {
-      setAddressError("Address is required")
+      setAddressError("Address field is required")
     } else{
       setAddressError('')
     }
@@ -220,6 +266,14 @@ export const useLogin = () => {
     setLastName,
     first_name,
     setFirstName,
+    city,
+    setCity,
+    cityError,
+    setCityError,
+    state,
+    setState,
+    stateError,
+    setStateError,
     address,
     setAddress,
     addressError,
@@ -249,6 +303,10 @@ export const useLogin = () => {
     setIsFirstNameFocused,
     isLastNameFocused,
     setIsLastNameFocused,
+    isCityFocused,
+    setIsCityFocused,
+    isStateFocused,
+    setIsStateFocused,
     isAddressFocused,
     setIsAddressFocused,
     isPasswordFocused,
@@ -258,6 +316,10 @@ export const useLogin = () => {
     isEmailFocused,
     setIsEmailFocused,
     //
+    handleCityChange,
+    handleCityBlur,
+    handleStateBlur,
+    handleStateChange,
     handleAddressBlur,
     handleAddressChange,
     handleLastNameBlur,

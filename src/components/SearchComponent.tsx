@@ -1,5 +1,5 @@
 // SearchComponent.tsx
-import React, { useState, ChangeEvent, KeyboardEvent } from "react";
+import React, { useState, ChangeEvent, KeyboardEvent, useRef, useEffect } from "react";
 import Image from "next/image";
 import Close from "../../public/Images/cancel.svg";
 import Search from "../../public/Images/Search.svg";
@@ -11,18 +11,27 @@ import { useRouter } from "next/router";
 
 interface SearchProps {
   onSearchToggle: () => void;
+  isSearchOpen: boolean; 
 }
 
 const SearchComponent = React.forwardRef<HTMLDivElement | null, SearchProps>(
-  ({ onSearchToggle }, ref) => {
+  ({ onSearchToggle, isSearchOpen }, ref) => {
     const dispatch = useDispatch();
     const router = useRouter();
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [localIsSearchOpen, setLocalIsSearchOpen] = useState(false)
     const [searchValue, setSearchValue] = useState("");
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      setLocalIsSearchOpen(isSearchOpen); // Set the initial state based on the prop
+      if (isSearchOpen && inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, [isSearchOpen]);
 
     const toggleSearch = () => {
       console.log("Toggling search");
-      setIsSearchOpen(!isSearchOpen);
+      setLocalIsSearchOpen(!localIsSearchOpen);
       onSearchToggle();
     };
 
@@ -79,13 +88,14 @@ const SearchComponent = React.forwardRef<HTMLDivElement | null, SearchProps>(
     return (
       <div
         className={`relative ${
-          isSearchOpen ? "w-[33rem]" : "w-10"
+          isSearchOpen ? "w-[90vw] sm:w-[33rem]" : "w-10"
         } transition-all duration-500`}
         style={{ fontFamily: "'Nokora', sans-serif" }}
       >
         {isSearchOpen ? (
           <div className="relative">
             <input
+              ref={inputRef}
               type="text"
               className="bg-[#fff] text-sm py-2 px-4 rounded-lg border-2 border-[#1B2E3C] focus:outline-none w-full h-[70%]"
               placeholder="Search"
@@ -102,7 +112,7 @@ const SearchComponent = React.forwardRef<HTMLDivElement | null, SearchProps>(
           </div>
         ) : (
           <div
-            className=" p-2 cursor-pointer flex justify-center items-center rounded-full border-transparent focus:outline-none focus:border-white"
+            className=" hidden p-2 cursor-pointer sm:flex justify-center items-center rounded-full border-transparent focus:outline-none focus:border-white"
             onClick={toggleSearch}
           >
             <Image

@@ -227,7 +227,7 @@ const Navbar: React.FC = () => {
 
           <div className="flex items-center space-x-4">
             <div className="hidden sm:block">
-              <SearchComponent onSearchToggle={toggleSearch} ref={searchRef} />
+              <SearchComponent onSearchToggle={toggleSearch} ref={searchRef} isSearchOpen={isSearchOpen} />
             </div>
             <div className="relative">
               <Link href="/cart">

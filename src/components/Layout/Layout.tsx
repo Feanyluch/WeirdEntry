@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
@@ -13,20 +13,33 @@ type LayoutProps = {
 
 import dynamic from 'next/dynamic';
 import MobileNav from './MobileNav';
+import MobileSearch from './MobileSearch';
 
 const DynamicNavbar = dynamic(() => import('./Navbar'), {
   ssr: false, // Disable server-side rendering for this component
 });
 
+
 const Layout = ({ children, title }: LayoutProps) => {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const openSearch = () => {
+    console.log("clicked")
+    setIsSearchOpen(true);
+  };
+
+  const closeSearch = () => {
+    setIsSearchOpen(false);
+  };
   return (
     <div>
       <DynamicNavbar />
+      <MobileSearch isSearchOpen={isSearchOpen} onClose={closeSearch} />
       <Head>
         <title>{title}</title>
       </Head>
       {children}
-      <MobileNav />
+      <MobileNav onSearchClick={openSearch} />
       <Footer />
     </div>
   );

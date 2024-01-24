@@ -7,7 +7,7 @@ import RoundCheckbox from "@/components/Checkbox";
 import Link from "next/link";
 import Image from "next/image";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/slices/authSlice";
 
 import { useLogin } from "@/hook/useLogin";
@@ -16,6 +16,7 @@ import toright from "../../../public/Images/To-Right.svg";
 import { login } from "@/service/authService";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { RootState } from "@/redux/store";
 
 interface HomeProps {
   products: ProductData[];
@@ -49,14 +50,15 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
   };
 
   const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
 
   const handleLogin = async () => {
     try {
-      const user = await login({ email, password });
-      dispatch(setUser(user));
+      const user = await login(cartItems, router, dispatch, { email, password });
+      // dispatch(setUser(user));
 
       // Navigate back by one step in the browser's history
-      router.back();
+      // router.back();
     } catch (error) {
       // Handle login error
     }

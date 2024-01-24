@@ -30,6 +30,14 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
     firstNameError,
     email,
     setEmail,
+    city,
+    setCity,
+    cityError,
+    setCityError,
+    state,
+    stateError,
+    setState,
+    setStateError,
     address,
     setAddress,
     addressError,
@@ -43,6 +51,10 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
     showPassword,
     //
 
+    isStateFocused,
+    isCityFocused,
+    setIsCityFocused,
+    setIsStateFocused,
     isFirstNameFocused,
     setIsFirstNameFocused,
     isAddressFocused,
@@ -64,6 +76,10 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
     isEmailFocused,
     setIsEmailFocused,
     //
+    handleCityBlur,
+    handleCityChange,
+    handleStateBlur,
+    handleStateChange,
     handleAddressBlur,
     handleAddressChange,
     handleEmailBlur,
@@ -97,11 +113,15 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
         first_name,
         last_name,
         address,
+        city,
+        state,
         password_confirmation,
       });
       setFirstName("");
       setLastName("");
       setAddress("");
+      setState("");
+      setCity("")
       setEmail("");
       setPassword("");
       setConfirmPassword("");
@@ -190,6 +210,52 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                 </span>
               )}
             </div>
+            <div className="">
+              <div className="py-2">
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  value={city}
+                  placeholder="Delivery City"
+                  className={`h-[60px] w-full px-4 bg-[#f3f4f5] focus:outline-none focus:border-[#1B2E3C] focus:border-2 rounded-lg ${
+                    isCityFocused ? "bg-white" : "bg-[#f3f4f5]"
+                  }`}
+                  onFocus={() => setIsCityFocused(true)}
+                  onChange={handleCityChange}
+                  onBlur={handleCityBlur}
+                />
+              </div>
+
+              {cityError && (
+                <span className="text-[#1B2E3C] text-sm py-1">
+                  {cityError}
+                </span>
+              )}
+            </div>
+            <div className="">
+              <div className="py-2">
+                <input
+                  type="text"
+                  id="state"
+                  name="state"
+                  value={state}
+                  placeholder="Delivery State"
+                  className={`h-[60px] w-full px-4 bg-[#f3f4f5] focus:outline-none focus:border-[#1B2E3C] focus:border-2 rounded-lg ${
+                    isStateFocused ? "bg-white" : "bg-[#f3f4f5]"
+                  }`}
+                  onFocus={() => setIsStateFocused(true)}
+                  onChange={handleStateChange}
+                  onBlur={handleStateBlur}
+                />
+              </div>
+
+              {stateError && (
+                <span className="text-[#1B2E3C] text-sm py-1">
+                  {stateError}
+                </span>
+              )}
+            </div>            
             <div className="">
               <div className="py-2">
                 <input
