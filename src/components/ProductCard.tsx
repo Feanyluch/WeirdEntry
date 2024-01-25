@@ -163,7 +163,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         </div>
 
         <div className="my-5">
-          <h2 className="capitalize h-[50px] sm:max-h-[50px] sm:h-[50px] text-base">
+          <h2 className="capitalize h-[50px] sm:max-h-[50px] sm:h-[50px] text-[14px] sm:text-base">
             {product.title}
           </h2>
           {/* <div className="flex my-2">
@@ -186,9 +186,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
               />
             ))}
           </div> */}
-          <h2 className="text-lg my-4 font-bold">
-            ₦ {product.price.toLocaleString()}
-          </h2>
+          {product.sales_price ? (
+            <div className="flex items-center justify-start gap-2 sm:gap-4 my-4">
+              <span className="text-sm sm:text-lg font-bold text-[#1B2E3C]">
+                ₦ {product.sales_price.toLocaleString()}
+              </span>
+              <span className="text-[12px] text-gray-500 line-through mr-2">
+                ₦ {product.price.toLocaleString()}
+              </span>
+            </div>
+          ) : (
+            <h2 className="text-sm sm:text-lg font-bold my-4">
+              ₦ {product.price.toLocaleString()}
+            </h2>
+          )}
         </div>
       </Link>
       <div className="flex gap-4 w-full">

@@ -15,6 +15,7 @@ import { ProductData } from "./product";
 
 import Image from "next/image";
 import cancel from "../../public/Images/cancel.svg";
+import AddNotification from "./AddNotification";
 
 interface SizeSelectionModalProps {
   sizes: string[];
@@ -38,6 +39,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
 
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -220,6 +222,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
     } catch (error) {
       console.error("Error handling add to cart:", error);
     }
+    setShowNotification(true);
   };
 
   const handleSizeSelect = (size: string) => {
@@ -228,6 +231,10 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
 
   const handleColorSelect = (color: string) => {
     setSelectedColor(color);
+  };
+
+  const closeNotification = () => {
+    setShowNotification(false);
   };
 
   //   const handleAddToCart = () => {
@@ -308,7 +315,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
         <div className="mt-4 flex justify-end">
           <button
             onClick={handleAddToCart}
-            disabled={loading}
+            disabled={!selectedSize || !selectedColor || loading}
             className={`px-4 py-2 text-xs sm:text-sm rounded-md hover:bg-[#29465b] ${
               loading
                 ? "bg-gray-200 cursor-not-allowed"
@@ -318,6 +325,12 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
             {loading ? "Adding..." : "Add to Cart"}
           </button>
         </div>
+        {showNotification && (
+          <AddNotification
+            message={`Product added to the cart`}
+            onClose={closeNotification}
+          />
+        )}
       </div>
     </div>
   );

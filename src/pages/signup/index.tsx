@@ -14,6 +14,8 @@ import { setUser } from "@/redux/slices/authSlice";
 import { useLogin } from "@/hook/useLogin";
 
 import toright from "../../../public/Images/To-Right.svg";
+import eyeIcon from "../../../public/Images/eyeIcon.svg";
+import eyeCloseIcon from "../../../public/Images/eyeCloseIcon.svg";
 import { signup } from "@/service/authService";
 
 interface HomeProps {
@@ -305,7 +307,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                         showPassword ? "text-[#1B2E3C]" : "text-green-600"
                       }`}
                     >
-                      <Image src={toright} alt="eye" />
+                      {showPassword ? <Image src={eyeCloseIcon} alt="eye" /> : <Image src={eyeIcon} alt="eye" /> }
                     </div>
                   </div>
                 </div>
@@ -343,7 +345,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                           : "text-green-600"
                       }`}
                     >
-                      <Image src={toright} alt="eye" />
+                      {showConfirmPassword ? <Image src={eyeCloseIcon} alt="eye" /> : <Image src={eyeIcon} alt="eye" /> }
                     </div>
                   </div>
                 </div>

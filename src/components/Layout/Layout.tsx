@@ -19,6 +19,10 @@ const DynamicNavbar = dynamic(() => import('./Navbar'), {
   ssr: false, // Disable server-side rendering for this component
 });
 
+const DynamicMobileNavbar = dynamic(() => import('./MobileNav'), {
+  ssr: false, // Disable server-side rendering for this component
+});
+
 
 const Layout = ({ children, title }: LayoutProps) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -39,7 +43,7 @@ const Layout = ({ children, title }: LayoutProps) => {
         <title>{title}</title>
       </Head>
       {children}
-      <MobileNav onSearchClick={openSearch} />
+      <DynamicMobileNavbar onSearchClick={openSearch} />
       <Footer />
     </div>
   );

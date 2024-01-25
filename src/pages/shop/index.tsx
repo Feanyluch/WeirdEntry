@@ -362,7 +362,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
   return (
     <div>
       <Breadcrumb products={products} />
-      <div className="max-w-[1200px] mx-auto flex gap-8 my-12 px-4">
+      <div className="max-w-[1200px] mx-auto flex gap-8 mb-12 mt-4 px-4">
         <div className="w-1/4 flex-shrink-0 hidden sm:block">
           <div className="sticky top-28 ">
             <ProductCategory
@@ -373,7 +373,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
         </div>
         
         <div className="w-full sm:w-3/4 overflow-y-auto px-4 product-container">
-        <button className="sm:hidden flex gap-2 my-2 border border-[#1B2E3C] px-4 rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2]" onClick={() => setIsSidebarOpen(true)}>Filter </button>
+        <button className="sm:hidden flex gap-2 my-6 border border-[#1B2E3C] px-4 rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2]" onClick={() => setIsSidebarOpen(true)}>Filter :- </button>
           <div className=" my-2">
             {searchQuery && (
               <div className="flex items-center justify-start gap-2">

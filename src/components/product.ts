@@ -1,4 +1,5 @@
 export interface ProductData {
+  sales_price?: number;
   page?: number;
   id: number;
   title: string;
