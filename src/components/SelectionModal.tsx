@@ -246,7 +246,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-[999px]">
-      <div className="my-8 bg-white p-8 rounded-lg w-[500px] mx-4 h-full overflow-auto">
+      <div className="bg-white p-8 rounded-lg w-[500px] mx-4 h-fit overflow-auto">
         <div className="flex items-center justify-between">
           <h2 className="text-sm sm:text-lg font-bold my-2 text-[#0C0C1E]">
             {title}
@@ -256,8 +256,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center justify-start">
-          <div className="grid grid-cols-2 gap-2 my-8 h-full">
+        <div className="flex items-start justify-center">
+          <div className="grid grid-cols-2 gap-4 sm:gap-0 my-8">
             <div className="rounded-lg h-full flex items-center justify-center overflow-hidden">
               <Image
                 src={product.product_image}
