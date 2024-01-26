@@ -1,5 +1,5 @@
 import Breadcrumb from "@/components/BreadCrumb";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import { ProductData } from "@/components/product";
@@ -8,7 +8,7 @@ import RoundCheckbox from "@/components/Checkbox";
 import Link from "next/link";
 import Image from "next/image";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/slices/authSlice";
 
 import { useLogin } from "@/hook/useLogin";
@@ -17,6 +17,8 @@ import toright from "../../../public/Images/To-Right.svg";
 import eyeIcon from "../../../public/Images/eyeIcon.svg";
 import eyeCloseIcon from "../../../public/Images/eyeCloseIcon.svg";
 import { signup } from "@/service/authService";
+import { RootState } from "@/redux/store";
+import { useRouter } from "next/router";
 
 interface HomeProps {
   products: ProductData[];
@@ -99,6 +101,8 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
     handleShowConfirmPasswordClick,
   } = useLogin();
   const [isChecked, setIsChecked] = useState(false);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const router = useRouter();
 
   const handleCheckboxChange = (newCheckedState: boolean) => {
     console.log(newCheckedState);
@@ -107,9 +111,26 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
 
   const dispatch = useDispatch();
 
+  // Check if the user is logged in
+  useEffect(() => {
+    // Check if the code is running on the client-side
+    if (typeof window !== 'undefined') {
+      // Check if the user is logged in
+      if (user) {
+        // If the user is logged in, redirect to another page (e.g., home page)
+        router.replace('/'); // Replace with the path you want to redirect to
+      }
+    }
+  }, [user, router]);
+
+  // If the user is logged in, return null or any loading indicator while the redirection is happening
+  if (user) {
+    return null;
+  }
+
   const handleSignup = async () => {
     try {
-      const user = await signup({
+      const user = await signup(router, {
         email,
         password,
         first_name,

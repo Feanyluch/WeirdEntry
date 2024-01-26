@@ -176,7 +176,7 @@ const Navbar: React.FC = () => {
                   <button
                     onClick={() => {
                       closeMenu();
-                      router.push("/profile");
+                      router.push("/my-account");
                     }}
                     className="uppercase my-4"
                   >
@@ -260,6 +260,7 @@ const Navbar: React.FC = () => {
               </div>
             )} */}
 
+            <Link href="/wishlist">
             <div className="p-2 relative cursor-pointer hidden sm:block">
               <Image
                 src={Heart}
@@ -272,6 +273,7 @@ const Navbar: React.FC = () => {
                 0
               </h2>
             </div>
+            </Link>
             <div className="hidden sm:block">
               {user ? (
                 // If user is logged in, display image with user's first name

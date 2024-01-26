@@ -116,15 +116,12 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           const productEndpoint = "cart";
 
           const apiUrl = `${apiBaseUrl}${productEndpoint}`;
-          const response = await axios.get(
-            apiUrl,
-            {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-                Accept: "application/json",
-              },
-            }
-          );
+          const response = await axios.get(apiUrl, {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              Accept: "application/json",
+            },
+          });
 
           if (response.status === 200) {
             const userCart = response.data.items;
@@ -249,7 +246,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-[999px]">
-      <div className="bg-white p-8 rounded-lg w-[500px] mx-4">
+      <div className="my-8 bg-white p-8 rounded-lg w-[500px] mx-4 h-full overflow-auto">
         <div className="flex items-center justify-between">
           <h2 className="text-sm sm:text-lg font-bold my-2 text-[#0C0C1E]">
             {title}
@@ -259,54 +256,58 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           </div>
         </div>
 
-        <div className="flex items-start justify-start gap-6 my-8">
-          <div className="rounded-lg h-full flex items-center justify-center overflow-hidden">
-            <Image
-              src={product.product_image}
-              alt="item1"
-              width={150}
-              height={50}
-              className="object-cover transform hover:scale-110 transition-transform duration-300"
-            />
-          </div>
-          <div className="flex flex-col gap-4 h-full py-1">
-            <div className="py-2">
-              <h2 className="text-sm mb-2 text-[#0C0C1E] font-light">
-                Select a size
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => handleSizeSelect(size)}
-                    className={`border border-gray-300 rounded-full p-2 text-xs sm:text-sm hover:text-[#F3E3E2] hover:bg-[#1B2E3C] ${
-                      selectedSize === size ? "bg-[#1B2E3C] text-[#F3E3E2]" : ""
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
+        <div className="flex items-center justify-start">
+          <div className="grid grid-cols-2 gap-2 my-8 h-full">
+            <div className="rounded-lg h-full flex items-center justify-center overflow-hidden">
+              <Image
+                src={product.product_image}
+                alt="item1"
+                width={150}
+                height={50}
+                className="object-cover h-full transform hover:scale-110 transition-transform duration-300"
+              />
             </div>
+            <div className="flex flex-col gap-4 h-full py-1">
+              <div className="py-2">
+                <h2 className="text-sm mb-2 text-[#0C0C1E] font-light">
+                  Select a size
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {sizes.map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => handleSizeSelect(size)}
+                      className={`border border-gray-300 rounded-full p-2 text-xs sm:text-sm hover:text-[#F3E3E2] hover:bg-[#1B2E3C] ${
+                        selectedSize === size
+                          ? "bg-[#1B2E3C] text-[#F3E3E2]"
+                          : ""
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-            <div className="py-2">
-              <h2 className="text-sm mb-2 text-[#0C0C1E] font-light">
-                Select a color
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {colors.map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => handleColorSelect(color)}
-                    className={`border border-gray-300 rounded-full text-xs sm:text-sm p-2 hover:text-[#F3E3E2] hover:bg-[#1B2E3C] ${
-                      selectedColor === color
-                        ? "bg-[#1B2E3C] text-[#F3E3E2]"
-                        : ""
-                    }`}
-                  >
-                    {color}
-                  </button>
-                ))}
+              <div className="py-2">
+                <h2 className="text-sm mb-2 text-[#0C0C1E] font-light">
+                  Select a color
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {colors.map((color) => (
+                    <button
+                      key={color}
+                      onClick={() => handleColorSelect(color)}
+                      className={`border border-gray-300 rounded-full text-xs sm:text-sm p-2 hover:text-[#F3E3E2] hover:bg-[#1B2E3C] ${
+                        selectedColor === color
+                          ? "bg-[#1B2E3C] text-[#F3E3E2]"
+                          : ""
+                      }`}
+                    >
+                      {color}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

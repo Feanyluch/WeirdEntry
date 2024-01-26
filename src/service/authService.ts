@@ -6,7 +6,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 
-export const signup = async (userData: {
+export const signup = async (router: any, userData: {
   first_name: string;
   last_name: string;
   email: string;
@@ -26,6 +26,7 @@ export const signup = async (userData: {
     if (response.data.message) {
       // Use react-toastify to show a notification
       toast.info(response.data.info, { autoClose: 3000 }); // Auto-close after 5 seconds
+      router.push("/email-verification")
     }
     return response.data;
   } catch (error: any) {

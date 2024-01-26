@@ -1,5 +1,5 @@
 import Breadcrumb from "@/components/BreadCrumb";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { ProductData } from "@/components/product";
 import { GetStaticProps } from "next";
@@ -43,16 +43,31 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
     handleShowPasswordClick,
   } = useLogin();
   const [isChecked, setIsChecked] = useState(false);
-
+  const user = useSelector((state: RootState) => state.auth.user);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+
+  // Check if the user is logged in
+  useEffect(() => {
+    // Check if the user is logged in
+    if (user) {
+      // If the user is logged in, redirect to another page (e.g., home page)
+      router.replace('/'); // Replace with the path you want to redirect to
+    }
+  }, [user, router]);
+
+  // If the user is logged in, return null or any loading indicator while the redirection is happening
+  if (user) {
+    return null;
+  }
 
   const handleCheckboxChange = (newCheckedState: boolean) => {
     console.log(newCheckedState);
     setIsChecked(newCheckedState);
   };
 
-  const dispatch = useDispatch();
-  const cartItems = useSelector((state: RootState) => state.cart.items);
+  
 
   const handleLogin = async () => {
     try {
