@@ -220,14 +220,14 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           setLoading(false);
 
           setShowNotification(true);
-            onClose();
+          onClose();
         }
       }
     } catch (error) {
       console.error("Error handling add to cart:", error);
     }
     setShowNotification(true);
-            onClose();
+    onClose();
   };
 
   const handleSizeSelect = (size: string) => {
