@@ -214,6 +214,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
             },
           });
           setLoading(false);
+
+          onClose();
         }
       }
     } catch (error) {
