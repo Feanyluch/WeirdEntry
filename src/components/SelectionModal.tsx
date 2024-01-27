@@ -176,6 +176,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
             }
 
             setLoading(false);
+            setShowNotification(true);
+            onClose();
             // ... (remaining code)
           } else if (response.status === 400) {
             setLoading(true);
@@ -193,6 +195,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
               },
             });
             setLoading(false);
+            setShowNotification(true);
+            onClose();
           } else {
             console.error("Failed to fetch user cart:", response.statusText);
           }
@@ -215,13 +219,15 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           });
           setLoading(false);
 
-          onClose();
+          setShowNotification(true);
+            onClose();
         }
       }
     } catch (error) {
       console.error("Error handling add to cart:", error);
     }
     setShowNotification(true);
+            onClose();
   };
 
   const handleSizeSelect = (size: string) => {
