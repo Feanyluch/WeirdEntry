@@ -9,12 +9,12 @@ import Emailverif5 from "../../public/email-verification/email-verif5.svg";
 
 const EmailVerificationImage = () => {
     return (
-        <div className="relative my-[80px]">
-            <Image src={Emailverif1} alt="" className="z-50" />
-            <Image src={Emailverif2} alt="" className="absolute top-[-30px] right-[-50px]" />
-            <Image src={Emailverif3} alt="" className="z-[-999] absolute bottom-[-17px] left-[-87px]" />
-            <Image src={Emailverif4} alt="" className="z-[-999] absolute bottom-[30px] right-[-90px]" />
-            <Image src={Emailverif5} alt="" className="absolute top-[-50px] left-[-55px]" />
+        <div className="relative my-[40px]">
+            <Image src={Emailverif1} alt="" className="z-50 w-[90px] h-[93px]" />
+            <Image src={Emailverif2} alt="" className="absolute top-[-15px] right-[-25px] w-[25px] h-[25px]" />
+            <Image src={Emailverif3} alt="" className="z-[-999] absolute bottom-[-10px] left-[-50px] w-[70px] h-[58px]" />
+            <Image src={Emailverif4} alt="" className="z-[-999] absolute bottom-[12px] right-[-50px] w-[62px]" />
+            <Image src={Emailverif5} alt="" className="absolute top-[-25px] left-[-30px] w-[48px] h-[48px]" />
         </div>
     )
 }

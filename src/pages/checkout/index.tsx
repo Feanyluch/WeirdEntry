@@ -22,6 +22,7 @@ import axios from "axios";
 
 import { PaystackButton } from "react-paystack";
 import ProtectedRoute from "@/components/ProtectedRoutes";
+import { useRouter } from "next/router";
 
 interface HomeProps {
   products?: { data: ProductData[] } | undefined; // Make the prop optional
@@ -74,6 +75,8 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
     terms: false,
     // Initialize more checkboxes as needed
   });
+
+  const router = useRouter()
 
   // Function to handle checkbox changes
   const handleCheckboxChange = (checkboxName: keyof CheckboxStates) => {
@@ -203,6 +206,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
       })
       .then((response) => {
         console.log("Order placed successfully:", response.data);
+        router.push("/order-success")
         // Redirect or perform any necessary actions
       })
       .catch((error) => {
@@ -310,13 +314,13 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-[20px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-[20px]">
                   <div className="flex flex-col">
                     <label className="text-[#1B2E3C80] text-xs">State</label>
                     <input
                       type="text"
                       className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none capitalize text-sm"
-                      value={address}
+                      value={state}
                       onChange={(e) => setAddress(e.target.value)}
                     />
                   </div>
@@ -325,11 +329,11 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                     <input
                       type="text"
                       className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none capitalize text-sm"
-                      value={address}
+                      value={city}
                       onChange={(e) => setAddress(e.target.value)}
                     />
                   </div>
-                  <div className="flex flex-col">
+                  {/* <div className="flex flex-col">
                     <label className="text-[#1B2E3C80] text-xs">Zip Code</label>
                     <input
                       type="text"
@@ -337,7 +341,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
                     />
-                  </div>
+                  </div> */}
                 </div>
                 <div className="flex flex-col">
                   <label className="text-[#1B2E3C80] text-xs">Address</label>

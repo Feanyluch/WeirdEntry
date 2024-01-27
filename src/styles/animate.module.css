@@ -1,0 +1,17 @@
+/*  */
+
+@keyframes carMovement {
+  0%{
+    transform: translateX(-100px)
+  }
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(100px); /* Adjust the distance the car moves */
+  }
+}
+
+.image {
+  animation: carMovement 2s ease-in-out; /* Adjust the duration as needed */
+}

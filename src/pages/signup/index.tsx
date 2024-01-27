@@ -166,6 +166,10 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
           <div className="my-2">
             <div className="">
               <div className="py-2">
+              <div className="flex flex-col">
+                    <label className="pb-2 text-[#1B2E3C80] text-xs">
+                      First Name
+                    </label>
                 <input
                   type="text"
                   id="first_name"
@@ -179,6 +183,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                   onChange={handleFirstNameChange}
                   onBlur={handleFirstNameBlur}
                 />
+                </div>
               </div>
 
               {firstNameError && (
@@ -189,6 +194,10 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
             </div>
             <div className="">
               <div className="py-2">
+              <div className="flex flex-col">
+                    <label className="pb-2 text-[#1B2E3C80] text-xs">
+                      Last Name
+                    </label>
                 <input
                   type="text"
                   id="last_name"
@@ -202,6 +211,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                   onChange={handleLastNameChange}
                   onBlur={handleLastNameBlur}
                 />
+                </div>
               </div>
 
               {lastNameError && (
@@ -212,6 +222,10 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
             </div>
             <div className="">
               <div className="py-2">
+              <div className="flex flex-col">
+                    <label className="pb-2 text-[#1B2E3C80] text-xs">
+                      Address
+                    </label>
                 <input
                   type="text"
                   id="address"
@@ -225,6 +239,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                   onChange={handleAddressChange}
                   onBlur={handleAddressBlur}
                 />
+                </div>
               </div>
 
               {addressError && (
@@ -235,6 +250,10 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
             </div>
             <div className="">
               <div className="py-2">
+              <div className="flex flex-col">
+                    <label className="pb-2 text-[#1B2E3C80] text-xs">
+                      City
+                    </label>
                 <input
                   type="text"
                   id="city"
@@ -248,6 +267,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                   onChange={handleCityChange}
                   onBlur={handleCityBlur}
                 />
+                </div>
               </div>
 
               {cityError && (
@@ -258,6 +278,10 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
             </div>
             <div className="">
               <div className="py-2">
+              <div className="flex flex-col">
+                    <label className="pb-2 text-[#1B2E3C80] text-xs">
+                      State
+                    </label>
                 <input
                   type="text"
                   id="state"
@@ -271,6 +295,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                   onChange={handleStateChange}
                   onBlur={handleStateBlur}
                 />
+                </div>
               </div>
 
               {stateError && (
@@ -281,6 +306,10 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
             </div>            
             <div className="">
               <div className="py-2">
+              <div className="flex flex-col">
+                    <label className="pb-2 text-[#1B2E3C80] text-xs">
+                      Email
+                    </label>
                 <input
                   type="email"
                   id="email"
@@ -294,6 +323,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                   onChange={handleEmailChange}
                   onBlur={handleEmailBlur}
                 />
+                </div>
               </div>
 
               {emailError && (
@@ -305,6 +335,10 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
 
             <div className="">
               <div className="py-2">
+              <div className="flex flex-col">
+                    <label className="pb-2 text-[#1B2E3C80] text-xs">
+                      Password
+                    </label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -332,6 +366,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                     </div>
                   </div>
                 </div>
+                </div>
               </div>
               {passwordError && (
                 <span className="text-[#1B2E3C] text-sm py-1">
@@ -341,7 +376,12 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
             </div>
             <div className="">
               <div className="py-2">
+              <div className="flex flex-col">
+                    <label className="pb-2 text-[#1B2E3C80] text-xs">
+                      Confirm Password
+                    </label>
                 <div className="relative">
+
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     id="confirmPassword"
@@ -369,6 +409,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
                       {showConfirmPassword ? <Image src={eyeCloseIcon} alt="eye" /> : <Image src={eyeIcon} alt="eye" /> }
                     </div>
                   </div>
+                </div>
                 </div>
               </div>
               {confirmPasswordError && (

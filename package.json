@@ -15,6 +15,7 @@
     "@paystack/inline-js": "^2.13.0",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.6.2",
+    "gsap": "^3.12.5",
     "next": "13.5.4",
     "paystack": "^2.0.1",
     "react": "^18",
