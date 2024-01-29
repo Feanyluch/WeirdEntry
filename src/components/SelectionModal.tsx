@@ -77,6 +77,10 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
 
           // Dispatch action to increment the item
           dispatch(incrementItem(existingProductKey));
+          setShowNotification(true);
+          setTimeout(() => {
+            onClose();
+          }, 200);
         }
       } else {
         // If the product is not in the cart, add it with a quantity of 1
@@ -92,6 +96,10 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
         };
         dispatch(addToCart(cartItem));
         dispatch(incrementCartCount());
+        setShowNotification(true);
+        setTimeout(() => {
+          onClose();
+        }, 200);
       }
 
       // dispatch(addSelectedProduct(product));
@@ -177,7 +185,9 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
 
             setLoading(false);
             setShowNotification(true);
-            onClose();
+            setTimeout(() => {
+              onClose();
+            }, 200);
             // ... (remaining code)
           } else if (response.status === 400) {
             setLoading(true);
@@ -196,7 +206,9 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
             });
             setLoading(false);
             setShowNotification(true);
-            onClose();
+            setTimeout(() => {
+              onClose();
+            }, 200);
           } else {
             console.error("Failed to fetch user cart:", response.statusText);
           }
@@ -220,14 +232,14 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           setLoading(false);
 
           setShowNotification(true);
-          onClose();
+          setTimeout(() => {
+            onClose();
+          }, 2000);
         }
       }
     } catch (error) {
       console.error("Error handling add to cart:", error);
     }
-    setShowNotification(true);
-    onClose();
   };
 
   const handleSizeSelect = (size: string) => {

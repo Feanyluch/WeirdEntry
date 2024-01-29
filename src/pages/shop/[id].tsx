@@ -73,6 +73,43 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
   const user = useSelector((state: RootState) => state.auth.user);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  // Use state to store the selected product
+  const [selectedProduct, setSelectedProduct] = useState<
+    ProductData | undefined
+  >(undefined);
+
+  let productUrl = "";
+  let productTitle = "";
+  let productDescription = "";
+
+  if (selectedProduct) {
+    productUrl = `https://weird-entry.vercel.app/shop/${selectedProduct.id}`;
+    productTitle = selectedProduct.title;
+    productDescription = selectedProduct.description || " ";
+  }
+
+  const handleShareInstagram = () => {
+    const instagramUrl = `https://www.instagram.com/?url=${encodeURIComponent(
+      productUrl
+    )}&title=${encodeURIComponent(productTitle)}`;
+    window.open(instagramUrl, "_blank");
+  };
+
+  const handleShareFacebook = () => {
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      productUrl
+    )}&title=${encodeURIComponent(
+      productTitle
+    )}&description=${encodeURIComponent(productDescription)}`;
+    window.open(facebookUrl, "_blank");
+  };
+
+  const handleShareTwitter = () => {
+    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+      productUrl
+    )}&text=${encodeURIComponent(productTitle)}`;
+    window.open(twitterUrl, "_blank");
+  };
 
   const handleSizeSelect = (size: string) => {
     // Toggle the selection of size
@@ -134,15 +171,12 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
             const productEndpoint = "cart";
 
             const apiUrl = `${apiBaseUrl}${productEndpoint}`;
-            const response = await axios.get(
-              apiUrl,
-              {
-                headers: {
-                  Authorization: `Bearer ${user.token}`,
-                  Accept: "application/json",
-                },
-              }
-            );
+            const response = await axios.get(apiUrl, {
+              headers: {
+                Authorization: `Bearer ${user.token}`,
+                Accept: "application/json",
+              },
+            });
 
             if (response.status === 200) {
               const userCart = response.data.items;
@@ -240,11 +274,6 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
 
   const router = useRouter();
   const { id } = router.query; // Get the product ID from the router
-
-  // Use state to store the selected product
-  const [selectedProduct, setSelectedProduct] = useState<
-    ProductData | undefined
-  >(undefined);
 
   useEffect(() => {
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
@@ -409,15 +438,15 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
               <div className="flex items-center justify-start gap-2">
                 <h2>Share: </h2>
                 <div className="flex gap-2">
-                  <Link href="instagram.com">
+                  <button onClick={handleShareInstagram}>
                     <Image src={instagram} alt="" height={20} width={20} />
-                  </Link>
-                  <Link href="facebook.com">
+                  </button>
+                  <button onClick={handleShareFacebook}>
                     <Image src={facebook} alt="" height={20} width={20} />
-                  </Link>
-                  <Link href="twitter.com">
+                  </button>
+                  <button onClick={handleShareTwitter}>
                     <Image src={twitter} alt="" height={20} width={20} />
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
