@@ -68,6 +68,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
   products,
 }) => {
   const dispatch = useDispatch();
+  console.log({products})
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [loading, setLoading] = useState(true);
   const user = useSelector((state: RootState) => state.auth.user);
@@ -77,6 +78,28 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
   const [selectedProduct, setSelectedProduct] = useState<
     ProductData | undefined
   >(undefined);
+
+  const relatedProducts = products?.data
+  ? products.data
+      .filter((product) => {
+        const hasMatchingCategory =
+          product.category?.title === selectedProduct?.category?.title;
+        const isNotSelectedProduct = product.id !== selectedProduct?.id;
+
+        console.log('Product:', product);
+        console.log('Matching Category:', hasMatchingCategory);
+        console.log('Not Selected Product:', isNotSelectedProduct);
+
+        return hasMatchingCategory && isNotSelectedProduct;
+      })
+      .slice(0, 4)
+  : [];
+
+
+
+
+  console.log({relatedProducts})
+
 
   let productUrl = "";
   let productTitle = "";
@@ -457,7 +480,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
         <h2 className="py-4 text-center uppercase text-xl my-4">
           Related Products
         </h2>
-        <RelatedProducts products={products} />
+        <RelatedProducts products={relatedProducts} />
       </div>
     </div>
   );
