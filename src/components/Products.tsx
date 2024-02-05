@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import Image from "next/image";
 import ProductCard from "../components/ProductCard";
 import { ProductData } from "./product";
 import SizeSelectionModal from "./SelectionModal";
+import cartempty from "../../public/Images/cartempty.png";
 
 interface ProductsProps {
   products?: { data: ProductData[] } | ProductData[] | undefined; // Adjusted prop type
@@ -15,7 +17,14 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
     useState<ProductData | null>(null);
 
   if (!products || (!Array.isArray(products) && !products.data)) {
-    return <p>No products available.</p>;
+    return (
+      <div className="flex items-center justify-center flex-col">
+        <Image src={cartempty} alt="emptycart" />
+        <h2 className="uppercase text-lg sm:text-xl text-center my-4">
+          product with the selected category is not available
+        </h2>
+      </div>
+    );
   }
 
   const productsArray = Array.isArray(products)
@@ -23,7 +32,14 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
     : products.data || [];
 
   if (productsArray.length === 0) {
-    return <p>No products available.</p>;
+    return (
+      <div className="flex items-center justify-center flex-col">
+        <Image src={cartempty} alt="emptycart" />
+        <h2 className="uppercase text-lg sm:text-xl text-center my-4">
+          product with the selected category is not available
+        </h2>
+      </div>
+    );
   }
 
   const handleAddToCart = async (product: ProductData) => {

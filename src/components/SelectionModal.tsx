@@ -16,6 +16,7 @@ import { ProductData } from "./product";
 import Image from "next/image";
 import cancel from "../../public/Images/cancel.svg";
 import AddNotification from "./AddNotification";
+import { useNotification } from "./NotificationContext";
 
 interface SizeSelectionModalProps {
   sizes: string[];
@@ -39,7 +40,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [showNotification, setShowNotification] = useState(false);
+  // const [showNotification, setShowNotification] = useState(false);
+  const { showNotification } = useNotification();
 
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -77,10 +79,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
 
           // Dispatch action to increment the item
           dispatch(incrementItem(existingProductKey));
-          setShowNotification(true);
-          setTimeout(() => {
-            onClose();
-          }, 200);
+          showNotification();
+          onClose()
         }
       } else {
         // If the product is not in the cart, add it with a quantity of 1
@@ -96,10 +96,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
         };
         dispatch(addToCart(cartItem));
         dispatch(incrementCartCount());
-        setShowNotification(true);
-        setTimeout(() => {
-          onClose();
-        }, 200);
+        showNotification();
+        onClose()
       }
 
       // dispatch(addSelectedProduct(product));
@@ -184,10 +182,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
             }
 
             setLoading(false);
-            setShowNotification(true);
-            setTimeout(() => {
-              onClose();
-            }, 200);
+            showNotification();
+            onClose()
             // ... (remaining code)
           } else if (response.status === 400) {
             setLoading(true);
@@ -205,10 +201,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
               },
             });
             setLoading(false);
-            setShowNotification(true);
-            setTimeout(() => {
-              onClose();
-            }, 200);
+            showNotification();
+            onClose()
           } else {
             console.error("Failed to fetch user cart:", response.statusText);
           }
@@ -231,10 +225,8 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           });
           setLoading(false);
 
-          setShowNotification(true);
-          setTimeout(() => {
-            onClose();
-          }, 2000);
+          showNotification();
+          onClose()
         }
       }
     } catch (error) {
@@ -250,9 +242,9 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
     setSelectedColor(color);
   };
 
-  const closeNotification = () => {
-    setShowNotification(false);
-  };
+  // const closeNotification = () => {
+  //   setShowNotification(false);
+  // };
 
   //   const handleAddToCart = () => {
   //     if (selectedSize) {
@@ -346,12 +338,12 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
             {loading ? "Adding..." : "Add to Cart"}
           </button>
         </div>
-        {showNotification && (
+        {/* {showNotification && (
           <AddNotification
             message={`Product added to the cart`}
             onClose={closeNotification}
           />
-        )}
+        )} */}
       </div>
     </div>
   );

@@ -321,7 +321,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                       type="text"
                       className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none capitalize text-sm"
                       value={state}
-                      onChange={(e) => setAddress(e.target.value)}
+                      onChange={(e) => setState(e.target.value)}
                     />
                   </div>
                   <div className="flex flex-col">
@@ -330,7 +330,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                       type="text"
                       className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none capitalize text-sm"
                       value={city}
-                      onChange={(e) => setAddress(e.target.value)}
+                      onChange={(e) => setCity(e.target.value)}
                     />
                   </div>
                   {/* <div className="flex flex-col">

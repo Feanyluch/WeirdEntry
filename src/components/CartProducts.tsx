@@ -280,7 +280,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
               />
             </div>
 
-            <div className="py-1 hidden sm:flex justify-between items-center">
+            <div className="py-1 hidden sm:flex justify-between items-center sm:gap-4">
               <div className="flex items-center gap-2 cursor-pointer">
                 <Image
                   src={Favorite}

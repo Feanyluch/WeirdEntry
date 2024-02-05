@@ -70,39 +70,50 @@ const Index: React.FC<HomeProps> & { title: string } = ({
     // Assuming you want to filter based on selected categories and price range
     // You can customize this logic based on your specific requirements
     // Here, I'm assuming you have an API endpoint that supports both category and price range filters
+  
     const selectedCategoryIds = selectedCategories
       .filter((category) => typeof category !== "string")
       .map((category) => category.id);
-
+  
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
     const productEndpoint = "product";
-
+  
     const apiUrl = `${apiBaseUrl}${productEndpoint}`;
+    let params = {};
+  
+    // Include selected category IDs in the query parameters if they exist
+    if (selectedCategoryIds.length > 0) {
+      params.category = selectedCategoryIds.join("+");
+    }
+  
+    // Include price range in the query parameters if it's set
+    if (priceRange[0] && priceRange[1]) {
+      params = {
+        ...params,
+        price: `${priceRange[0]}-${priceRange[1]}`,
+      };
+    }
+  
     axios
       .get(apiUrl, {
         headers: {
           Authorization: "Bearer Token",
           Accept: "application/json",
         },
-        params: {
-          // Include selected category IDs and price range in the query parameters
-          category_ids: selectedCategoryIds.join(","),
-          min_price: priceRange[0],
-          max_price: priceRange[1],
-        },
+        params: params,
       })
       .then((response) => {
         const productData = response.data;
-
+  
         // Update the component state with the new data
         // (Assuming your API response structure is similar to previous examples)
-        setProducts(productData.products);
+        setProducts(productData);
         setCurrentPrevPageUrl(productData.prev_page_url);
         setCurrentNextPageUrl(productData.next_page_url);
-
+  
         // Reset the current page to 1
         setCurrentPage(1);
-
+  
         // Log the values for debugging
         console.log("Next Page URL:", productData.next_page_url);
         console.log("Previous Page URL:", productData.prev_page_url);
@@ -112,36 +123,41 @@ const Index: React.FC<HomeProps> & { title: string } = ({
         console.error("Error fetching data from API:", error.message);
       });
   };
+  
 
   const handleSelectCategory = async (category: Category) => {
-    // Check if the category is not already in the list
+
+      try {
+        // Check if the category is not already in the list
     if (
       !selectedCategories.some(
         (selectedCategory) => selectedCategory.id === category.id
       )
     ) {
-      try {
-        setLoading(true);
+      // Extract all selected category IDs
+      const selectedCategoryIds = [...selectedCategories, category].map(
+        (selectedCategory) => selectedCategory.id
+      );
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-        const productEndpoint = "category";
+        const productEndpoint = "product?category=";
 
-        const apiUrl = `${apiBaseUrl}${productEndpoint}/${category.id}`;
+        const apiUrl = `${apiBaseUrl}${productEndpoint}${selectedCategoryIds.join(
+          "+"
+        )}`;
+
+        console.log(apiUrl)
         const response = await axios.get(apiUrl, {
           headers: {
             Authorization: "Bearer Token",
             Accept: "application/json",
           },
-          params: {
-            // Include the price range in the query parameters
-            min_price: priceRange[0],
-            max_price: priceRange[1],
-          },
         });
 
         const productData = response.data;
+        console.log("Selected Product Data", productData)
 
         // Update the component state with the new data
-        setProducts(productData.products);
+        setProducts(productData);
 
         // Update the component state with the new data
         // setProducts(productData.products);
@@ -161,61 +177,31 @@ const Index: React.FC<HomeProps> & { title: string } = ({
         console.log("Next Page URL:", productData.next_page_url);
         console.log("Previous Page URL:", productData.prev_page_url);
         console.log("Product Data:", productData.products);
-      } catch (error: any) {
+      }} catch (error: any) {
         console.error("Error fetching data from API:", error.message);
       }
-    }
   };
 
   const handleCancelCategory = async (category: Category) => {
-    const updatedSelectedCategories = selectedCategories.filter(
-      (selectedCategory) => selectedCategory.id !== category.id
-    );
-
-    setSelectedCategories(updatedSelectedCategories);
-
     try {
       setLoading(true);
+  
+      // Remove the canceled category from the selected categories
+      const updatedSelectedCategories = selectedCategories.filter(
+        (selectedCategory) => selectedCategory.id !== category.id
+      );
+  
+      setSelectedCategories(updatedSelectedCategories);
+  
       if (updatedSelectedCategories.length > 0) {
-        // There are other selected categories, update products based on the remaining selected category
-        const remainingCategoryId = updatedSelectedCategories[0].id; // Assuming you want to use the first remaining category
+        // There are other selected categories, update products based on the remaining selected categories
+        const remainingCategoryIds = updatedSelectedCategories.map(
+          (selectedCategory) => selectedCategory.id
+        );
+  
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-        const productEndpoint = "category";
-
-        const apiUrl = `${apiBaseUrl}${productEndpoint}/${remainingCategoryId}`;
-        const response = await axios.get(apiUrl, {
-          headers: {
-            Authorization: "Bearer Token",
-            Accept: "application/json",
-          },
-          params: {
-            // Include the price range in the query parameters
-            min_price: priceRange[0],
-            max_price: priceRange[1],
-          },
-        });
-
-        const productData = response.data;
-
-        // Update the component state with the products for the remaining selected category
-        setProducts(productData.products);
-        setCurrentPrevPageUrl(productData.prev_page_url || null);
-        setCurrentNextPageUrl(productData.next_page_url || null);
-        setLoading(false);
-
-        // Reset the current page to 1
-        setCurrentPage(1);
-
-        // Log the values for debugging
-        console.log("Next Page URL:", productData.next_page_url);
-        console.log("Previous Page URL:", productData.prev_page_url);
-        console.log("Product Data:", productData.products);
-      } else {
-        setLoading(true);
-        // No other selected categories, fetch and set the initial list of products
-        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-        const productEndpoint = "product";
-
+        const productEndpoint = "product?category=";
+  
         const apiUrl = `${apiBaseUrl}${productEndpoint}`;
         const response = await axios.get(apiUrl, {
           headers: {
@@ -223,33 +209,69 @@ const Index: React.FC<HomeProps> & { title: string } = ({
             Accept: "application/json",
           },
           params: {
-            // Include the price range in the query parameters
-            min_price: priceRange[0],
-            max_price: priceRange[1],
+            category: remainingCategoryIds.join("+"),
+            // Include the price range in the query parameters if needed
+            // min_price: priceRange[0],
+            // max_price: priceRange[1],
           },
         });
-
+  
         const productData = response.data;
-        console.log({ productData });
-
+  
+        // Update the component state with the products for the remaining selected categories
+        setProducts(productData);
+        setCurrentPrevPageUrl(productData.prev_page_url || null);
+        setCurrentNextPageUrl(productData.next_page_url || null);
+        setLoading(false);
+  
+        // Reset the current page to 1
+        setCurrentPage(1);
+  
+        // Log the values for debugging
+        console.log("Next Page URL:", productData.next_page_url);
+        console.log("Previous Page URL:", productData.prev_page_url);
+        console.log("Product Data:", productData.data);
+      } else {
+        // No other selected categories, fetch and set the initial list of products
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+        const productEndpoint = "product";
+  
+        const apiUrl = `${apiBaseUrl}${productEndpoint}`;
+        const response = await axios.get(apiUrl, {
+          headers: {
+            Authorization: "Bearer Token",
+            Accept: "application/json",
+          },
+          // params: {
+          //   // Include the price range in the query parameters if needed
+          //   min_price: priceRange[0],
+          //   max_price: priceRange[1],
+          // },
+        });
+  
+        const productData = response.data;
+  
         // Update the component state with the initial list of products
         setProducts(productData.data);
         setCurrentPrevPageUrl(productData.prev_page_url || null);
         setCurrentNextPageUrl(productData.next_page_url || null);
-
+        setLoading(false);
+  
         // Reset the current page to 1
         setCurrentPage(1);
-        setLoading(false);
-
+  
         // Log the values for debugging
         console.log("Next Page URL:", productData.next_page_url);
         console.log("Previous Page URL:", productData.prev_page_url);
-        console.log("Product Data:", productData.products);
+        console.log("Product Data:", productData.data);
       }
     } catch (error: any) {
       console.error("Error handling canceled category:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
+  
 
   const handlePrevPage = async () => {
     if (currentPrevPageUrl) {
@@ -371,9 +393,14 @@ const Index: React.FC<HomeProps> & { title: string } = ({
             />
           </div>
         </div>
-        
+
         <div className="w-full sm:w-3/4 overflow-y-auto px-4 product-container">
-        <button className="sm:hidden flex gap-2 my-6 border border-[#1B2E3C] px-4 rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2]" onClick={() => setIsSidebarOpen(true)}>Filter :- </button>
+          <button
+            className="sm:hidden flex gap-2 my-6 border border-[#1B2E3C] px-4 rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2]"
+            onClick={() => setIsSidebarOpen(true)}
+          >
+            Filter :-{" "}
+          </button>
           <div className=" my-2">
             {searchQuery && (
               <div className="flex items-center justify-start gap-2">
@@ -420,7 +447,6 @@ const Index: React.FC<HomeProps> & { title: string } = ({
             />
           )}
 
-          
           {loading ? (
             <div className="loading-container">
               <div className="loading-content">
