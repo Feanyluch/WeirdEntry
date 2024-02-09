@@ -80,7 +80,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           // Dispatch action to increment the item
           dispatch(incrementItem(existingProductKey));
           showNotification();
-          onClose()
+          onClose();
         }
       } else {
         // If the product is not in the cart, add it with a quantity of 1
@@ -89,6 +89,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           id: product.id,
           quantity: 1,
           price: product.price,
+          sales_price: product.sales_price,
           title: product.title,
           product_image: product.product_image,
           size: selectedSize,
@@ -97,7 +98,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
         dispatch(addToCart(cartItem));
         dispatch(incrementCartCount());
         showNotification();
-        onClose()
+        onClose();
       }
 
       // dispatch(addSelectedProduct(product));
@@ -151,6 +152,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
                   id: product.id,
                   title: product.title,
                   price: product.price,
+                  sales_price: product.sales_price,
                   product_image: product.product_image,
                   quantity: 1, // Quantity is 1 for a newly added item
                   size: selectedSize,
@@ -165,6 +167,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
                 id: product.id,
                 title: product.title,
                 price: product.price,
+                sales_price: product.sales_price,
                 product_image: product.product_image,
                 quantity: 1, // Quantity is 1 for a newly added item
                 size: selectedSize,
@@ -183,7 +186,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
 
             setLoading(false);
             showNotification();
-            onClose()
+            onClose();
             // ... (remaining code)
           } else if (response.status === 400) {
             setLoading(true);
@@ -194,6 +197,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
                 id: product.id,
                 title: product.title,
                 price: product.price,
+                sales_price: product.sales_price,
                 product_image: product.product_image,
                 quantity: 1,
                 size: selectedSize,
@@ -202,7 +206,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
             });
             setLoading(false);
             showNotification();
-            onClose()
+            onClose();
           } else {
             console.error("Failed to fetch user cart:", response.statusText);
           }
@@ -217,6 +221,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
               id: product.id,
               title: product.title,
               price: product.price,
+              sales_price: product.sales_price,
               product_image: product.product_image,
               quantity: 1,
               size: selectedSize,
@@ -226,7 +231,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           setLoading(false);
 
           showNotification();
-          onClose()
+          onClose();
         }
       }
     } catch (error) {

@@ -150,7 +150,7 @@ const Cart: React.FC<HomeProps> & { title: string } = ({ products }) => {
         const product = products.data.find((p) => p.id === item.id);
 
         if (product) {
-          const priceAsNumber = product.price;
+          const priceAsNumber = product.sales_price;
           // console.log("Product Price:", product.price);
           // console.log("Price as Number:", priceAsNumber);
           // console.log("Item Quantity:", item.quantity);

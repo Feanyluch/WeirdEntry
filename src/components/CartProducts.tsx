@@ -126,6 +126,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
             id: product.id,
             title: product.title,
             price: product.price,
+            sales_price: product.sales_price,
             color: product.color,
             size: product.size,
             product_image: product.product_image,
@@ -219,7 +220,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
   };
 
   return (
-    <div className="flex flex-col gap-6 px-2">
+    <div className="flex flex-col gap-6 px-2 text-[#1B2E3C]">
       {Object.entries(cartData).map(([productKey, product]) => (
         <div
           className="h-[230PX] relative grid grid-cols-2 gap-4 sm:bg-[#F3E3E2] rounded-lg px-4 sm:px-[40px] py-6 border border-gray-200 mx-4 sm:mx-0"
@@ -240,7 +241,20 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
               {product.title}
             </h2>
             <h1 className="font-bold text-sm my-1">
-              ₦ {product.price.toLocaleString()}
+              {product.sales_price ? (
+                <div className="flex items-center justify-start gap-2 sm:gap-4 my-4">
+                  <span className="text-sm sm:text-lg font-bold text-[#1B2E3C]">
+                    ₦ {product.sales_price.toLocaleString()}
+                  </span>
+                  <span className="text-[12px] text-gray-500 line-through mr-2">
+                    ₦ {product.price.toLocaleString()}
+                  </span>
+                </div>
+              ) : (
+                <h2 className="text-sm sm:text-lg font-bold my-4 text-[#1B2E3C]">
+                  ₦ {product.price.toLocaleString()}
+                </h2>
+              )}
             </h1>
 
             <div className="flex sm:items-center justify-between flex-col sm:flex-row gap-3 sm:gap-6">
@@ -281,7 +295,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
             </div>
 
             <div className="py-1 hidden sm:flex justify-between items-center sm:gap-4">
-              <div className="flex items-center gap-2 cursor-pointer">
+              {/* <div className="flex items-center gap-2 cursor-pointer">
                 <Image
                   src={Favorite}
                   width={20}
@@ -289,7 +303,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
                   alt="delete icon"
                 />
                 <h2 className="text-xs uppercase">Add to wishlist</h2>
-              </div>
+              </div> */}
               <div
                 className="flex items-center gap-2 cursor-pointer"
                 // onClick={handleDeleteFromCart}

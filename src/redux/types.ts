@@ -31,8 +31,13 @@ export interface Product {
 
 // favoriteTypes.ts
 export interface FavoriteItem {
+  sales_price?: string;
+  product_image?: any;
+  // image?: any;
+  title: string;
+  price: number;
   id: number;
-  productId: number;
+  // productId: number;
   // Add more favorite item-related fields here
 }
 

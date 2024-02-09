@@ -6,6 +6,7 @@ interface TabProps {
   isActive: boolean;
   route: string;
   imaget: React.ReactNode;
+  icon: React.ReactNode;
 }
 
 const Tab: React.FC<TabProps> = ({ label, isActive, route, imaget }) => {

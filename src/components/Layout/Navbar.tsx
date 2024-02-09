@@ -29,6 +29,7 @@ import { Router, useRouter } from "next/router";
 const Navbar: React.FC = () => {
   const [cartCount, setCartCount] = useState(0);
   const user = useSelector((state: RootState) => state.auth.user);
+  const favoriteItems = useSelector((state: RootState) => state.favorite.items);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const cartContainerRef = useRef<HTMLDivElement | null>(null);
@@ -227,7 +228,11 @@ const Navbar: React.FC = () => {
 
           <div className="flex items-center space-x-4">
             <div className="hidden sm:block">
-              <SearchComponent onSearchToggle={toggleSearch} ref={searchRef} isSearchOpen={isSearchOpen} />
+              <SearchComponent
+                onSearchToggle={toggleSearch}
+                ref={searchRef}
+                isSearchOpen={isSearchOpen}
+              />
             </div>
             <div className="relative">
               <Link href="/cart">
@@ -261,18 +266,18 @@ const Navbar: React.FC = () => {
             )} */}
 
             <Link href="/wishlist">
-            <div className="p-2 relative cursor-pointer hidden sm:block">
-              <Image
-                src={Heart}
-                alt="Heart"
-                height={22}
-                width={22}
-                className="h-[25px] w-[22px]"
-              />
-              <h2 className="absolute top-0 right-0 bg-[#1B2E3C] text-white rounded-[50%] p-1 flex items-center justify-center h-5 w-5 text-sm">
-                0
-              </h2>
-            </div>
+              <div className="p-2 relative cursor-pointer hidden sm:block">
+                <Image
+                  src={Heart}
+                  alt="Heart"
+                  height={22}
+                  width={22}
+                  className="h-[25px] w-[22px]"
+                />
+                <h2 className="absolute top-0 right-0 bg-[#1B2E3C] text-white rounded-[50%] p-1 flex items-center justify-center h-5 w-5 text-sm">
+                  {favoriteItems.length}
+                </h2>
+              </div>
             </Link>
             <div className="hidden sm:block">
               {user ? (

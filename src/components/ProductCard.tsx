@@ -7,6 +7,10 @@ import { useDispatch, useSelector } from "react-redux";
 import store, { RootState } from "@/redux/store";
 import pinkFavorite from "../../public/Images/pink-favorite.svg";
 import axios from "axios";
+import {
+  addToFavorite,
+  removeFromFavorite,
+} from "@/redux/slices/favoriteSlice";
 interface ProductCardProps {
   product: ProductData;
   onAddToCart: (product: ProductData) => void;
@@ -23,6 +27,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const user = useSelector((state: RootState) => state.auth.user);
+  const favoriteItems = useSelector((state: RootState) => state.favorite.items);
   const [loading, setLoading] = useState(false);
 
   const handleAddToCart = async () => {
@@ -42,6 +47,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
       setLoading(false);
     } catch (error: any) {
       console.error("Error fetching product details:", error.message);
+    }
+  };
+
+  const handleToggleFavorite = () => {
+    // Check if the current product is in the favorites list
+    const isFavorite = favoriteItems.some((item) => item.id === product.id);
+
+    // If the product is in favorites, remove it; otherwise, add it
+    if (isFavorite) {
+      dispatch(removeFromFavorite(product.id));
+    } else {
+      dispatch(addToFavorite(product));
     }
   };
   // const handleAddToCart = async () => {
@@ -196,7 +213,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
               </span>
             </div>
           ) : (
-            <h2 className="text-sm sm:text-lg font-bold my-4">
+            <h2 className="text-sm sm:text-lg font-bold my-4 text-[#1B2E3C]">
               ₦ {product.price.toLocaleString()}
             </h2>
           )}
@@ -209,7 +226,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         >
           {loading ? "processing..." : "Add to cart"}
         </button>
-        <button className="hidden sm:w-1/4 border border-[#0C0C1E] sm:flex items-center justify-center rounded-lg transition ease-in-out duration-300">
+        <button
+          onClick={handleToggleFavorite}
+          className="hidden sm:w-1/4 border border-[#0C0C1E] sm:flex items-center justify-center rounded-lg transition ease-in-out duration-300"
+        >
           <Image
             src="https://res.cloudinary.com/duxy2eomx/image/upload/v1697712759/Heart_kvhvmp.svg"
             height={25}

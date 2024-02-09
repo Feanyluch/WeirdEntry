@@ -35,7 +35,7 @@ const CheckoutProducts: React.FC<CheckoutProductProps> = ({ cartData }) => {
             <h2 className="font-bold text-xs sm:text-sm">
               ₦{" "}
               {(
-                product.price *
+                product.sales_price *
                 (product.quantity)
               ).toLocaleString()}
             </h2>

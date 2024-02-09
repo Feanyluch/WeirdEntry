@@ -32,7 +32,7 @@ const Index: React.FC<HomeProps> & { title: string } = () => {
 
       // Make a GET request using the token as a header
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-      const verificationEndpoint = "/confirm-email";
+      const verificationEndpoint = "confirm-email";
       const apiUrl = `${apiBaseUrl}${verificationEndpoint}`;
 
       axios
