@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Breadcrumb from "@/components/BreadCrumb";
@@ -13,6 +13,8 @@ import { useRouter } from "next/router";
 import wishlist from "../../../public/Images/wishlist.png";
 import FavoriteTable from "@/components/FavoriteTable";
 import { removeFromFavorite } from "@/redux/slices/favoriteSlice";
+import { FavoriteItem } from "@/redux/types";
+import { useRemoveFromWishlist } from "@/hook/useRemoveFromWishlist";
 // import Breadcrumb from "@/components/BreadCrumb";
 
 interface HomeProps {
@@ -20,24 +22,33 @@ interface HomeProps {
 }
 
 const Index: React.FC<HomeProps> & { title: string } = ({ products }) => {
-  //   const user = useSelector((state: RootState) => state.auth.user);
+    const user = useSelector((state: RootState) => state.auth.user);
+    const removeFromWishlist = useRemoveFromWishlist()
   //   const router = useRouter();
+
+  
 
   const favoriteItems = useSelector((state: RootState) => state.favorite.items);
   const dispatch = useDispatch();
+
+  const onRemoveFavorite = async (productId: number) => {
+    if (user && user.token) {
+      // If user is logged in, call removeFromWishlist function
+      await removeFromWishlist(productId);
+    } else {
+      // If user is not logged in, dispatch an action to remove the product from the Redux store
+      dispatch(removeFromFavorite(productId));
   
-  const onRemoveFavorite = (productId: number) => {
-    // Dispatch an action to remove the product from the Redux store
-    dispatch(removeFromFavorite(productId));
-
-    // Get the updated favorite items from Redux store
-    const updatedFavorites = favoriteItems.filter(
-      (item) => item.id !== productId
-    );
-
-    // Update local storage with the updated favorite items
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+      // Get the updated favorite items from Redux store
+      const updatedFavorites = favoriteItems.filter(
+        (item) => item.id !== productId
+      );
+  
+      // Update local storage with the updated favorite items
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    }
   };
+  
 
   if (favoriteItems.length == 0) {
     return (

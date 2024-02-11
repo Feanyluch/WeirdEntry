@@ -25,11 +25,13 @@ import SearchComponent from "../SearchComponent";
 
 import { ToastContainer, toast } from "react-toastify";
 import { Router, useRouter } from "next/router";
+import { FavoriteItem } from "@/redux/types";
 
 const Navbar: React.FC = () => {
   const [cartCount, setCartCount] = useState(0);
+  const [wishlistCount, setWishlistCount] = useState(0);
   const user = useSelector((state: RootState) => state.auth.user);
-  const favoriteItems = useSelector((state: RootState) => state.favorite.items);
+  // const favoriteItems = useSelector((state: RootState) => state.favorite.items);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const cartContainerRef = useRef<HTMLDivElement | null>(null);
@@ -39,6 +41,8 @@ const Navbar: React.FC = () => {
   const cartCountFromRedux = useSelector(
     (state: RootState) => state.cart.cartCount
   );
+  const wishlistCountFromRedux = useSelector((state: RootState) => state.favorite.items);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
 
@@ -50,33 +54,52 @@ const Navbar: React.FC = () => {
     const fetchCartCount = async () => {
       try {
         let cartCountFromAPI = 0;
-
+        let wishlistCountFromAPI = 0;
+  
         if (user) {
           const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-          const productEndpoint = "cart";
-
-          const apiUrl = `${apiBaseUrl}${productEndpoint}`;
-          const response = await axios.get(apiUrl, {
-            headers: {
-              Authorization: `Bearer ${user.token}`, // Replace with your actual access token
-              Accept: "application/json",
-            },
-          });
-          const itemsObject = response.data.items || {};
-          cartCountFromAPI = Object.keys(itemsObject).length;
+          const cartEndpoint = "cart";
+          const wishlistEndpoint = "wishlist";
+  
+          const cartUrl = `${apiBaseUrl}${cartEndpoint}`;
+          const wishlistUrl = `${apiBaseUrl}${wishlistEndpoint}`;
+  
+          const [cartResponse, wishlistResponse] = await Promise.all([
+            axios.get(cartUrl, {
+              headers: {
+                Authorization: `Bearer ${user.token}`,
+                Accept: "application/json",
+              },
+            }),
+            axios.get(wishlistUrl, {
+              headers: {
+                Authorization: `Bearer ${user.token}`,
+                Accept: "application/json",
+              },
+            }),
+          ]);
+  
+          const cartItemsObject = cartResponse.data.items || {};
+          cartCountFromAPI = Object.keys(cartItemsObject).length;
+  
+          const wishlistItems: FavoriteItem[] = wishlistResponse.data || [];
+        wishlistCountFromAPI = wishlistItems.length;
         } else {
-          // If user is not logged in, use the cart count from the Redux store
+          // If user is not logged in, use the cart and wishlist count from the Redux store
           cartCountFromAPI = cartCountFromRedux;
+          wishlistCountFromAPI = wishlistCountFromRedux.length;
         }
-
+  
         setCartCount(cartCountFromAPI);
+        setWishlistCount(wishlistCountFromAPI);
       } catch (error: any) {
-        console.error("Error fetching cart count from API:", error.message);
+        console.error("Error fetching cart and wishlist counts from API:", error.message);
       }
     };
-
+  
     fetchCartCount();
-  }, [user, cartCountFromRedux]);
+  }, [user, cartCountFromRedux, wishlistCountFromRedux]);
+  
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -275,7 +298,7 @@ const Navbar: React.FC = () => {
                   className="h-[25px] w-[22px]"
                 />
                 <h2 className="absolute top-0 right-0 bg-[#1B2E3C] text-white rounded-[50%] p-1 flex items-center justify-center h-5 w-5 text-sm">
-                  {favoriteItems.length}
+                  {wishlistCount}
                 </h2>
               </div>
             </Link>
