@@ -68,7 +68,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
   products,
 }) => {
   const dispatch = useDispatch();
-  console.log({products})
+  console.log({ products });
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [loading, setLoading] = useState(true);
   const user = useSelector((state: RootState) => state.auth.user);
@@ -80,26 +80,22 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
   >(undefined);
 
   const relatedProducts = products?.data
-  ? products.data
-      .filter((product) => {
-        const hasMatchingCategory =
-          product.category?.title === selectedProduct?.category?.title;
-        const isNotSelectedProduct = product.id !== selectedProduct?.id;
+    ? products.data
+        .filter((product) => {
+          const hasMatchingCategory =
+            product.category?.title === selectedProduct?.category?.title;
+          const isNotSelectedProduct = product.id !== selectedProduct?.id;
 
-        console.log('Product:', product);
-        console.log('Matching Category:', hasMatchingCategory);
-        console.log('Not Selected Product:', isNotSelectedProduct);
+          console.log("Product:", product);
+          console.log("Matching Category:", hasMatchingCategory);
+          console.log("Not Selected Product:", isNotSelectedProduct);
 
-        return hasMatchingCategory && isNotSelectedProduct;
-      })
-      .slice(0, 4)
-  : [];
+          return hasMatchingCategory && isNotSelectedProduct;
+        })
+        .slice(0, 4)
+    : [];
 
-
-
-
-  console.log({relatedProducts})
-
+  console.log({ relatedProducts });
 
   let productUrl = "";
   let productTitle = "";
@@ -164,6 +160,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
             quantity: 1,
             product_image: selectedProduct.product_image,
             price: selectedProduct.price,
+            sales_price: selectedProduct.sales_price,
             title: selectedProduct.title,
             size: selectedSize,
             color: selectedColor,
@@ -224,6 +221,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                       id: selectedProduct.id,
                       title: selectedProduct.title,
                       price: selectedProduct.price,
+                      sales_price: selectedProduct.sales_price,
                       product_image: selectedProduct.product_image,
                       quantity: newlyAddedItemQuantity,
                       size: selectedSize,
@@ -238,6 +236,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                     id: selectedProduct.id,
                     title: selectedProduct.title,
                     price: selectedProduct.price,
+                    sales_price: selectedProduct.sales_price,
                     product_image: selectedProduct.product_image,
                     quantity: newlyAddedItemQuantity,
                     size: selectedSize,
@@ -262,6 +261,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                   id: selectedProduct.id,
                   title: selectedProduct.title,
                   price: selectedProduct.price,
+                  sales_price: selectedProduct.sales_price,
                   product_image: selectedProduct.product_image,
                   quantity: newlyAddedItemQuantity,
                   size: selectedSize,
@@ -281,6 +281,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                 id: selectedProduct.id,
                 title: selectedProduct.title,
                 price: selectedProduct.price,
+                sales_price: selectedProduct.sales_price,
                 product_image: selectedProduct.product_image,
                 quantity: newlyAddedItemQuantity,
                 size: selectedSize,
@@ -375,9 +376,20 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
               {/* <div className="flex my-2">
                 <StarRating rating={selectedProduct.rating} />
               </div> */}
-              <h2 className="text-xl py-2 font-bold">
-                ₦ {selectedProduct.price.toLocaleString()}
-              </h2>
+              {selectedProduct.sales_price ? (
+                <div className="flex items-center justify-start gap-2 sm:gap-4 my-4">
+                  <span className="text-sm sm:text-xl font-bold text-[#1B2E3C]">
+                    ₦ {selectedProduct.sales_price.toLocaleString()}
+                  </span>
+                  <span className="text-[12px] text-gray-500 line-through mr-2">
+                    ₦ {selectedProduct.price.toLocaleString()}
+                  </span>
+                </div>
+              ) : (
+                <h2 className="text-sm sm:text-xl font-bold my-4 text-[#1B2E3C]">
+                  ₦ {selectedProduct.price.toLocaleString()}
+                </h2>
+              )}
               <p className="py-4 break-words sm:w-[80%] text-sm">
                 <span className="font-bold">Description:</span>{" "}
                 {selectedProduct.description}
