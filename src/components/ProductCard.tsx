@@ -214,7 +214,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
             className="rounded-lg transform hover:scale-110 transition-transform duration-300"
           ></div>
           <button className="sm:hidden absolute top-3 right-3 z-[9999px] bg-pink-50 p-1 rounded-lg transition ease-in-out duration-300">
-            <Image src={pinkFavorite} height={20} width={20} alt="heart" />
+            <Image src={user ? (isProductInWishlist ? images[images.length - 1] : pinkFavorite) : (isFavorite ? images[images.length - 1] : pinkFavorite)} height={20} width={20} alt="heart" />
           </button>
         </div>
 
@@ -248,7 +248,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         <button
           onClick={handleToggleFavorite}
           className={`hidden sm:w-1/4 border border-[#0C0C1E] sm:flex items-center justify-center rounded-lg transition ease-in-out duration-300 ${
-            user ? (isProductInWishlist ? "" : "") : isFavorite ? "" : ""
+            user ? (isProductInWishlist ? "border border-red-500 bg-red-100" : "") : isFavorite ? "" : ""
           }`}
         >
           <Image

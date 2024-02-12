@@ -24,7 +24,6 @@ export const sendItemsToEndpoint = async (
       id: number;
       title: string;
       price: number;
-      sales_price: number;
       quantity: number;
       product_image: string;
       size: string | null;

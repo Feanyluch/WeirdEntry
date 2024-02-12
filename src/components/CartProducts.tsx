@@ -24,9 +24,9 @@ interface CartProductProps {
   cartData: ProductData[];
 }
 
-const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
-  console.log({ cartData });
-  const [localCartData, setLocalCartData] = useState(cartData);
+const CartProducts: React.FC<CartProductProps> = ({ cartData: initialCartData }) => {
+  console.log({ initialCartData });
+  const [localCartData, setLocalCartData] = useState(initialCartData);
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const user = useSelector((state: RootState) => state.auth.user);
@@ -47,8 +47,44 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
   //     setQuantity(initialQuantity);
   //   }, [initialQuantity]);
 
-  const incrementQuantity = (productKey: any) => {
-    const product = cartData[productKey];
+  // Inside your component
+
+  useEffect(() => {
+    if (!user) {
+      setLocalCartData(initialCartData);
+    }
+  }, [initialCartData, user]);
+
+  const refreshCartData = async () => {
+    try {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+      const productEndpoint = "cart";
+
+      const apiUrl = `${apiBaseUrl}${productEndpoint}`;
+      // Make an API call to fetch the latest cart data
+      const response = await axios.get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          Accept: "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        // Update the local cart data with the latest data from the server
+        setLocalCartData(response.data.items);
+      } else {
+        console.error(
+          "Failed to fetch updated cart data:",
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching updated cart data:", error);
+    }
+  };
+
+  const incrementQuantity = async (productKey: any) => {
+    const product = initialCartData[productKey];
     console.log("product quantity", product.quantity);
     dispatch(incrementItem(productKey));
     dispatch(
@@ -56,12 +92,14 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     );
 
     if (user) {
-      sendUpdateToEndpoint(productKey, product.quantity + 1, user.token);
+      await sendUpdateToEndpoint(productKey, product.quantity + 1, user.token);
+      // Refresh cart data after updating
+      await refreshCartData();
     }
   };
 
-  const decrementQuantity = (productKey: any) => {
-    const product = cartData[productKey];
+  const decrementQuantity = async (productKey: any) => {
+    const product = initialCartData[productKey];
     if (product.quantity > 0) {
       dispatch(decrementItem(productKey));
       dispatch(
@@ -71,16 +109,22 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     // If user is logged in, send update to /cart/create endpoint
     if (user) {
       if (product.quantity > 0) {
-        sendUpdateToEndpoint(productKey, product.quantity - 1, user.token);
+        await sendUpdateToEndpoint(
+          productKey,
+          product.quantity - 1,
+          user.token
+        );
+        // Refresh cart data after updating
+        await refreshCartData();
       }
     }
   };
 
-  const handleDeleteFromCart = (productKey: any) => {
-    const product = cartData[productKey];
+  const handleDeleteFromCart = async (productKey: any) => {
+    const product = initialCartData[productKey];
     // If user is logged in, remove the product from the cart
     if (user) {
-      removeProductFromCart(productKey, user.token);
+      await removeProductFromCart(productKey, user.token);
     }
 
     // const cartItem = { id: product.id, quantity: 1 };
@@ -88,6 +132,9 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     // dispatch(deleteSelectedProduct({ id: cartItem.id }));
     dispatch(decrementCartCount());
     // console.log("Item removed", cartItem);
+
+    // Refresh cart data after deletion
+    await refreshCartData();
   };
 
   const sendUpdateToEndpoint = async (
@@ -99,7 +146,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
     const productEndpoint = "cart";
 
     const apiUrl = `${apiBaseUrl}${productEndpoint}`;
-    const product = cartData[productKey];
+    const product = initialCartData[productKey];
     console.log({ product });
 
     try {
@@ -118,11 +165,11 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
         console.log("Product Key", productKey);
 
         // Update the quantity for the specific product in the cart
-        if (cartData[productKey]) {
-          cartData[productKey].quantity = newQuantity;
+        if (initialCartData[productKey]) {
+          initialCartData[productKey].quantity = newQuantity;
         } else {
           // If the product is not in the cart, add it with the new quantity
-          cartData[productKey] = {
+          initialCartData[productKey] = {
             id: product.id,
             title: product.title,
             price: product.price,
@@ -142,7 +189,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
           apiUrl + "/create",
           {
             user_email: `${user.user.email}`,
-            items: cartData,
+            items: initialCartData ,
           },
           {
             headers: {
@@ -172,7 +219,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
 
     const apiUrl = `${apiBaseUrl}${productEndpoint}`;
 
-    const product = cartData[productKey];
+    const product = initialCartData[productKey];
 
     try {
       // Fetch the user's current cart
@@ -187,7 +234,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
         const userCart = response.data.items;
 
         // Remove the product from the cart
-        delete cartData[productKey];
+        delete initialCartData[productKey];
         console.log("deleted product ", productKey, "from cart");
 
         // Send the updated cart to the endpoint
@@ -195,7 +242,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
           apiUrl + "/create",
           {
             user_email: `${user.user.email}`,
-            items: cartData,
+            items: initialCartData ,
           },
           {
             headers: {
@@ -221,14 +268,14 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
 
   return (
     <div className="flex flex-col gap-6 px-2 text-[#1B2E3C]">
-      {Object.entries(cartData).map(([productKey, product]) => (
+      {Object.entries(localCartData).map(([productKey, product]) => (
         <div
           className="h-[230PX] relative grid grid-cols-2 gap-4 sm:bg-[#F3E3E2] rounded-lg px-4 sm:px-[40px] py-6 border border-gray-200 mx-4 sm:mx-0"
           key={productKey}
         >
           <div className="h-full flex items-center justify-center overflow-hidden">
             <Image
-              src={product.product_image as unknown as string}
+              src={product.product_image[0] as unknown as string}
               alt="item1"
               width={200}
               height={50}
@@ -242,7 +289,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
             </h2>
             <h1 className="font-bold text-sm my-1">
               {product.sales_price ? (
-                <div className="flex items-center justify-start gap-2 sm:gap-4 my-4">
+                <div className="flex items-center justify-start gap-2 sm:gap-4 my-1">
                   <span className="text-sm sm:text-lg font-bold text-[#1B2E3C]">
                     ₦ {product.sales_price.toLocaleString()}
                   </span>
@@ -251,7 +298,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
                   </span>
                 </div>
               ) : (
-                <h2 className="text-sm sm:text-lg font-bold my-4 text-[#1B2E3C]">
+                <h2 className="text-sm sm:text-lg font-bold my-1 text-[#1B2E3C]">
                   ₦ {product.price.toLocaleString()}
                 </h2>
               )}

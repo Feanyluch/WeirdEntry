@@ -34,6 +34,12 @@ import axios from "axios";
 import SizeButtons from "@/components/SizeButtons";
 import { useDispatch, useSelector } from "react-redux";
 
+import heart from "../../../public/Images/heart.svg";
+import heart1 from "../../../public/Images/heart1.svg";
+import heart2 from "../../../public/Images/heart2.svg";
+import heart3 from "../../../public/Images/heart3.svg";
+import heart4 from "../../../public/Images/heart4.svg";
+
 import {
   addToCart,
   incrementCartCount,
@@ -43,6 +49,9 @@ import {
   addSelectedProduct,
 } from "@/redux/slices/cartSlice";
 import { sendItemsToEndpoint } from "@/utils/localStorageHelper";
+import { useRemoveFromWishlist } from "@/hook/useRemoveFromWishlist";
+import { useNotification } from "@/components/NotificationContext";
+import { addToFavorite, removeFromFavorite } from "@/redux/slices/favoriteSlice";
 
 interface Size {
   id: number;
@@ -80,6 +89,158 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
     ProductData | undefined
   >(undefined);
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
+
+  const favoriteItems = useSelector((state: RootState) => state.favorite.items);
+  const [isProductInWishlist, setIsProductInWishlist] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const removeFromWishlist = useRemoveFromWishlist();
+  const { showNotification } = useNotification();
+
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const images = [heart, heart1, heart2, heart3, heart4];
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    if (isAnimating) {
+      intervalId = setInterval(() => {
+        setCurrentImageIndex((prevIndex) =>
+          prevIndex === images.length - 1 ? prevIndex : prevIndex + 1
+        );
+      }, 100); // Adjust the interval as per your requirement
+    } else {
+      // Reset animation to the first image when isAnimating becomes false
+      setCurrentImageIndex(0);
+    }
+    return () => clearInterval(intervalId);
+  }, [isAnimating, images]);
+
+  
+  useEffect(() => {
+    // Update isProductInWishlist if user is logged in
+    if (user && user.token && selectedProduct) {
+      fetchUserWishlist()
+        .then((userWishlist) => {
+          if (Array.isArray(userWishlist)) {
+            const isInWishlist = userWishlist.some(
+              (item: { product_id: number }) => item.product_id === selectedProduct.id
+            );
+            setIsProductInWishlist(isInWishlist);
+          }
+        })
+        .catch((error) =>
+          console.error("Error fetching user wishlist:", error)
+        );
+    }
+
+    // Update isFavorite
+    if(selectedProduct){
+    setIsFavorite(favoriteItems.some((item) => item.id === selectedProduct.id));}
+  }, [user, favoriteItems, selectedProduct]);
+
+
+  const fetchUserWishlist = async () => {
+    try {
+      const response = await axios.get(
+        "https://weird-entry-lara-production.up.railway.app/api/wishlist",
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error("Failed to fetch user's wishlist");
+      }
+    } catch (error) {
+      console.error("Error fetching user's wishlist:", error);
+      return [];
+    }
+  };
+
+  const handleToggleFavorite = async () => {
+    try {
+      // Set loading state to true to indicate that the process is ongoing
+      // setLoading(true);
+      
+      if (user && user.token) {
+        const userWishlist = await fetchUserWishlist();
+        if (Array.isArray(userWishlist)) {
+          if (isProductInWishlist && selectedProduct) {
+            await removeFromWishlist(selectedProduct.id);
+            showNotification("Product Removed from Wishlist")
+          } else {
+            await addToWishlist(selectedProduct);
+            showNotification("Product Added to Wishlist")
+          }
+        } else {
+          console.log("User wishlist is empty. Adding product to wishlist.");
+          await addToWishlist(selectedProduct);
+          showNotification("Product Added to Wishlist")
+        }
+      } else {
+        if (selectedProduct) {
+        if (isFavorite) {
+          dispatch(removeFromFavorite(selectedProduct.id));
+          showNotification("Product Removed from Wishlist")
+        } else {
+          dispatch(addToFavorite(selectedProduct));
+          showNotification("Product Added to Wishlist")
+        }}
+      }
+      
+      // Manually update local state to reflect changes
+      setIsFavorite(!isFavorite);
+      
+      // Trigger a refresh of the data from the server to ensure UI reflects latest state
+      const updatedWishlist = await fetchUserWishlist();
+      if (selectedProduct){
+      if (Array.isArray(updatedWishlist)) {
+        const isInWishlist = updatedWishlist.some(item => item.product_id === selectedProduct.id);
+        setIsProductInWishlist(isInWishlist);
+      }}
+    } catch (error) {
+      console.error("Error handling toggle favorite:", error);
+    } finally {
+      // Set loading state to false when the process is completed (either successfully or with error)
+      // setLoading(false);
+    }
+    setIsAnimating(prevIsAnimating => !prevIsAnimating);
+  };  
+  
+
+  const addToWishlist = async (productToAdd: any) => {
+    try {
+      const response = await axios.post(
+        "https://weird-entry-lara-production.up.railway.app/api/wishlist/create",
+        {
+          product_id: productToAdd.id,
+          title: productToAdd.title,
+          price: productToAdd.price,
+          product_image: productToAdd.product_image,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Added to wishlist successfully");
+      } else {
+        console.error("Failed to add to wishlist:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+    }
+  };
 
   const handleImageHover = (image: string) => {
     setHoveredImage(image);
@@ -165,8 +326,9 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
             id: `${selectedProduct.id}_${selectedSize}_${selectedColor}`,
             quantity: 1,
             product_image: selectedProduct.product_image[0],
-            price: selectedProduct.price,
-            sales_price: selectedProduct.sales_price,
+            price: selectedProduct.sales_price
+              ? selectedProduct.sales_price
+              : selectedProduct.price,
             title: selectedProduct.title,
             size: selectedSize,
             color: selectedColor,
@@ -226,8 +388,9 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                     const newCartItem = {
                       id: selectedProduct.id,
                       title: selectedProduct.title,
-                      price: selectedProduct.price,
-                      sales_price: selectedProduct.sales_price,
+                      price: selectedProduct.sales_price
+                        ? selectedProduct.sales_price
+                        : selectedProduct.price,
                       product_image: selectedProduct.product_image[0],
                       quantity: newlyAddedItemQuantity,
                       size: selectedSize,
@@ -241,8 +404,9 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                   const newCartItem = {
                     id: selectedProduct.id,
                     title: selectedProduct.title,
-                    price: selectedProduct.price,
-                    sales_price: selectedProduct.sales_price,
+                    price: selectedProduct.sales_price
+                      ? selectedProduct.sales_price
+                      : selectedProduct.price,
                     product_image: selectedProduct.product_image[0],
                     quantity: newlyAddedItemQuantity,
                     size: selectedSize,
@@ -266,8 +430,9 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                 [newCartItemKey]: {
                   id: selectedProduct.id,
                   title: selectedProduct.title,
-                  price: selectedProduct.price,
-                  sales_price: selectedProduct.sales_price,
+                  price: selectedProduct.sales_price
+                    ? selectedProduct.sales_price
+                    : selectedProduct.price,
                   product_image: selectedProduct.product_image[0],
                   quantity: newlyAddedItemQuantity,
                   size: selectedSize,
@@ -286,8 +451,9 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
               [newCartItemKey]: {
                 id: selectedProduct.id,
                 title: selectedProduct.title,
-                price: selectedProduct.price,
-                sales_price: selectedProduct.sales_price,
+                price: selectedProduct.sales_price
+                  ? selectedProduct.sales_price
+                  : selectedProduct.price,
                 product_image: selectedProduct.product_image[0],
                 quantity: newlyAddedItemQuantity,
                 size: selectedSize,
@@ -383,7 +549,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                         backgroundPosition: "center",
                         width: "100%",
                         height: "200px", // Adjust the height as needed
-                        cursor: "pointer"
+                        cursor: "pointer",
                       }}
                     ></div>
                   </div>
@@ -471,13 +637,20 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                 <button
                   onClick={handleAddToCart}
                   disabled={isAddToCartDisabled}
-                  className="px-8 sm:px-[80px] w-[80%] h-[50px] uppercase border border-[#0C0C1E] rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300"
+                  className={`px-8 sm:px-[80px] w-[80%] h-[50px] uppercase border border-[#0C0C1E] rounded-lg ${
+                    isAddToCartDisabled
+                      ? ""
+                      : "hover:bg-[#1B2E3C] hover:text-[#F3E3E2]"
+                  } transition ease-in-out duration-300 ${
+                    isAddToCartDisabled ? "cursor-not-allowed" : ""
+                  }`}
                 >
                   Add to cart
                 </button>
-                <button className="w-[20%] h-[50px] border border-[#0C0C1E] flex items-center justify-center rounded-lg hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition ease-in-out duration-300">
+                <button className={`w-[20%] h-[50px] border border-[#0C0C1E] flex items-center justify-center rounded-lg transition ease-in-out duration-300 ${user ? (isProductInWishlist ? "border border-red-500 bg-red-100" : "") : isFavorite ? "" : ""
+          }`} onClick={handleToggleFavorite}>
                   <Image
-                    src="https://res.cloudinary.com/duxy2eomx/image/upload/v1697712759/Heart_kvhvmp.svg"
+                    src={user ? (isProductInWishlist ? images[images.length - 1] : images[0]) : (isFavorite ? images[images.length - 1] : images[0])}
                     height={20}
                     width={20}
                     alt="heart"

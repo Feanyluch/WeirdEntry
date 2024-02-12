@@ -88,8 +88,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
         const cartItem = {
           id: product.id,
           quantity: 1,
-          price: product.price,
-          sales_price: product.sales_price,
+          price: product.sales_price ? product.sales_price : product.price,
           title: product.title,
           product_image: product.product_image,
           size: selectedSize,
@@ -151,8 +150,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
                 const newCartItem = {
                   id: product.id,
                   title: product.title,
-                  price: product.price,
-                  sales_price: product.sales_price,
+                  price: product.sales_price ? product.sales_price : product.price,
                   product_image: product.product_image,
                   quantity: 1, // Quantity is 1 for a newly added item
                   size: selectedSize,
@@ -166,8 +164,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
               const newCartItem = {
                 id: product.id,
                 title: product.title,
-                price: product.price,
-                sales_price: product.sales_price,
+                price: product.sales_price ? product.sales_price : product.price,
                 product_image: product.product_image,
                 quantity: 1, // Quantity is 1 for a newly added item
                 size: selectedSize,
@@ -196,8 +193,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
               [newCartItemKey]: {
                 id: product.id,
                 title: product.title,
-                price: product.price,
-                sales_price: product.sales_price,
+                price: product.sales_price ? product.sales_price : product.price,
                 product_image: product.product_image[0],
                 quantity: 1,
                 size: selectedSize,
@@ -220,8 +216,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
             [newCartItemKey]: {
               id: product.id,
               title: product.title,
-              price: product.price,
-              sales_price: product.sales_price,
+              price: product.sales_price ? product.sales_price : product.price,
               product_image: product.product_image[0],
               quantity: 1,
               size: selectedSize,
@@ -338,7 +333,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
               loading
                 ? "bg-gray-200 cursor-not-allowed"
                 : "bg-[#1B2E3C] text-[#F3E3E2]"
-            }`}
+            } ${!selectedSize || !selectedColor || loading ? "cursor-not-allowed" : ""}`}
           >
             {loading ? "Adding..." : "Add to Cart"}
           </button>

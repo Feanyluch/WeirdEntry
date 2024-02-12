@@ -76,7 +76,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
     // Initialize more checkboxes as needed
   });
 
-  const router = useRouter()
+  const router = useRouter();
 
   // Function to handle checkbox changes
   const handleCheckboxChange = (checkboxName: keyof CheckboxStates) => {
@@ -189,6 +189,8 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
       subtotal: subtotal,
       delivery_fee: 4000, // Replace with the actual delivery fee
       total: total,
+      state: user?.user?.state,
+      city: user?.user?.city,
       shipping_address: user?.user?.address, // Replace with the actual shipping address
       payment_ref: payment_reference,
     };
@@ -208,7 +210,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
       })
       .then((response) => {
         console.log("Order placed successfully:", response.data);
-        router.push("/order-success")
+        router.push("/order-success");
         // Redirect or perform any necessary actions
       })
       .catch((error) => {
@@ -409,19 +411,22 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
               </p> */}
               </div>
               <div className="hidden sm:flex items-center justify-center">
-                {/* <button className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
-                Place Order
-              </button> */}
-                <div className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
-                  <PaystackButton
-                    {...paystackConfig}
-                    text="Place Order"
-                    onSuccess={(response: any) =>
-                      handlePaymentSuccess(response)
-                    }
-                    onClose={() => console.log("Payment closed")}
-                  />
-                </div>
+                {checkboxStates.terms ? (
+                  <div className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
+                    <PaystackButton
+                      {...paystackConfig}
+                      text="Place Order"
+                      onSuccess={(response: any) =>
+                        handlePaymentSuccess(response)
+                      }
+                      onClose={() => console.log("Payment closed")}
+                    />
+                  </div>
+                ) : (
+                  <div className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded opacity-50 cursor-not-allowed">
+                    Place Order
+                  </div>
+                )}
               </div>
             </div>
             <div className="sm:w-[42%] h-[630px] bg-white rounded-lg p-[40px]">
@@ -468,14 +473,22 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
               {/* <button className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
                 Place Order
               </button> */}
-              <div className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
-                <PaystackButton
-                  {...paystackConfig}
-                  text="Place Order"
-                  onSuccess={(response: any) => handlePaymentSuccess(response)}
-                  onClose={() => console.log("Payment closed")}
-                />
-              </div>
+              {checkboxStates.terms ? (
+                <div className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded">
+                  <PaystackButton
+                    {...paystackConfig}
+                    text="Place Order"
+                    onSuccess={(response: any) =>
+                      handlePaymentSuccess(response)
+                    }
+                    onClose={() => console.log("Payment closed")}
+                  />
+                </div>
+              ) : (
+                <div className="bg-[#1B2E3C] text-[#F3E3E2] px-[80px] py-[17px] rounded opacity-50 cursor-not-allowed">
+                  Place Order
+                </div>
+              )}
             </div>
           </div>
         </div>
