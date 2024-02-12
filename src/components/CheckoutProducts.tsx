@@ -19,7 +19,7 @@ const CheckoutProducts: React.FC<CheckoutProductProps> = ({ cartData }) => {
       {Object.entries(cartData).map(([productKey, product]) => (
         <div className="h-[210px] flex items-start justify-start gap-4 sm:gap-8 px-2 py-[10px]" key={productKey}>
           <Image
-            src={product.product_image}
+            src={product.product_image as unknown as string}
             width={200}
             height={20}
             alt="shirt"

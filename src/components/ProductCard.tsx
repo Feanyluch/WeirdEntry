@@ -1,40 +1,63 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ProductData } from "./product";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import store, { RootState } from "@/redux/store";
 import pinkFavorite from "../../public/Images/pink-favorite.svg";
+import heart from "../../public/Images/heart.svg";
+import heart1 from "../../public/Images/heart1.svg";
+import heart2 from "../../public/Images/heart2.svg";
+import heart3 from "../../public/Images/heart3.svg";
+import heart4 from "../../public/Images/heart4.svg";
 import axios from "axios";
 import {
   addToFavorite,
   removeFromFavorite,
 } from "@/redux/slices/favoriteSlice";
 import { useRemoveFromWishlist } from "@/hook/useRemoveFromWishlist";
+import { useNotification } from "./NotificationContext";
 interface ProductCardProps {
   product: ProductData;
   onAddToCart: (product: ProductData) => void;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
-  // console.log("Product Card Prop", product);
-  // const [showAllStars, setShowAllStars] = useState(false);
-
-  // const totalStars = 5;
-  // const grayStars = totalStars - product.rating;
-  // const displayStars = showAllStars ? totalStars : product.rating;
-
   const dispatch = useDispatch();
-  const cartItems = useSelector((state: RootState) => state.cart.items);
   const user = useSelector((state: RootState) => state.auth.user);
   const favoriteItems = useSelector((state: RootState) => state.favorite.items);
   const [loading, setLoading] = useState(false);
+  const [isProductInWishlist, setIsProductInWishlist] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const removeFromWishlist = useRemoveFromWishlist();
+  const { showNotification } = useNotification();
+
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const images = [heart, heart1, heart2, heart3, heart4];
+
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    if (isAnimating) {
+      intervalId = setInterval(() => {
+        setCurrentImageIndex((prevIndex) =>
+          prevIndex === images.length - 1 ? prevIndex : prevIndex + 1
+        );
+      }, 100); // Adjust the interval as per your requirement
+    } else {
+      // Reset animation to the first image when isAnimating becomes false
+      setCurrentImageIndex(0);
+    }
+    return () => clearInterval(intervalId);
+  }, [isAnimating, images]);
+
+  // const isFavorite = favoriteItems.some(item => item.id === product.id)
 
   const handleAddToCart = async () => {
-    
     try {
       setLoading(true);
       // Make an API request to get the full details of the selected product
@@ -54,35 +77,27 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
     }
   };
 
-  const handleToggleFavorite = async () => {
-    try {
-      // Check if the user is logged in
-      if (user && user.token) {
-        // Fetch the user's wishlist
-        const userWishlist = await fetchUserWishlist();
-        console.log({ userWishlist });
-        const isProductInWishlist = userWishlist.some(
-          (item: { product_id: number }) => item.product_id === product.id
+  useEffect(() => {
+    // Update isProductInWishlist if user is logged in
+    if (user && user.token) {
+      fetchUserWishlist()
+        .then((userWishlist) => {
+          if (Array.isArray(userWishlist)) {
+            const isInWishlist = userWishlist.some(
+              (item: { product_id: number }) => item.product_id === product.id
+            );
+            setIsProductInWishlist(isInWishlist);
+          }
+        })
+        .catch((error) =>
+          console.error("Error fetching user wishlist:", error)
         );
-
-        if (isProductInWishlist) {
-          removeFromWishlist(product.id);
-        } else {
-          addToWishlist(product);
-        }
-      } else {
-        // User is not logged in, proceed with regular favorite toggling
-        const isFavorite = favoriteItems.some((item) => item.id === product.id);
-        if (isFavorite) {
-          dispatch(removeFromFavorite(product.id));
-        } else {
-          dispatch(addToFavorite(product));
-        }
-      }
-    } catch (error) {
-      console.error("Error handling toggle favorite:", error);
     }
-  };
+
+    // Update isFavorite
+    setIsFavorite(favoriteItems.some((item) => item.id === product.id));
+  }, [user, favoriteItems, product.id]);
+
 
   const fetchUserWishlist = async () => {
     try {
@@ -106,6 +121,55 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
       return [];
     }
   };
+
+  const handleToggleFavorite = async () => {
+    try {
+      // Set loading state to true to indicate that the process is ongoing
+      // setLoading(true);
+      
+      if (user && user.token) {
+        const userWishlist = await fetchUserWishlist();
+        if (Array.isArray(userWishlist)) {
+          if (isProductInWishlist) {
+            await removeFromWishlist(product.id);
+            showNotification("Product Removed from Wishlist")
+          } else {
+            await addToWishlist(product);
+            showNotification("Product Added to Wishlist")
+          }
+        } else {
+          console.log("User wishlist is empty. Adding product to wishlist.");
+          await addToWishlist(product);
+          showNotification("Product Added to Wishlist")
+        }
+      } else {
+        if (isFavorite) {
+          dispatch(removeFromFavorite(product.id));
+          showNotification("Product Removed from Wishlist")
+        } else {
+          dispatch(addToFavorite(product));
+          showNotification("Product Added to Wishlist")
+        }
+      }
+      
+      // Manually update local state to reflect changes
+      setIsFavorite(!isFavorite);
+      
+      // Trigger a refresh of the data from the server to ensure UI reflects latest state
+      const updatedWishlist = await fetchUserWishlist();
+      if (Array.isArray(updatedWishlist)) {
+        const isInWishlist = updatedWishlist.some(item => item.product_id === product.id);
+        setIsProductInWishlist(isInWishlist);
+      }
+    } catch (error) {
+      console.error("Error handling toggle favorite:", error);
+    } finally {
+      // Set loading state to false when the process is completed (either successfully or with error)
+      // setLoading(false);
+    }
+    setIsAnimating(prevIsAnimating => !prevIsAnimating);
+  };  
+  
 
   const addToWishlist = async (productToAdd: any) => {
     try {
@@ -135,148 +199,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
     }
   };
 
-  // const handleAddToFavorite = async () => {
-  //   try {
-  //     const isFavorite = favoriteItems.some((item) => item.id === product.id);
-
-  //     if (isFavorite) {
-  //       dispatch(removeFromFavorite(product.id));
-  //     } else {
-  //       dispatch(addToFavorite(product));
-  //     }
-
-  //     // Check if the user is logged in before fetching the user's cart
-  //     if (user && user.token) {
-  //       // Fetch the user's cart after updating the local cart
-  //       try {
-  //         setLoading(true);
-  //         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-  //         const productEndpoint = "wishlist";
-
-  //         const apiUrl = `${apiBaseUrl}${productEndpoint}`;
-  //         const response = await axios.get(apiUrl, {
-  //           headers: {
-  //             Authorization: `Bearer ${user.token}`,
-  //             Accept: "application/json",
-  //           },
-  //         });
-
-  //         if (response.status === 200) {
-  //           const userFavorite = response.data.items;
-
-  //           // Use the extracted quantity for the newly added item
-  //           const existingFavoriteKey = product.id;
-  //           const existingFavorite = userFavorite[existingFavoriteKey];
-
-  //           if (existingFavorite) {
-  //             // Check if the existing item has the same size and color
-  //             if (existingFavorite) {
-  //               // Remove the existing favorite item
-  //               console.log("Existing favorite item found. Removing the product from favorites.");
-  //               try {
-  //                 setLoading(true);
-  //                 const removeFavoriteEndpoint = `${apiBaseUrl}wishlist/remove`;
-
-  //                 // Make a request to remove the product from favorites
-  //                 const removeResponse = await axios.post(removeFavoriteEndpoint, {
-  //                   product_id: product.id,
-  //                 }, {
-  //                   headers: {
-  //                     Authorization: `Bearer ${user.token}`,
-  //                     Accept: "application/json",
-  //                   },
-  //                 });
-
-  //                 if (removeResponse.status === 200) {
-  //                   console.log("Product removed from favorites successfully.");
-  //                   // Here, you may want to update your Redux store or UI to reflect the change
-  //                 } else {
-  //                   console.error("Failed to remove product from favorites:", removeResponse.statusText);
-  //                 }
-  //               } catch (error) {
-  //                 console.error("Error removing product from favorites:", error);
-  //               } finally {
-  //                 setLoading(false);
-  //               }
-  //             } else {
-  //               console.log("newly added");
-  //               // Create a new item with the same ID but different size and color
-  //               const newFavoriteItem = {
-  //                 product_id: product.id,
-  //                 title: product.title,
-  //                 price: product.price,
-  //                 sales_price: product.sales_price,
-  //                 product_image: product.product_image,
-  //               };
-  //               userFavorite[existingFavoriteKey] = newFavoriteItem;
-  //             }
-  //           } else {
-  //             // If there's no existing item, create a new one
-  //             console.log("newly added");
-  //             const newFavoriteItem = {
-  //               product_id: product.id,
-  //               title: product.title,
-  //               price: product.price,
-  //               sales_price: product.sales_price,
-  //               product_image: product.product_image,
-  //             };
-  //             userFavorite[existingFavoriteKey] = newFavoriteItem;
-  //           }
-
-  //           // Combine the fetched cart with the items already in the Redux store
-  //           const updatedWishlist = { ...userFavorite };
-
-  //           // If the user is logged in, send the updated cart to the endpoint
-  //           if (user && user.token) {
-  //             sendFavoriteToEndpoint(updatedWishlist);
-  //           }
-  //           // ... (remaining code)
-  //         } else if (response.status === 400) {
-  //           setLoading(true);
-  //           // If the user has no cart, send only the newly added item to create the cart
-  //           const newFavoriteItemKey = product.id;
-  //           sendFavoriteToEndpoint({
-  //             [newFavoriteItemKey]: {
-  //               product_id: product.id,
-  //               title: product.title,
-  //               price: product.price,
-  //               sales_price: product.sales_price,
-  //               product_image: product.product_image,
-  //             },
-  //           });
-  //         } else {
-  //           console.error("Failed to fetch user cart:", response.statusText);
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching user cart:", error);
-
-  //         setLoading(true);
-  //         // If there's an error fetching the user's cart, assume the user has no cart and send only the newly added item
-  //         const newFavoriteItemKey = product.id;
-  //         sendFavoriteToEndpoint({
-  //           [newFavoriteItemKey]: {
-  //             product_id: product.id,
-  //             title: product.title,
-  //             price: product.price,
-  //             sales_price: product.sales_price,
-  //             product_image: product.product_image,
-  //           },
-  //         });
-  //         setLoading(false);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Error handling add to cart:", error);
-  //   }
-  // };
-
   return (
     <div>
       <Link href={`/shop/${product.id}`} passHref>
         <div className="rounded-lg h-[200px] relative overflow-hidden flex items-center justify-center">
           <div
             style={{
-              backgroundImage: `url('${product.product_image}')`,
+              backgroundImage: `url('${product.product_image[0]}')`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               width: "100%",
@@ -293,26 +222,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
           <h2 className="capitalize h-[50px] sm:max-h-[50px] sm:h-[50px] text-[14px] sm:text-base">
             {product.title}
           </h2>
-          {/* <div className="flex my-2">
-            {[...Array(displayStars)].map((_, index) => (
-              <Image
-                key={index}
-                width={16}
-                height={16}
-                src="https://res.cloudinary.com/duxy2eomx/image/upload/v1697712759/staricon_pz1faa.svg"
-                alt="staricon"
-              />
-            ))}
-            {[...Array(grayStars)].map((_, index) => (
-              <Image
-                key={index}
-                width={16}
-                height={16}
-                src="https://res.cloudinary.com/duxy2eomx/image/upload/v1697713781/nostarticon_zdqlph.svg"
-                alt="gray-staricon"
-              />
-            ))}
-          </div> */}
           {product.sales_price ? (
             <div className="flex items-center justify-start gap-2 sm:gap-4 my-4">
               <span className="text-sm sm:text-lg font-bold text-[#1B2E3C]">
@@ -338,10 +247,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         </button>
         <button
           onClick={handleToggleFavorite}
-          className="hidden sm:w-1/4 border border-[#0C0C1E] sm:flex items-center justify-center rounded-lg transition ease-in-out duration-300"
+          className={`hidden sm:w-1/4 border border-[#0C0C1E] sm:flex items-center justify-center rounded-lg transition ease-in-out duration-300 ${
+            user ? (isProductInWishlist ? "" : "") : isFavorite ? "" : ""
+          }`}
         >
           <Image
-            src="https://res.cloudinary.com/duxy2eomx/image/upload/v1697712759/Heart_kvhvmp.svg"
+            src={user ? (isProductInWishlist ? images[images.length - 1] : images[0]) : (isFavorite ? images[images.length - 1] : images[0])}
             height={25}
             width={25}
             alt="heart"

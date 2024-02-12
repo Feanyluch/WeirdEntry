@@ -1,27 +1,46 @@
-import React, { createContext, useContext, ReactNode, useState } from 'react';
-import AddNotification from './AddNotification';
+import React, { createContext, useContext, ReactNode, useState } from "react";
+import AddNotification from "./AddNotification";
+
+// Define the type for the notification state
+interface NotificationState {
+  show: boolean;
+  message: string;
+}
 
 interface NotificationContextProps {
   children: ReactNode;
 }
 
 interface NotificationContextValue {
-  showNotification: () => void;
+  showNotification: (message: string) => void;
 }
 
-const NotificationContext = createContext<NotificationContextValue | undefined>(undefined);
+const NotificationContext = createContext<NotificationContextValue | undefined>(
+  undefined
+);
 
-export const NotificationProvider: React.FC<NotificationContextProps> = ({ children }) => {
-  const [showNotification, setShowNotification] = useState(false);
+export const NotificationProvider: React.FC<NotificationContextProps> = ({
+  children,
+}) => {
+  const [notification, setNotification] = useState<NotificationState>({
+    show: false,
+    message: "",
+  });
 
   const contextValue: NotificationContextValue = {
-    showNotification: () => setShowNotification(true),
+    showNotification: (message: string) =>
+      setNotification({ show: true, message }), // Update here
   };
 
   return (
     <NotificationContext.Provider value={contextValue}>
       {children}
-      {showNotification && <AddNotification message={`Product added to the cart`} onClose={() => setShowNotification(false)} />}
+      {notification.show && (
+        <AddNotification
+          message={notification.message}
+          onClose={() => setNotification({ show: false, message: "" })}
+        />
+      )}
     </NotificationContext.Provider>
   );
 };
@@ -29,7 +48,9 @@ export const NotificationProvider: React.FC<NotificationContextProps> = ({ child
 export const useNotification = () => {
   const context = useContext(NotificationContext);
   if (!context) {
-    throw new Error('useNotification must be used within a NotificationProvider');
+    throw new Error(
+      "useNotification must be used within a NotificationProvider"
+    );
   }
   return context;
 };

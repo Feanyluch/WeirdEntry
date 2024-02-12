@@ -228,7 +228,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData }) => {
         >
           <div className="h-full flex items-center justify-center overflow-hidden">
             <Image
-              src={product.product_image}
+              src={product.product_image as unknown as string}
               alt="item1"
               width={200}
               height={50}

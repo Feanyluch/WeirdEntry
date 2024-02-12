@@ -21,9 +21,10 @@ const FavoriteTable: React.FC<FavoriteTableProps> = ({ onRemoveFavorite }) => {
   const favoriteItems = useSelector((state: RootState) => state.favorite.items);
   const user = useSelector((state: RootState) => state.auth.user);
   const wishlistItems = useSelector((state: RootState) => state.favorite.items);
-  console.log({wishlistItems})
+  console.log({ wishlistItems });
 
   const [wishlistData, setWishlistData] = useState<CommonFavoriteItem[]>([]);
+  console.log({ wishlistData });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -47,24 +48,30 @@ const FavoriteTable: React.FC<FavoriteTableProps> = ({ onRemoveFavorite }) => {
             return;
           }
 
-          const itemsArray: CommonFavoriteItem[] = response.data.map((item: any) => ({
-            product_id: item.product_id,
-            title: item.products.title,
-            price: item.products.price,
-            sales_price: item.products.sales_price,
-            product_image: item.products.product_image,
-          }));
+          const itemsArray: CommonFavoriteItem[] = response.data.map(
+            (item: any) => ({
+              product_id: item.product_id,
+              title: item.products.title,
+              price: item.products.price,
+              sales_price: item.products.sales_price,
+              product_image: item.products.product_image[0],
+            })
+          );
+
+          console.log({ itemsArray });
 
           setWishlistData(itemsArray);
         } else {
           // For local storage data, directly use the items from redux store
-          const itemsArray: CommonFavoriteItem[] = wishlistItems.map((item: FavoriteItem) => ({
-            product_id: item.id,
-            title: item.title,
-            price: item.price,
-            sales_price: item.sales_price,
-            product_image: item.product_image,
-          }));
+          const itemsArray: CommonFavoriteItem[] = wishlistItems.map(
+            (item: FavoriteItem) => ({
+              product_id: item.id,
+              title: item.title,
+              price: item.price,
+              sales_price: item.sales_price,
+              product_image: item.product_image[0],
+            })
+          );
 
           setWishlistData(itemsArray);
         }
@@ -80,7 +87,7 @@ const FavoriteTable: React.FC<FavoriteTableProps> = ({ onRemoveFavorite }) => {
     fetchWishlistData();
   }, [user?.token, wishlistItems]);
 
-  console.log({wishlistData})
+  console.log({ wishlistData });
 
   return (
     <table
@@ -113,9 +120,7 @@ const FavoriteTable: React.FC<FavoriteTableProps> = ({ onRemoveFavorite }) => {
                   <span className="text-gray-500 line-through">
                     ₦ {favoriteProduct.price}
                   </span>{" "}
-                  <strong>
-                    ₦ {favoriteProduct.sales_price}
-                  </strong>
+                  <strong>₦ {favoriteProduct.sales_price}</strong>
                 </div>
               ) : (
                 <>₦ {favoriteProduct.price}</>

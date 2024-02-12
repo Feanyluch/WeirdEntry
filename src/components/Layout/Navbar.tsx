@@ -40,7 +40,9 @@ const Navbar: React.FC = () => {
   const cartCountFromRedux = useSelector(
     (state: RootState) => state.cart.cartCount
   );
-  const wishlistCountFromRedux = useSelector((state: RootState) => state.favorite.items);
+  const wishlistCountFromRedux = useSelector(
+    (state: RootState) => state.favorite.items
+  );
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
@@ -53,52 +55,65 @@ const Navbar: React.FC = () => {
     const fetchCartCount = async () => {
       try {
         let cartCountFromAPI = 0;
-        let wishlistCountFromAPI = 0;
   
         if (user) {
           const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
           const cartEndpoint = "cart";
-          const wishlistEndpoint = "wishlist";
-  
           const cartUrl = `${apiBaseUrl}${cartEndpoint}`;
-          const wishlistUrl = `${apiBaseUrl}${wishlistEndpoint}`;
   
-          const [cartResponse, wishlistResponse] = await Promise.all([
-            axios.get(cartUrl, {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-                Accept: "application/json",
-              },
-            }),
-            axios.get(wishlistUrl, {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-                Accept: "application/json",
-              },
-            }),
-          ]);
+          const cartResponse = await axios.get(cartUrl, {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              Accept: "application/json",
+            },
+          });
   
           const cartItemsObject = cartResponse.data.items || {};
           cartCountFromAPI = Object.keys(cartItemsObject).length;
-  
-          const wishlistItems: FavoriteItem[] = wishlistResponse.data || [];
-        wishlistCountFromAPI = wishlistItems.length;
         } else {
-          // If user is not logged in, use the cart and wishlist count from the Redux store
+          // If user is not logged in, use the cart count from the Redux store
           cartCountFromAPI = cartCountFromRedux;
-          wishlistCountFromAPI = wishlistCountFromRedux.length;
         }
   
         setCartCount(cartCountFromAPI);
+      } catch (error: any) {
+        console.error("Error fetching cart count from API:", error.message);
+      }
+    };
+  
+    const fetchWishlistCount = async () => {
+      try {
+        let wishlistCountFromAPI = 0;
+  
+        if (user) {
+          const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+          const wishlistEndpoint = "wishlist";
+          const wishlistUrl = `${apiBaseUrl}${wishlistEndpoint}`;
+  
+          const wishlistResponse = await axios.get(wishlistUrl, {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              Accept: "application/json",
+            },
+          });
+  
+          const wishlistItems: FavoriteItem[] = wishlistResponse.data || [];
+          console.log({wishlistItems})
+          wishlistCountFromAPI = wishlistItems.length;
+        } else {
+          // If user is not logged in, use the wishlist count from the Redux store
+          wishlistCountFromAPI = wishlistCountFromRedux.length;
+        }
+  
         setWishlistCount(wishlistCountFromAPI);
       } catch (error: any) {
-        console.error("Error fetching cart and wishlist counts from API:", error.message);
+        console.error("Error fetching wishlist count from API:", error.message);
       }
     };
   
     fetchCartCount();
-  }, [user, cartCountFromRedux, wishlistCountFromRedux]);
-  
+    fetchWishlistCount();
+  }, [user, cartCountFromRedux, wishlistCountFromRedux]);  
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);

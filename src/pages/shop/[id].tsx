@@ -62,6 +62,7 @@ interface HomeProps {
   products?: { data: ProductData[] } | undefined; // Make the prop optional
   sizes: string[];
   colors: Color[];
+  product_image: string[];
 }
 
 const ProductDescription: React.FC<HomeProps> & { title: string } = ({
@@ -78,6 +79,11 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
   const [selectedProduct, setSelectedProduct] = useState<
     ProductData | undefined
   >(undefined);
+  const [hoveredImage, setHoveredImage] = useState<string | null>(null);
+
+  const handleImageHover = (image: string) => {
+    setHoveredImage(image);
+  };
 
   const relatedProducts = products?.data
     ? products.data
@@ -158,7 +164,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
           const cartItem = {
             id: `${selectedProduct.id}_${selectedSize}_${selectedColor}`,
             quantity: 1,
-            product_image: selectedProduct.product_image,
+            product_image: selectedProduct.product_image[0],
             price: selectedProduct.price,
             sales_price: selectedProduct.sales_price,
             title: selectedProduct.title,
@@ -222,7 +228,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                       title: selectedProduct.title,
                       price: selectedProduct.price,
                       sales_price: selectedProduct.sales_price,
-                      product_image: selectedProduct.product_image,
+                      product_image: selectedProduct.product_image[0],
                       quantity: newlyAddedItemQuantity,
                       size: selectedSize,
                       color: selectedColor,
@@ -237,7 +243,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                     title: selectedProduct.title,
                     price: selectedProduct.price,
                     sales_price: selectedProduct.sales_price,
-                    product_image: selectedProduct.product_image,
+                    product_image: selectedProduct.product_image[0],
                     quantity: newlyAddedItemQuantity,
                     size: selectedSize,
                     color: selectedColor,
@@ -262,7 +268,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                   title: selectedProduct.title,
                   price: selectedProduct.price,
                   sales_price: selectedProduct.sales_price,
-                  product_image: selectedProduct.product_image,
+                  product_image: selectedProduct.product_image[0],
                   quantity: newlyAddedItemQuantity,
                   size: selectedSize,
                   color: selectedColor,
@@ -282,7 +288,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                 title: selectedProduct.title,
                 price: selectedProduct.price,
                 sales_price: selectedProduct.sales_price,
-                product_image: selectedProduct.product_image,
+                product_image: selectedProduct.product_image[0],
                 quantity: newlyAddedItemQuantity,
                 size: selectedSize,
                 color: selectedColor,
@@ -347,8 +353,11 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
             <div className="grid grid-cols-3 gap-4 mx-4 sm:mx-0">
               <div className="col-span-3 flex items-center justify-center">
                 <div
+                  className="main-image"
                   style={{
-                    backgroundImage: `url('${selectedProduct.product_image}')`,
+                    backgroundImage: `url('${
+                      hoveredImage || selectedProduct?.product_image[0]
+                    }')`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     width: "100%",
@@ -357,15 +366,28 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                 ></div>
               </div>
 
-              <div className="col-span-1">
-                <Image src={shirt2} alt="shirt2" />
-              </div>
-              <div className="col-span-1">
-                <Image src={shirt3} alt="shirt2" />
-              </div>
-              <div className="col-span-1">
-                <Image src={shirt4} alt="shirt2" />
-              </div>
+              {selectedProduct?.product_image
+                .slice(1)
+                .map((image: string, index: number) => (
+                  <div
+                    key={index}
+                    className="col-span-1"
+                    onMouseEnter={() => handleImageHover(image)}
+                    onMouseLeave={() => setHoveredImage(null)}
+                  >
+                    <div
+                      className="additional-image"
+                      style={{
+                        backgroundImage: `url('${image}')`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        width: "100%",
+                        height: "200px", // Adjust the height as needed
+                        cursor: "pointer"
+                      }}
+                    ></div>
+                  </div>
+                ))}
             </div>
           </div>
           <div className="px-4">

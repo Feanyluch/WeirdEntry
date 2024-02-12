@@ -79,7 +79,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
 
           // Dispatch action to increment the item
           dispatch(incrementItem(existingProductKey));
-          showNotification();
+          showNotification("Product added to the cart");
           onClose();
         }
       } else {
@@ -97,7 +97,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
         };
         dispatch(addToCart(cartItem));
         dispatch(incrementCartCount());
-        showNotification();
+        showNotification("Product added to the cart");
         onClose();
       }
 
@@ -185,7 +185,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
             }
 
             setLoading(false);
-            showNotification();
+            showNotification("Product added to the cart");
             onClose();
             // ... (remaining code)
           } else if (response.status === 400) {
@@ -198,14 +198,14 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
                 title: product.title,
                 price: product.price,
                 sales_price: product.sales_price,
-                product_image: product.product_image,
+                product_image: product.product_image[0],
                 quantity: 1,
                 size: selectedSize,
                 color: selectedColor,
               },
             });
             setLoading(false);
-            showNotification();
+            showNotification("Product added to the cart");
             onClose();
           } else {
             console.error("Failed to fetch user cart:", response.statusText);
@@ -222,7 +222,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
               title: product.title,
               price: product.price,
               sales_price: product.sales_price,
-              product_image: product.product_image,
+              product_image: product.product_image[0],
               quantity: 1,
               size: selectedSize,
               color: selectedColor,
@@ -230,7 +230,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           });
           setLoading(false);
 
-          showNotification();
+          showNotification("Product added to the cart");
           onClose();
         }
       }
@@ -277,7 +277,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           <div className="grid grid-cols-2 gap-4 sm:gap-0 my-8">
             <div className="rounded-lg h-full flex items-center justify-center overflow-hidden">
               <Image
-                src={product.product_image}
+                src={product.product_image[0]}
                 alt="item1"
                 width={150}
                 height={50}
