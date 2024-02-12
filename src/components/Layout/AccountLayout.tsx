@@ -118,7 +118,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ children }) => {
                 isActive={tab.id === activeTab?.id}
                 imaget={<Image src={tab.image} width={20} height={10} alt="" />} // Use the Image component with the imported image
                 route={`${tab.route}?tab=${tab.id}`} // Include the query parameter here
-              />
+                icon={undefined}              />
             ))}
           </div>
         </div>
