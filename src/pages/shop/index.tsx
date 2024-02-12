@@ -79,7 +79,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
     const productEndpoint = "product";
   
     const apiUrl = `${apiBaseUrl}${productEndpoint}`;
-    let params = {};
+    let params: Record<string, any> = {};
   
     // Include selected category IDs in the query parameters if they exist
     if (selectedCategoryIds.length > 0) {
