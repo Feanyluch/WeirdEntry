@@ -16,7 +16,6 @@ import cancel from "../../../public/Images/cancel.svg";
 import weirdlogo from "../../../public/Images/weirdlogo.png";
 import whiteweirdlogo from "../../../public/Images/white-logo.png";
 
-import CartItems from "@/components/CartItems";
 import { ProductData } from "@/components/product";
 import { GetServerSideProps, GetStaticProps } from "next";
 import axios from "axios";

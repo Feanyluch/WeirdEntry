@@ -4,7 +4,14 @@ import { FavoriteItem } from "@/redux/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import axios from "axios";
-// import { FavoriteItem } from "@/redux/favoriteSlice";
+
+interface CommonFavoriteItem {
+  product_id: number;
+  title: string;
+  price: number;
+  sales_price?: number;
+  product_image: string;
+}
 
 interface FavoriteTableProps {
   onRemoveFavorite: (productId: number) => void;
@@ -12,24 +19,20 @@ interface FavoriteTableProps {
 
 const FavoriteTable: React.FC<FavoriteTableProps> = ({ onRemoveFavorite }) => {
   const favoriteItems = useSelector((state: RootState) => state.favorite.items);
-
   const user = useSelector((state: RootState) => state.auth.user);
-
   const wishlistItems = useSelector((state: RootState) => state.favorite.items);
+  console.log({wishlistItems})
 
-  const [wishlistData, setWishlistData] = useState<FavoriteItem[]>([]); // State for wishlist data
-  const [loading, setLoading] = useState(true); // State for loading status
+  const [wishlistData, setWishlistData] = useState<CommonFavoriteItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  console.log({ favoriteItems });
 
   useEffect(() => {
     const fetchWishlistData = async () => {
       try {
         if (user?.token) {
-          // Fetch wishlist data from the database endpoint
           const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
           const wishlistEndpoint = "wishlist";
-
           const apiUrl = `${apiBaseUrl}${wishlistEndpoint}`;
           const response = await axios.get(apiUrl, {
             headers: {
@@ -39,17 +42,31 @@ const FavoriteTable: React.FC<FavoriteTableProps> = ({ onRemoveFavorite }) => {
           });
 
           if (response.status === 400) {
-            // If response status is 400, show the empty wishlist content
             setWishlistData([]);
             setLoading(false);
-            return; // Exit the function early to prevent further execution
+            return;
           }
 
-          const itemsArray = response.data;
+          const itemsArray: CommonFavoriteItem[] = response.data.map((item: any) => ({
+            product_id: item.product_id,
+            title: item.products.title,
+            price: item.products.price,
+            sales_price: item.products.sales_price,
+            product_image: item.products.product_image,
+          }));
+
           setWishlistData(itemsArray);
         } else {
-          // Use wishlist data from the Redux store for non-logged-in users
-          setWishlistData(wishlistItems as FavoriteItem[]);
+          // For local storage data, directly use the items from redux store
+          const itemsArray: CommonFavoriteItem[] = wishlistItems.map((item: FavoriteItem) => ({
+            product_id: item.id,
+            title: item.title,
+            price: item.price,
+            sales_price: item.sales_price,
+            product_image: item.product_image,
+          }));
+
+          setWishlistData(itemsArray);
         }
 
         setLoading(false);
@@ -61,8 +78,9 @@ const FavoriteTable: React.FC<FavoriteTableProps> = ({ onRemoveFavorite }) => {
     };
 
     fetchWishlistData();
-    console.log("Raw wishlistData:", wishlistData);
   }, [user?.token, wishlistItems]);
+
+  console.log({wishlistData})
 
   return (
     <table
@@ -78,32 +96,32 @@ const FavoriteTable: React.FC<FavoriteTableProps> = ({ onRemoveFavorite }) => {
         </tr>
       </thead>
       <tbody>
-        {wishlistData.map((favoriteProduct: FavoriteItem) => (
-          <tr key={favoriteProduct.id}>
+        {wishlistData.map((favoriteProduct: CommonFavoriteItem) => (
+          <tr key={favoriteProduct.product_id}>
             <td className="flex gap-4 py-4">
               <Image
-                src={favoriteProduct.products.product_image}
-                alt={favoriteProduct.id.toString()}
+                src={favoriteProduct.product_image}
+                alt="hello"
                 width={50}
                 height={50}
               />
-              {favoriteProduct.products.title}
+              {favoriteProduct.title}
             </td>
             <td className="py-4">
-              {favoriteProduct.products.sales_price ? (
+              {favoriteProduct.sales_price ? (
                 <div className="flex gap-4">
                   <span className="text-gray-500 line-through">
-                    ₦ {favoriteProduct.products.price.toLocaleString()}
+                    ₦ {favoriteProduct.price}
                   </span>{" "}
                   <strong>
-                    ₦ {favoriteProduct.products.sales_price.toLocaleString()}
+                    ₦ {favoriteProduct.sales_price}
                   </strong>
                 </div>
               ) : (
-                <>₦ {favoriteProduct.products.price.toLocaleString()}</>
+                <>₦ {favoriteProduct.price}</>
               )}
             </td>
-            <td className="py-4">In stock</td>{" "}
+            <td className="py-4">In stock</td>
             {/* Example status, replace with actual product status */}
             <td className="py-4">
               <button

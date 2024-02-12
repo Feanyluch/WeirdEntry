@@ -3,9 +3,11 @@ import { RootState } from "../store";
 
 export interface FavoriteItem {
   id: number;
+  product_id?: any;
   title: string;
   price: number;
   product_image?: any;
+  sales_price: number;
   // Add any other properties specific to favorite items
 }
 

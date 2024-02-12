@@ -34,6 +34,7 @@ const Index: React.FC<HomeProps> & { title: string } = () => {
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
       const verificationEndpoint = "confirm-email";
       const apiUrl = `${apiBaseUrl}${verificationEndpoint}`;
+      console.log(apiUrl)
 
       axios
         .get(apiUrl, { headers })
