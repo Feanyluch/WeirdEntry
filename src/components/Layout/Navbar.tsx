@@ -7,7 +7,7 @@ import { RootState } from "@/redux/store";
 
 import cart from "../../../public/Images/cart1.png";
 // import Cart from "../../public/Images/Cart.svg";
-import Heart from "../../../public/Images/Heart.svg";
+import hearty from "../../../public/Images/hearty.svg";
 import User from "../../../public/Images/User.svg";
 import hamburger from "../../../public/Images/hamburger.svg";
 import Navclose from "../../../public/Images/Iclose.svg";
@@ -305,7 +305,7 @@ const Navbar: React.FC = () => {
             <Link href="/wishlist">
               <div className="p-2 relative cursor-pointer hidden sm:block">
                 <Image
-                  src={Heart}
+                  src={hearty}
                   alt="Heart"
                   height={22}
                   width={22}
