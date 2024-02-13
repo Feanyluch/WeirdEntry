@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import store, { RootState } from "@/redux/store";
 import pinkFavorite from "../../public/Images/pink-favorite.svg";
-import heart from "../../public/Images/heart.svg";
+import hearty from "../../public/Images/hearty.svg";
 import heart1 from "../../public/Images/heart1.svg";
 import heart2 from "../../public/Images/heart2.svg";
 import heart3 from "../../public/Images/heart3.svg";
@@ -36,7 +36,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
 
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const images = [heart, heart1, heart2, heart3, heart4];
+  const images = [hearty, heart1, heart2, heart3, heart4];
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
