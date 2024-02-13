@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Image from 'next/image'
+import Image from "next/image";
 import Slider from "react-slider";
 import axios from "axios";
 
@@ -12,7 +12,7 @@ interface Category {
 
 interface ProductCategoryProps {
   onSelectCategory: (category: Category) => void;
-  onFilterClick: () => void;
+  onFilterClick: (event: React.MouseEvent<HTMLButtonElement>, priceRange: [number, number]) => void;
   onClose: () => void;
 }
 
@@ -21,7 +21,9 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
   onFilterClick,
   onClose,
 }) => {
-  const [priceRange, setPriceRange] = useState<[number, number]>([10000, 70000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    10000, 70000,
+  ]);
   const [categories, setCategories] = useState<(string | Category)[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<
     string | Category | null
@@ -36,16 +38,13 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
         const productEndpoint = "category";
 
         const apiUrl = `${apiBaseUrl}${productEndpoint}`;
-        console.log({apiUrl})
-        const response = await axios.get<(string | Category)[]>(
-          apiUrl,
-          {
-            headers: {
-              Authorization: "Bearer Token",
-              Accept: "application/json",
-            },
-          }
-        );
+        console.log({ apiUrl });
+        const response = await axios.get<(string | Category)[]>(apiUrl, {
+          headers: {
+            Authorization: "Bearer Token",
+            Accept: "application/json",
+          },
+        });
 
         setCategories(response.data);
       } catch (error) {
@@ -58,6 +57,11 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
 
   const handlePriceRangeChange = (newRange: [number, number]) => {
     setPriceRange(newRange);
+  };
+
+  const handleFilterClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    // Pass both event and priceRange to parent component when filter is clicked
+    onFilterClick(event, priceRange);
   };
 
   const handleCategoryClick = (category: Category) => {
@@ -75,7 +79,6 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
 
   return (
     <div className="fixed top-0 left-0 h-screen overflow-auto w-4/5 bg-[#1B2E3C] z-[99999] transition-all transform duration-1000 ease-in-out py-6 text-[#F3E3E2] ">
-        
       <div className="border-[#1B2E3C80] border-b pb-8">
         <div className="flex justify-between items-center border-b border-gray-200 px-4">
           <h2 className="uppercase sm:text-lg font-normal pl-2 pb-2">
@@ -84,8 +87,8 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
             Categories
           </h2>
           <div className="cursor-pointer">
-                    <Image src={Navclose} alt="" onClick={onClose} />
-                  </div>
+            <Image src={Navclose} alt="" onClick={onClose} />
+          </div>
         </div>
         <div className="list-none text-sm font-light ml-4 sm:ml-0 mt-8 sm:mt-4">
           {displayedCategories.map((category) => (
@@ -127,7 +130,10 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
         </div>
 
         <div className="flex sm:items-center sm:justify-center my-4">
-          <button className="uppercase py-2 text-sm px-8 w-full sm:w-[220px] border border-[#F3E3E2] sm:border-[#1B2E3C] rounded-lg hover:bg-[#1B2E3C] hover:text-white" onClick={onFilterClick}>
+          <button
+            className="uppercase py-2 text-sm px-8 w-full sm:w-[220px] border border-[#F3E3E2] sm:border-[#1B2E3C] rounded-lg hover:bg-[#1B2E3C] hover:text-white"
+            onClick={handleFilterClick}
+          >
             Filter
           </button>
         </div>

@@ -9,7 +9,7 @@ interface Category {
 
 interface ProductCategoryProps {
   onSelectCategory: (category: Category) => void;
-  onFilterClick: () => void;
+  onFilterClick: (event: React.MouseEvent<HTMLButtonElement>, priceRange: [number, number]) => void;
 }
 
 const ProductCategory: React.FC<ProductCategoryProps> = ({
@@ -52,6 +52,11 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
 
   const handlePriceRangeChange = (newRange: [number, number]) => {
     setPriceRange(newRange);
+  };
+
+  const handleFilterClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    // Pass both event and priceRange to parent component when filter is clicked
+    onFilterClick(event, priceRange);
   };
 
   console.log(priceRange);
@@ -120,7 +125,7 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({
         <div className="flex items-center justify-center my-4">
           <button
             className="uppercase py-2 text-sm px-8 w-[220px] border border-[#1B2E3C] rounded-lg hover:bg-[#1B2E3C] hover:text-white"
-            onClick={onFilterClick}
+            onClick={handleFilterClick}
           >
             Filter
           </button>

@@ -66,7 +66,7 @@ const Index: React.FC<HomeProps> & { title: string } = ({
     console.log("Initial Next Page URL:", nextPageUrl);
   }, [initialProducts, prevPageUrl, nextPageUrl]);
 
-  const handleFilterClick = () => {
+  const handleFilterClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, priceRange: [number, number]) => {
     // Assuming you want to filter based on selected categories and price range
     // You can customize this logic based on your specific requirements
     // Here, I'm assuming you have an API endpoint that supports both category and price range filters

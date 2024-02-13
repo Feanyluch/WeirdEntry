@@ -24,12 +24,15 @@ interface CartProductProps {
   cartData: ProductData[];
 }
 
-const CartProducts: React.FC<CartProductProps> = ({ cartData: initialCartData }) => {
+const CartProducts: React.FC<CartProductProps> = ({
+  cartData: initialCartData,
+}) => {
   console.log({ initialCartData });
   const [localCartData, setLocalCartData] = useState(initialCartData);
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const user = useSelector((state: RootState) => state.auth.user);
+  const [loading, setLoading] = useState(false);
   // const cartItem = cartItems.find((item) => item.id === product.id);
   // const initialQuantity = cartItem ? cartItem.quantity : 0;
 
@@ -57,6 +60,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData: initialCartData })
 
   const refreshCartData = async () => {
     try {
+      setLoading(true); 
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
       const productEndpoint = "cart";
 
@@ -80,6 +84,8 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData: initialCartData })
       }
     } catch (error) {
       console.error("Error fetching updated cart data:", error);
+    }finally {
+      setLoading(false); // Set loading to false when fetching data ends
     }
   };
 
@@ -189,7 +195,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData: initialCartData })
           apiUrl + "/create",
           {
             user_email: `${user.user.email}`,
-            items: initialCartData ,
+            items: initialCartData,
           },
           {
             headers: {
@@ -242,7 +248,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData: initialCartData })
           apiUrl + "/create",
           {
             user_email: `${user.user.email}`,
-            items: initialCartData ,
+            items: initialCartData,
           },
           {
             headers: {
@@ -275,7 +281,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData: initialCartData })
         >
           <div className="h-full flex items-center justify-center overflow-hidden">
             <Image
-              src={product.product_image[0] as unknown as string}
+              src={product.product_image as unknown as string}
               alt="item1"
               width={200}
               height={50}
@@ -319,6 +325,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData: initialCartData })
               <button
                 className="text-lg px-2 rounded-lg"
                 onClick={() => decrementQuantity(productKey)}
+                disabled={loading}
               >
                 -
               </button>
@@ -326,6 +333,7 @@ const CartProducts: React.FC<CartProductProps> = ({ cartData: initialCartData })
               <button
                 className="text-lg px-2 rounded-lg"
                 onClick={() => incrementQuantity(productKey)}
+                disabled={loading}
               >
                 +
               </button>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { ProductData } from "@/components/product";
 import Breadcrumb from "@/components/BreadCrumb";
@@ -12,12 +12,23 @@ import Address from "../../../public/Images/Address.svg";
 
 import { GetStaticProps } from "next";
 import axios from "axios";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
 
 interface HomeProps {
   products: ProductData[]; // Make sure the interface matches the expected prop
 }
 
 const MyAccount: React.FC<HomeProps> & { title: string } = ({ products }) => {
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  const [firstName, setFirstName] = useState(user?.user?.first_name || "");
+  const [lastName, setLastName] = useState(user?.user?.last_name || "");
+  const [email, setEmail] = useState(user?.user?.email || "");
+  const [state, setState] = useState(user?.user?.state || "");
+  const [city, setCity] = useState(user?.user?.city || "");
+  const [zipCode, setZipCode] = useState(user?.user?.zipCode || "");
+  const [address, setAddress] = useState(user?.user?.address || "");
   return (
     <div className="" style={{ fontFamily: "'Nokora', sans-serif" }}>
       <Breadcrumb products={products} />
@@ -57,6 +68,8 @@ const MyAccount: React.FC<HomeProps> & { title: string } = ({ products }) => {
               <input
                 type="text"
                 className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
               />
             </div>
             <div className="flex flex-col">
@@ -64,32 +77,32 @@ const MyAccount: React.FC<HomeProps> & { title: string } = ({ products }) => {
               <input
                 type="text"
                 className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
               />
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-[20px]">
-            <div className="flex flex-col">
-              <label className="text-[#1B2E3C80] text-xs">Username</label>
-              <input
-                type="text"
-                className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
-              />
-            </div>
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <label className="text-[#1B2E3C80] text-xs">Phone</label>
               <input
                 type="text"
                 className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div> */}
+            <div className="flex flex-col">
+              <label className="text-[#1B2E3C80] text-xs">Email Address</label>
+              <input
+                type="text"
+                className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
-          <div className="flex flex-col">
-            <label className="text-[#1B2E3C80] text-xs">Email Address</label>
-            <input
-              type="text"
-              className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
-            />
-          </div>
+
           <div className="flex items-center justify-center mt-[40px]">
             <button className="px-8 sm:px-[80px] py-[17px] text-xs border border-[#1B2E3C] hover:bg-[#1B2E3C] hover:text-[#F3E3E2] transition-all rounded-lg">
               Save Changes

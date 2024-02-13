@@ -442,7 +442,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                 <div className="py-[10px] flex items-center justify-between">
                   <h2 className="text-xs sm:text-sm font-normal">Subtotal</h2>
                   <h2 className="text-xs sm:text-sm font-normal">
-                    N{subtotal.toLocaleString()}
+                  ₦{subtotal.toLocaleString()}
                   </h2>
                 </div>
                 <div className="py-[10px] flex items-center justify-between">
@@ -454,7 +454,7 @@ const Checkout: React.FC<HomeProps> & { title: string } = ({ products }) => {
                 <div className="py-[10px] flex items-center justify-between">
                   <h2 className="text-xs sm:text-sm font-bold">Total</h2>
                   <h2 className="text-xs sm:text-sm font-bold">
-                    N{total.toLocaleString()}
+                  ₦{total.toLocaleString()}
                   </h2>
                 </div>
               </div>

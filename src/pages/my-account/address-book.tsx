@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { ProductData } from "@/components/product";
 import Breadcrumb from "@/components/BreadCrumb";
@@ -12,39 +12,24 @@ import Address from "../../../public/Images/Address.svg";
 
 import { GetStaticProps } from "next";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface HomeProps {
   products: ProductData[]; // Make sure the interface matches the expected prop
 }
 
 const MyAccount: React.FC<HomeProps> & { title: string } = ({ products }) => {
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  const [email, setEmail] = useState(user?.user?.email || "");
+  const [state, setState] = useState(user?.user?.state || "");
+  const [city, setCity] = useState(user?.user?.city || "");
+  const [zipCode, setZipCode] = useState(user?.user?.zipCode || "");
+  const [address, setAddress] = useState(user?.user?.address || "");
   return (
     <div className="" style={{ fontFamily: "'Nokora', sans-serif" }}>
       <Breadcrumb products={products} />
-      {/* <div className="w-[25%] h-fit bg-white flex flex-col">
-            <div className="flex items-center justify-start gap-4 py-4 px-6 cursor-pointer hover:bg-[#F4F5F5] transition-all">
-              <Image src={Useraccount} width={20} height={10} alt="" />
-              <h2 className="text-sm font-normal">Account Details</h2>
-            </div>
-            <div className="flex items-center justify-start gap-4 py-4 px-6 cursor-pointer hover:bg-[#F4F5F5] transition-all">
-              <Image src={box} width={20} height={10} alt="" />
-              <h2 className="text-sm font-light">Orders</h2>
-            </div>
-            <div className="flex items-center justify-start gap-4 py-4 px-6 cursor-pointer hover:bg-[#F4F5F5] transition-all">
-              <Image src={card} width={20} height={10} alt="" />
-              <h2 className="text-sm font-light">Payment Methods</h2>
-            </div>
-            <div className="flex items-center justify-start gap-4 py-4 px-6 cursor-pointer hover:bg-[#F4F5F5] transition-all">
-              <Image src={Address} width={20} height={10} alt="" />
-              <h2 className="text-sm font-light">Address Book</h2>
-            </div>
-            <h2 className="text-sm font-light py-4 px-6 flex items-center justify-center cursor-pointer hover:bg-[#F4F5F5] transition-all">
-              Account Management
-            </h2>
-            <h2 className="text-sm font-normal py-4 px-6 flex items-center justify-center cursor-pointer hover:bg-[#F4F5F5] transition-all">
-              Logout
-            </h2>
-          </div> */}
       <AccountLayout>
         <div className="">
           <h2 className="uppercase text-sm font-normal tracking-[2px]">
@@ -56,30 +41,36 @@ const MyAccount: React.FC<HomeProps> & { title: string } = ({ products }) => {
             <input
               type="text"
               className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
+              value={email}
+                onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="grid grid-cols-2 gap-4 my-[20px]">
             <div className="flex flex-col">
-              <label className="text-[#1B2E3C80] text-xs">Town/State</label>
+              <label className="text-[#1B2E3C80] text-xs">City</label>
               <input
                 type="text"
                 className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
               />
             </div>
             <div className="flex flex-col">
-              <label className="text-[#1B2E3C80] text-xs">Country</label>
+              <label className="text-[#1B2E3C80] text-xs">State</label>
               <input
                 type="text"
                 className="rounded px-2 bg-[#1B2E3C0D] h-[40px] outline-none"
+                value={state}
+                onChange={(e) => setState(e.target.value)}
               />
             </div>
           </div>
 
-          <div className="flex items-center justify-center mt-[40px]">
+          {/* <div className="flex items-center justify-center mt-[40px]">
             <button className="px-[80px] py-[17px] text-sm border border-[#0C0C1E] hover:bg-[#0C0C1E] hover:text-[#F3E3E2] transition-all rounded-lg">
               Add Address
             </button>
-          </div>
+          </div> */}
         </div>
       </AccountLayout>
     </div>

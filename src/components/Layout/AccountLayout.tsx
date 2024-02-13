@@ -35,27 +35,20 @@ const tabs: TabData[] = [
   },
   {
     id: 3,
-    label: "Payment",
-    route: "/my-account/payment-method",
-    content: "Payment Methods",
-    image: "../../../public/Images/card.svg",
-  },
-  {
-    id: 4,
     label: "Address Book",
     route: "/my-account/address-book",
     content: "Address Book",
     image: "../../public/Images/Address.svg",
   },
   {
-    id: 5,
+    id: 4,
     label: "Account Management",
     route: "/my-account/account-management",
     content: "Account Management",
     image: "../../public/Images/Useraccount.svg",
   },
   {
-    id: 6,
+    id: 5,
     label: "Logout",
     route: "/",
     content: "null",
@@ -101,7 +94,9 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ children }) => {
         )}
         <div
           className={`${
-            isMobileNavOpen ? "absolute top-0 left-0 w-[60%] z-50 mt-4" : "hidden"
+            isMobileNavOpen
+              ? "absolute top-0 left-0 w-[60%] z-50 mt-4"
+              : "hidden"
           } transition-transform duration-300 w-[30%] h-fit bg-white flex flex-col ease-in-out transform translate-x-0 md:translate-x-0 md:block`}
         >
           <button
@@ -118,7 +113,8 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ children }) => {
                 isActive={tab.id === activeTab?.id}
                 imaget={<Image src={tab.image} width={20} height={10} alt="" />} // Use the Image component with the imported image
                 route={`${tab.route}?tab=${tab.id}`} // Include the query parameter here
-                icon={undefined}              />
+                icon={undefined}
+              />
             ))}
           </div>
         </div>
@@ -129,7 +125,9 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ children }) => {
           >
             <FontAwesomeIcon icon={faBars} />
           </button>
-          <div className="w-[100%] bg-white rounded-lg p-4 sm:p-[40px]">{children}</div>
+          <div className="w-[100%] bg-white rounded-lg p-4 sm:p-[40px]">
+            {children}
+          </div>
         </div>
       </div>
     </div>
