@@ -34,7 +34,7 @@ import axios from "axios";
 import SizeButtons from "@/components/SizeButtons";
 import { useDispatch, useSelector } from "react-redux";
 
-import heart from "../../../public/Images/heart.svg";
+import hearty from "../../../public/Images/hearty.svg";
 import heart1 from "../../../public/Images/heart1.svg";
 import heart2 from "../../../public/Images/heart2.svg";
 import heart3 from "../../../public/Images/heart3.svg";
@@ -99,7 +99,7 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
 
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const images = [heart, heart1, heart2, heart3, heart4];
+  const images = [hearty, heart1, heart2, heart3, heart4];
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
