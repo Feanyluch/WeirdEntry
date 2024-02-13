@@ -31,6 +31,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   const [isProductInWishlist, setIsProductInWishlist] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
 
+  const [buttonClicked, setButtonClicked] = useState(false);
+
+  // Function to handle button click
+  const handleButtonClick = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation(); // Stop the propagation of the click event
+    setButtonClicked(true); // Set the state variable to true
+  };
+
   const removeFromWishlist = useRemoveFromWishlist();
   const { showNotification } = useNotification();
 
@@ -98,7 +106,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
     setIsFavorite(favoriteItems.some((item) => item.id === product.id));
   }, [user, favoriteItems, product.id]);
 
-
   const fetchUserWishlist = async () => {
     try {
       const response = await axios.get(
@@ -126,39 +133,41 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
     try {
       // Set loading state to true to indicate that the process is ongoing
       // setLoading(true);
-      
+
       if (user && user.token) {
         const userWishlist = await fetchUserWishlist();
         if (Array.isArray(userWishlist)) {
           if (isProductInWishlist) {
             await removeFromWishlist(product.id);
-            showNotification("Product Removed from Wishlist")
+            showNotification("Product Removed from Wishlist");
           } else {
             await addToWishlist(product);
-            showNotification("Product Added to Wishlist")
+            showNotification("Product Added to Wishlist");
           }
         } else {
           console.log("User wishlist is empty. Adding product to wishlist.");
           await addToWishlist(product);
-          showNotification("Product Added to Wishlist")
+          showNotification("Product Added to Wishlist");
         }
       } else {
         if (isFavorite) {
           dispatch(removeFromFavorite(product.id));
-          showNotification("Product Removed from Wishlist")
+          showNotification("Product Removed from Wishlist");
         } else {
           dispatch(addToFavorite(product));
-          showNotification("Product Added to Wishlist")
+          showNotification("Product Added to Wishlist");
         }
       }
-      
+
       // Manually update local state to reflect changes
       setIsFavorite(!isFavorite);
-      
+
       // Trigger a refresh of the data from the server to ensure UI reflects latest state
       const updatedWishlist = await fetchUserWishlist();
       if (Array.isArray(updatedWishlist)) {
-        const isInWishlist = updatedWishlist.some(item => item.product_id === product.id);
+        const isInWishlist = updatedWishlist.some(
+          (item) => item.product_id === product.id
+        );
         setIsProductInWishlist(isInWishlist);
       }
     } catch (error) {
@@ -167,9 +176,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
       // Set loading state to false when the process is completed (either successfully or with error)
       // setLoading(false);
     }
-    setIsAnimating(prevIsAnimating => !prevIsAnimating);
-  };  
-  
+    setIsAnimating((prevIsAnimating) => !prevIsAnimating);
+  };
 
   const addToWishlist = async (productToAdd: any) => {
     try {
@@ -201,23 +209,39 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
 
   return (
     <div>
-      <Link href={`/shop/${product.id}`} passHref>
-        <div className="rounded-lg h-[200px] relative overflow-hidden flex items-center justify-center">
-          <div
-            style={{
-              backgroundImage: `url('${product.product_image[0]}')`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              width: "100%",
-              height: "100%",
-            }}
-            className="rounded-lg transform hover:scale-110 transition-transform duration-300"
-          ></div>
-          <button className="sm:hidden absolute top-3 right-3 z-[9999px] bg-pink-50 p-1 rounded-lg transition ease-in-out duration-300">
-            <Image src={user ? (isProductInWishlist ? images[images.length - 1] : pinkFavorite) : (isFavorite ? images[images.length - 1] : pinkFavorite)} height={20} width={20} alt="heart" />
-          </button>
-        </div>
+      <div className="rounded-lg h-[200px] relative overflow-hidden flex items-center justify-center">
+        <div
+          style={{
+            backgroundImage: `url('${product.product_image[0]}')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            width: "100%",
+            height: "100%",
+          }}
+          className="rounded-lg transform hover:scale-110 transition-transform duration-300"
+        ></div>
+        <button
+          className="sm:hidden absolute top-3 right-3 z-[9] bg-pink-50 p-1 rounded-lg transition ease-in-out duration-300"
+          onClick={handleToggleFavorite}
+        >
+          <Image
+            src={
+              user
+                ? isProductInWishlist
+                  ? images[images.length - 1]
+                  : pinkFavorite
+                : isFavorite
+                ? images[images.length - 1]
+                : pinkFavorite
+            }
+            height={20}
+            width={20}
+            alt="heart"
+          />
+        </button>
+      </div>
 
+      <Link href={`/shop/${product.id}`} passHref>
         <div className="my-5">
           <h2 className="capitalize h-[50px] sm:max-h-[50px] sm:h-[50px] text-[14px] sm:text-base">
             {product.title}
@@ -248,11 +272,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         <button
           onClick={handleToggleFavorite}
           className={`hidden sm:w-1/4 border border-[#0C0C1E] sm:flex items-center justify-center rounded-lg transition ease-in-out duration-300 ${
-            user ? (isProductInWishlist ? "border border-red-500 bg-red-100" : "") : isFavorite ? "" : ""
+            user
+              ? isProductInWishlist
+                ? "border border-red-500 bg-red-100"
+                : ""
+              : isFavorite
+              ? ""
+              : ""
           }`}
         >
           <Image
-            src={user ? (isProductInWishlist ? images[images.length - 1] : images[0]) : (isFavorite ? images[images.length - 1] : images[0])}
+            src={
+              user
+                ? isProductInWishlist
+                  ? images[images.length - 1]
+                  : images[0]
+                : isFavorite
+                ? images[images.length - 1]
+                : images[0]
+            }
             height={25}
             width={25}
             alt="heart"

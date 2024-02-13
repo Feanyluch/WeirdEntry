@@ -51,7 +51,10 @@ import {
 import { sendItemsToEndpoint } from "@/utils/localStorageHelper";
 import { useRemoveFromWishlist } from "@/hook/useRemoveFromWishlist";
 import { useNotification } from "@/components/NotificationContext";
-import { addToFavorite, removeFromFavorite } from "@/redux/slices/favoriteSlice";
+import {
+  addToFavorite,
+  removeFromFavorite,
+} from "@/redux/slices/favoriteSlice";
 
 interface Size {
   id: number;
@@ -116,7 +119,6 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
     return () => clearInterval(intervalId);
   }, [isAnimating, images]);
 
-  
   useEffect(() => {
     // Update isProductInWishlist if user is logged in
     if (user && user.token && selectedProduct) {
@@ -124,7 +126,8 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
         .then((userWishlist) => {
           if (Array.isArray(userWishlist)) {
             const isInWishlist = userWishlist.some(
-              (item: { product_id: number }) => item.product_id === selectedProduct.id
+              (item: { product_id: number }) =>
+                item.product_id === selectedProduct.id
             );
             setIsProductInWishlist(isInWishlist);
           }
@@ -135,10 +138,12 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
     }
 
     // Update isFavorite
-    if(selectedProduct){
-    setIsFavorite(favoriteItems.some((item) => item.id === selectedProduct.id));}
+    if (selectedProduct) {
+      setIsFavorite(
+        favoriteItems.some((item) => item.id === selectedProduct.id)
+      );
+    }
   }, [user, favoriteItems, selectedProduct]);
-
 
   const fetchUserWishlist = async () => {
     try {
@@ -167,52 +172,55 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
     try {
       // Set loading state to true to indicate that the process is ongoing
       // setLoading(true);
-      
+
       if (user && user.token) {
         const userWishlist = await fetchUserWishlist();
         if (Array.isArray(userWishlist)) {
           if (isProductInWishlist && selectedProduct) {
             await removeFromWishlist(selectedProduct.id);
-            showNotification("Product Removed from Wishlist")
+            showNotification("Product Removed from Wishlist");
           } else {
             await addToWishlist(selectedProduct);
-            showNotification("Product Added to Wishlist")
+            showNotification("Product Added to Wishlist");
           }
         } else {
           console.log("User wishlist is empty. Adding product to wishlist.");
           await addToWishlist(selectedProduct);
-          showNotification("Product Added to Wishlist")
+          showNotification("Product Added to Wishlist");
         }
       } else {
         if (selectedProduct) {
-        if (isFavorite) {
-          dispatch(removeFromFavorite(selectedProduct.id));
-          showNotification("Product Removed from Wishlist")
-        } else {
-          dispatch(addToFavorite(selectedProduct));
-          showNotification("Product Added to Wishlist")
-        }}
+          if (isFavorite) {
+            dispatch(removeFromFavorite(selectedProduct.id));
+            showNotification("Product Removed from Wishlist");
+          } else {
+            dispatch(addToFavorite(selectedProduct));
+            showNotification("Product Added to Wishlist");
+          }
+        }
       }
-      
+
       // Manually update local state to reflect changes
       setIsFavorite(!isFavorite);
-      
+
       // Trigger a refresh of the data from the server to ensure UI reflects latest state
       const updatedWishlist = await fetchUserWishlist();
-      if (selectedProduct){
-      if (Array.isArray(updatedWishlist)) {
-        const isInWishlist = updatedWishlist.some(item => item.product_id === selectedProduct.id);
-        setIsProductInWishlist(isInWishlist);
-      }}
+      if (selectedProduct) {
+        if (Array.isArray(updatedWishlist)) {
+          const isInWishlist = updatedWishlist.some(
+            (item) => item.product_id === selectedProduct.id
+          );
+          setIsProductInWishlist(isInWishlist);
+        }
+      }
     } catch (error) {
       console.error("Error handling toggle favorite:", error);
     } finally {
       // Set loading state to false when the process is completed (either successfully or with error)
       // setLoading(false);
     }
-    setIsAnimating(prevIsAnimating => !prevIsAnimating);
-  };  
-  
+    setIsAnimating((prevIsAnimating) => !prevIsAnimating);
+  };
 
   const addToWishlist = async (productToAdd: any) => {
     try {
@@ -313,17 +321,26 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
     // Check if selectedProduct is defined
     try {
       if (selectedProduct) {
-        // Check if the selected color and size combination already exists in the cart
-        const existingProductIndex = cartItems.findIndex(
-          (item) => item.size === selectedSize && item.color === selectedColor
-        );
+        const existingProductKey = `${selectedProduct.id}_${selectedSize}_${selectedColor}`;
+        const existingProduct = cartItems[existingProductKey as any];
 
-        // If the product is already in the cart, increment its quantity
-        if (existingProductIndex !== -1) {
-          dispatch(incrementItem(cartItems[existingProductIndex].id));
+        console.log({ existingProductKey });
+        console.log({ existingProduct });
+
+        if (existingProduct) {
+          if (
+            existingProduct.size === selectedSize &&
+            existingProduct.color === selectedColor
+          ) {
+            console.log("This line is triggered");
+
+            // Dispatch action to increment the item
+            dispatch(incrementItem(existingProductKey));
+            showNotification("Product added to the cart");
+          }
         } else {
           const cartItem = {
-            id: `${selectedProduct.id}_${selectedSize}_${selectedColor}`,
+            id: selectedProduct.id,
             quantity: 1,
             product_image: selectedProduct.product_image[0],
             price: selectedProduct.sales_price
@@ -341,104 +358,98 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
         dispatch(addSelectedProduct(selectedProduct));
 
         // Extract the quantity directly from the addToCart action payload
-        const newlyAddedItemQuantity =
-          store
-            .getState()
-            .cart.items.find(
-              (item) =>
-                item.id === selectedProduct.id &&
-                item.size === selectedSize &&
-                item.color === selectedColor
-            )?.quantity || 0;
+        // const newlyAddedItemQuantity =
+        //   store
+        //     .getState()
+        //     .cart.items.find((item) => item.id === selectedProduct.id)
+        //     ?.quantity || 0;
 
         // Check if the user is logged in before fetching the user's cart
         if (user && user.token) {
           // Fetch the user's cart after updating the local cart
           try {
-            const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-            const productEndpoint = "cart";
-
-            const apiUrl = `${apiBaseUrl}${productEndpoint}`;
-            const response = await axios.get(apiUrl, {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-                Accept: "application/json",
-              },
-            });
+            const response = await axios.get(
+              "https://weird-entry-lara-production.up.railway.app/api/cart",
+              {
+                headers: {
+                  Authorization: `Bearer ${user.token}`,
+                  Accept: "application/json",
+                },
+              }
+            );
 
             if (response.status === 200) {
               const userCart = response.data.items;
-
+  
               // Use the extracted quantity for the newly added item
-              if (newlyAddedItemQuantity > 0) {
-                const existingCartItemKey = `${selectedProduct.id}_${selectedSize}_${selectedColor}`;
-                const existingCartItem = userCart[existingCartItemKey];
-
-                if (existingCartItem) {
-                  // Check if the existing item has the same size and color
-                  if (
-                    existingCartItem.size === selectedSize &&
-                    existingCartItem.color === selectedColor
-                  ) {
-                    console.log("This line is triggered");
-                    existingCartItem.quantity += newlyAddedItemQuantity;
-                  } else {
-                    console.log("newly added", selectedSize);
-                    // Create a new item with the same ID but different size and color
-                    const newCartItem = {
-                      id: selectedProduct.id,
-                      title: selectedProduct.title,
-                      price: selectedProduct.sales_price
-                        ? selectedProduct.sales_price
-                        : selectedProduct.price,
-                      product_image: selectedProduct.product_image[0],
-                      quantity: newlyAddedItemQuantity,
-                      size: selectedSize,
-                      color: selectedColor,
-                    };
-                    userCart[existingCartItemKey] = newCartItem;
-                  }
+              const existingCartItemKey = `${selectedProduct.id}_${selectedSize}_${selectedColor}`;
+              const existingCartItem = userCart[existingCartItemKey];
+  
+              if (existingCartItem) {
+                // Check if the existing item has the same size and color
+                if (
+                  existingCartItem.size === selectedSize &&
+                  existingCartItem.color === selectedColor
+                ) {
+                  console.log("This line is triggered");
+                  existingCartItem.quantity += 1; // Increment by 1 since it's a new item
                 } else {
-                  // If there's no existing item, create a new one
                   console.log("newly added", selectedSize);
+                  // Create a new item with the same ID but different size and color
                   const newCartItem = {
                     id: selectedProduct.id,
                     title: selectedProduct.title,
-                    price: selectedProduct.sales_price
-                      ? selectedProduct.sales_price
-                      : selectedProduct.price,
+                    price: selectedProduct.sales_price ? selectedProduct.sales_price : selectedProduct.price,
                     product_image: selectedProduct.product_image[0],
-                    quantity: newlyAddedItemQuantity,
+                    quantity: 1, // Quantity is 1 for a newly added item
                     size: selectedSize,
                     color: selectedColor,
                   };
                   userCart[existingCartItemKey] = newCartItem;
                 }
-
-                // Combine the fetched cart with the items already in the Redux store
-                const updatedCart = { ...userCart };
-
-                // If the user is logged in, send the updated cart to the endpoint
-                if (user && user.token) {
-                  sendItemsToEndpoint(updatedCart);
-                }
+              } else {
+                // If there's no existing item, create a new one
+                console.log("newly added", selectedSize);
+                const newCartItem = {
+                  id: selectedProduct.id,
+                  title: selectedProduct.title,
+                  price: selectedProduct.sales_price ? selectedProduct.sales_price : selectedProduct.price,
+                  product_image: selectedProduct.product_image[0],
+                  quantity: 1, // Quantity is 1 for a newly added item
+                  size: selectedSize,
+                  color: selectedColor,
+                };
+                userCart[existingCartItemKey] = newCartItem;
               }
+  
+              // Combine the fetched cart with the items already in the Redux store
+              const updatedCart = { ...userCart };
+  
+              // If the user is logged in, send the updated cart to the endpoint
+              if (user && user.token) {
+                sendItemsToEndpoint(updatedCart);
+              }
+  
+              setLoading(false);
+              showNotification("Product added to the cart");
+              // ... (remaining code)
             } else if (response.status === 400) {
+              setLoading(true);
               // If the user has no cart, send only the newly added item to create the cart
               const newCartItemKey = `${selectedProduct.id}_${selectedSize}_${selectedColor}`;
               sendItemsToEndpoint({
                 [newCartItemKey]: {
                   id: selectedProduct.id,
                   title: selectedProduct.title,
-                  price: selectedProduct.sales_price
-                    ? selectedProduct.sales_price
-                    : selectedProduct.price,
+                  price: selectedProduct.sales_price ? selectedProduct.sales_price : selectedProduct.price,
                   product_image: selectedProduct.product_image[0],
-                  quantity: newlyAddedItemQuantity,
+                  quantity: 1,
                   size: selectedSize,
                   color: selectedColor,
                 },
               });
+              setLoading(false);
+              showNotification("Product added to the cart");
             } else {
               console.error("Failed to fetch user cart:", response.statusText);
             }
@@ -447,19 +458,17 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
 
             // If there's an error fetching the user's cart, assume the user has no cart and send only the newly added item
             const newCartItemKey = `${selectedProduct.id}_${selectedSize}_${selectedColor}`;
-            sendItemsToEndpoint({
-              [newCartItemKey]: {
-                id: selectedProduct.id,
-                title: selectedProduct.title,
-                price: selectedProduct.sales_price
-                  ? selectedProduct.sales_price
-                  : selectedProduct.price,
-                product_image: selectedProduct.product_image[0],
-                quantity: newlyAddedItemQuantity,
-                size: selectedSize,
-                color: selectedColor,
-              },
-            });
+          sendItemsToEndpoint({
+            [newCartItemKey]: {
+              id: selectedProduct.id,
+              title: selectedProduct.title,
+              price: selectedProduct.sales_price ? selectedProduct.sales_price : selectedProduct.price,
+              product_image: selectedProduct.product_image[0],
+              quantity: 1,
+              size: selectedSize,
+              color: selectedColor,
+            },
+          });
           }
         }
       }
@@ -647,10 +656,28 @@ const ProductDescription: React.FC<HomeProps> & { title: string } = ({
                 >
                   Add to cart
                 </button>
-                <button className={`w-[20%] h-[50px] border border-[#0C0C1E] flex items-center justify-center rounded-lg transition ease-in-out duration-300 ${user ? (isProductInWishlist ? "border border-red-500 bg-red-100" : "") : isFavorite ? "" : ""
-          }`} onClick={handleToggleFavorite}>
+                <button
+                  className={`w-[20%] h-[50px] border border-[#0C0C1E] flex items-center justify-center rounded-lg transition ease-in-out duration-300 ${
+                    user
+                      ? isProductInWishlist
+                        ? "border border-red-500 bg-red-100"
+                        : ""
+                      : isFavorite
+                      ? ""
+                      : ""
+                  }`}
+                  onClick={handleToggleFavorite}
+                >
                   <Image
-                    src={user ? (isProductInWishlist ? images[images.length - 1] : images[0]) : (isFavorite ? images[images.length - 1] : images[0])}
+                    src={
+                      user
+                        ? isProductInWishlist
+                          ? images[images.length - 1]
+                          : images[0]
+                        : isFavorite
+                        ? images[images.length - 1]
+                        : images[0]
+                    }
                     height={20}
                     width={20}
                     alt="heart"

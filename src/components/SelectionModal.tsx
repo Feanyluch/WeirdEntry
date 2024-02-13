@@ -90,7 +90,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
           quantity: 1,
           price: product.sales_price ? product.sales_price : product.price,
           title: product.title,
-          product_image: product.product_image,
+          product_image: product.product_image[0],
           size: selectedSize,
           color: selectedColor,
         };
@@ -151,7 +151,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
                   id: product.id,
                   title: product.title,
                   price: product.sales_price ? product.sales_price : product.price,
-                  product_image: product.product_image,
+                  product_image: product.product_image[0],
                   quantity: 1, // Quantity is 1 for a newly added item
                   size: selectedSize,
                   color: selectedColor,
@@ -165,7 +165,7 @@ const SizeSelectionModal: React.FC<SizeSelectionModalProps> = ({
                 id: product.id,
                 title: product.title,
                 price: product.sales_price ? product.sales_price : product.price,
-                product_image: product.product_image,
+                product_image: product.product_image[0],
                 quantity: 1, // Quantity is 1 for a newly added item
                 size: selectedSize,
                 color: selectedColor,
